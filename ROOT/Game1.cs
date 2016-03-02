@@ -7,8 +7,39 @@ namespace ROOT
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
+    
+    //Enum for the menu states
+    public enum MenuState
+    {
+        Main,
+        Start,
+        Quit,
+        Controls,
+        Instructions,
+        Options
+    }
+
     public class Game1 : Game
     {
+
+        //Enum for game states
+        public enum GameState
+        {
+            Menu,
+            Game,
+            GameOver
+        }
+
+        //Fields
+        private GameState currentState;
+        private MenuState currentMenuState;
+        private MenuMan menuManager;
+        private UIMan uiManager;
+        private double timer1;
+        private double timer2;
+        private bool hasOrbP1;
+        private bool hasOrbP2;
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
@@ -26,7 +57,9 @@ namespace ROOT
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            currentState = GameState.Menu;
+            menuManager = new MenuMan();
+            currentMenuState = MenuState.Main;
 
             base.Initialize();
         }
@@ -62,7 +95,24 @@ namespace ROOT
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            //Switch case for game state
+            switch (currentState)
+            {
+                case GameState.Menu:
+                    //If this returns Start, change state to Game and reset values
+                    //If this returns quit, end the program
+                    //Else call the menu's draw method
+                    currentMenuState=menuManager.NextState(currentMenuState);
+                    break;
+                case GameState.Game:
+                    //If either player wins, change state to game over
+                    //Otherwise, run logic and call the UI and Player draw methods
+                    break;
+                case GameState.GameOver:
+                    //If the player chooses play again, change state to game and reset values
+                    //If the player chooses back to menu, change state to menu and menustate to main
+                    break;
+            }
 
             base.Update(gameTime);
         }
