@@ -17,6 +17,8 @@ namespace ROOT
         //properties
         public bool IsSolid { get { return isSolid; } }
         public Rectangle HitBox { get { return hitBox; } }
+        public int X { get { return hitBox.X; } set { hitBox.X = value; } }
+        public int Y { get { return hitBox.Y; } set { hitBox.Y = value; } }
         public int Width { get { return hitBox.Width; } }
         public int Height { get { return hitBox.Height; } }
         public Texture2D Tex { get { return tex; } set { tex = value; } }
@@ -26,6 +28,7 @@ namespace ROOT
         //requires x/y coordinates for a starting point, dimensions for the hitbox rectangle,
         //and a solid bool value
         {
+            hitBox = new Rectangle(x, y, width, height);
             isSolid = solid;
         }
 
