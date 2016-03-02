@@ -19,20 +19,25 @@ namespace ROOT
             Jumping,
             PowerUp
         }
-        int moveRight, moveLeft, jump, use;
+        int moveRight, moveLeft, jump, use; //will correspond to player controls
+        double timer; //keeps track of how long the player needs to hold the orb
+        bool hasOrb; //checks if player has the orb
 
         //constructor, calls game object's but forces isSolid to be false
-        public Player(int x, int y, int width, int height)
+        public Player(int x, int y, int width, int height, double time)
             : base(x,y,width,height,false)
-        {        }
+        {
+            timer = time; //sets the starting time
+            hasOrb = false; //player doesn't start with orb
+        }
 
-        public void Move()
+        public void Move() //movement should be complete by next meeting
         //it's move...what do you think it does
         {
             KeyboardState input = Keyboard.GetState();
             if(input.IsKeyDown((Keys)moveRight) && input.IsKeyDown((Keys)jump))
             {
-                this.Y -= 5; // y - 5 goes up right?
+                this.Y -= 5; 
                 this.X += 5;
             }
             else if(input.IsKeyDown((Keys)moveLeft) && input.IsKeyDown((Keys)jump))
@@ -63,13 +68,13 @@ namespace ROOT
                 {
                     
                 }
-                else if(g is Player)
+                else if(g is Player && hasOrb)
                 {
                     Stun();
                 }
-                else
+                else if(g is Orb)
                 {
-
+                    hasOrb = true;
                 }
             }
         }
