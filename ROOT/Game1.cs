@@ -60,7 +60,7 @@ namespace ROOT
             currentState = GameState.Menu;
             menuManager = new MenuMan();
             currentMenuState = MenuState.Main;
-
+            
             base.Initialize();
         }
 

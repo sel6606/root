@@ -31,6 +31,9 @@ namespace ROOT
             //sets the initial y position for the platforms
             int ypos = 0;
 
+            //empties the list of rectangles
+            stageBounds.Clear();
+
             StreamReader readStage = new StreamReader(fileName);
 
 
@@ -66,8 +69,10 @@ namespace ROOT
                         Rectangle added = new Rectangle(xpos, ypos, 20, 20);
                         stageBounds.Add(added);
 
-                        xpos = xpos + 20;
+                        
                     }
+                    //shifts the x position right
+                    xpos = xpos + 20;
                 }
                 //shifts the position down
                 ypos = ypos + 20;
