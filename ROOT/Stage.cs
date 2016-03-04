@@ -17,10 +17,33 @@ namespace ROOT
         //Will definately change to at least be a platform list when platform class is made.
         List<Rectangle> stageBounds = new List<Rectangle>();
 
+        SpriteBatch sb;
 
-        public Stage() { }
+        Texture2D tileTex;
 
-        public void Draw() { }
+        public SpriteBatch SB
+        {
+            set { sb = value; }
+        }
+
+        public Texture2D TileTex
+        {
+            set { tileTex = value; }
+        }
+
+        public Stage(SpriteBatch sb, Texture2D tileTex)
+        {
+            this.sb = sb;
+            this.tileTex = tileTex;
+        }
+
+        public void Draw()
+        {
+            for(int i=0; i<stageBounds.Count; i++)
+            {
+                sb.Draw(tileTex, stageBounds[i], Color.White);
+            }
+        }
 
 
         /// <summary>
