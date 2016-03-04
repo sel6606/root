@@ -16,12 +16,19 @@ namespace ROOT
             FaceLeft,
             MoveRight,
             MoveLeft,
-            Jumping,
+            JumpRight,
+            JumpLeft,
             PowerUp
         }
         int moveRight, moveLeft, jump, use; //will correspond to player controls
         double timer; //keeps track of how long the player needs to hold the orb
         bool hasOrb; //checks if player has the orb
+        bool stunned; //checks if player is stunned
+
+        //properties
+        public double Timer { get { return timer; } set { timer = value; } }
+        public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
+        public bool Stunned { get { return stunned; } }
 
         //constructor, calls game object's but forces isSolid to be false
         public Player(int x, int y, int width, int height, double time)
@@ -37,12 +44,12 @@ namespace ROOT
             KeyboardState input = Keyboard.GetState();
             if(input.IsKeyDown((Keys)moveRight) && input.IsKeyDown((Keys)jump))
             {
-                this.Y -= 5; 
+                Jump(); 
                 this.X += 5;
             }
             else if(input.IsKeyDown((Keys)moveLeft) && input.IsKeyDown((Keys)jump))
             {
-                this.Y -= 5;
+                Jump();
                 this.X -= 5;
             }
             else if(input.IsKeyDown((Keys)moveRight))
@@ -57,7 +64,11 @@ namespace ROOT
             }
         }
 
-        public void Jump() { }
+        public void Jump()
+        //player ascends as though they have actual physics (don't move at constant speed)
+        {
+
+        }
 
         public void CheckCollision(GameObject g)
         //checks if the player has collided with the given game object
@@ -68,10 +79,6 @@ namespace ROOT
                 {
                     
                 }
-                else if(g is Player && hasOrb)
-                {
-                    Stun();
-                }
                 else if(g is Orb)
                 {
                     hasOrb = true;
@@ -79,7 +86,27 @@ namespace ROOT
             }
         }
 
-        public void Stun() { }
+        public void CheckPlayerCollision(Player p)
+        //this method specifically handles logic for player on player collision
+        {
+            if(hasOrb) //if this player has the orb
+            {
+                Stun();
+                hasOrb = false;
+                p.Orb = true;
+            }
+            else if(p.Orb) //if other player has orb
+            {
+                p.Orb = false;
+                hasOrb = true;
+            }
+        }
+
+        public void Stun()
+        //player will be unable to move while stunned, player will also blink
+        {
+            
+        }
 
         public override void Draw(SpriteBatch s)
         {
