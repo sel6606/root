@@ -17,8 +17,11 @@ namespace ROOT
         //Will definately change to at least be a platform list when platform class is made.
         List<Rectangle> stageBounds = new List<Rectangle>();
 
+        //SpriteBatch needed for the draw method
+        //Will be the SpriteBatch defined in Game1
         SpriteBatch sb;
 
+        //Texture of the tiles
         Texture2D tileTex;
 
         public SpriteBatch SB

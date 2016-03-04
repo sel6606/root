@@ -9,7 +9,20 @@ namespace ROOT
     {
         public MenuMan() { }
 
-        public void Draw(MenuState currentState) { }
+        public void Draw(MenuState currentState)
+        {
+            switch (currentState)
+            {
+                case MenuState.Instructions:
+                    break;
+                case MenuState.Main: //Priority
+                    break;
+                case MenuState.Options: //Unused for now
+                    break;
+                case MenuState.Controls: //Unused for now
+                    break;
+            }
+        }
 
         //Will return the next state of the menu
         public MenuState NextState(MenuState currentState)
