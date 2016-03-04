@@ -78,7 +78,7 @@ namespace ROOT
                 int xpos = 0;
 
 
-                String[] subHolder = inputStrings[x].Split();
+                String[] subHolder = inputStrings[x].Split(' ');
 
 
                 //checks to see if a platform should be made in that position
