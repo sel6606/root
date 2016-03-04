@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,15 +8,15 @@ namespace ROOT
 {
     class Tile : GameObject
     {
-        public Tile()
-            : base()
+        public Tile(int x, int y, int width, int height)
+            : base(x,y,width,height,true)
         {
 
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch s)
         {
-            base.Draw();
+            base.Draw(s);
         }
     }
 }

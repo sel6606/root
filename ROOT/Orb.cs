@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,15 +10,15 @@ namespace ROOT
     {
         private bool Active;
 
-        public Orb()
-            : base()
+        public Orb(int x, int y, int width, int height)
+            : base(x,y,width,height,false)
         {
 
         }
 
-        public override void Draw()
+        public override void Draw(SpriteBatch s)
         {
-            base.Draw();
+            base.Draw(s);
         }
 
     }
