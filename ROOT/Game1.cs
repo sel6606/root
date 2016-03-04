@@ -99,9 +99,14 @@ namespace ROOT
             switch (currentState)
             {
                 case GameState.Menu:
-                    //If this returns Start, change state to Game and reset values
-                    //If this returns quit, end the program
-                    //Else call the menu's draw method
+                    if (currentMenuState == MenuState.Start)
+                    {
+                        currentState = GameState.Game;
+                        //*Code to reset values*
+                    }else if(currentMenuState== MenuState.Quit)
+                    {
+                        //Code to exit the program
+                    }
                     currentMenuState=menuManager.NextState(currentMenuState);
                     break;
                 case GameState.Game:
