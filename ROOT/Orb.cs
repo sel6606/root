@@ -8,7 +8,9 @@ namespace ROOT
 {
     class Orb : GameObject
     {
-        private bool Active;
+        private bool active;
+
+        public bool Active { set { active = value; } }
 
         public Orb(int x, int y, int width, int height)
             : base(x,y,width,height,false)
@@ -18,7 +20,10 @@ namespace ROOT
 
         public override void Draw(SpriteBatch s)
         {
-            base.Draw(s);
+            while(active)
+            {
+                base.Draw(s);
+            }
         }
 
     }
