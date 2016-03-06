@@ -23,6 +23,9 @@ namespace ROOT
         }
         int moveRight, moveLeft, jump, use; //will correspond to player controls
         bool hasOrb; //checks if player has the orb
+        bool ground; //is the player on the ground
+        bool rightWall; //is there a wall to the right
+        bool leftWall; //is there a wall to the left
         static bool stunned; //checks if player is stunned
 
         //properties
@@ -44,22 +47,51 @@ namespace ROOT
                 if (input.IsKeyDown((Keys)moveRight) && input.IsKeyDown((Keys)jump))
                 {
                     Jump();
-                    this.X += 5;
+                    if(!rightWall)
+                    {
+                        this.X += 5;
+                    }
                 }
                 else if (input.IsKeyDown((Keys)moveLeft) && input.IsKeyDown((Keys)jump))
                 {
                     Jump();
-                    this.X -= 5;
+                    if(!leftWall)
+                    {
+                        this.X -= 5;
+                    }
+                }
+                else if(input.IsKeyDown((Keys)jump))
+                {
+                    Jump();
                 }
                 else if (input.IsKeyDown((Keys)moveRight))
                 {
-                    this.X += 5;
-                    this.Y += 5; //simulates the effects of gravity
+                    if (!rightWall)
+                    {
+                        this.X += 5;
+                    }
+                    if (!ground) //gravity should only be in effect when player is not on the ground
+                    {
+                        this.Y += 5;
+                    }
                 }
                 else if (input.IsKeyDown((Keys)moveLeft))
                 {
-                    this.X -= 5;
-                    this.Y += 5; //still simluates gravity
+                    if (!leftWall)
+                    {
+                        this.X -= 5;
+                    }
+                    if (!ground)
+                    {
+                        this.Y += 5;
+                    }
+                }
+                else
+                {
+                    if (!ground)
+                    {
+                        this.Y += 5;
+                    }
                 }
             }           
         }
@@ -67,8 +99,10 @@ namespace ROOT
         public void Jump()
         //player ascends as though they have actual physics (don't move at constant speed)
         {
-            Y += 5; //temperary measure until acceleration can be implemented
-            //once i can figure out how to see if there's solid floor below i can prevent infinate jumps
+            if (ground) //player shouldn't be able to jump unless they are on the ground
+            {
+                Y -= 5; //temperary measure until acceleration can be implemented
+            }
         }
 
         public void CheckCollision(GameObject g)
@@ -78,7 +112,33 @@ namespace ROOT
             {
                 if(g.IsSolid) //stops player movement if they hit a solid object
                 {
-                    
+                    //should check if the player is on top of a solid object
+                    if (this.HitBox.Bottom.CompareTo(g.HitBox.Top) >= 0)
+                    {
+                        ground = true;
+                    }
+                    else
+                    {
+                        ground = false;
+                    }
+                    //is there a wall to the right
+                    if (this.HitBox.Right.CompareTo(g.HitBox.Left) >= 0)
+                    {
+                        rightWall = true;
+                    }
+                    else
+                    {
+                        rightWall = false;
+                    }
+                    //is there a wall to the left
+                    if (this.HitBox.Left.CompareTo(g.HitBox.Right) >= 0)
+                    {
+                        leftWall = true;
+                    }
+                    else
+                    {
+                        leftWall = false;
+                    }
                 }
                 else if(g is Orb)
                 {
