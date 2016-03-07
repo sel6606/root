@@ -23,9 +23,7 @@ namespace ROOT
         }
         int moveRight, moveLeft, jump, use; //will correspond to player controls
         bool hasOrb; //checks if player has the orb
-        bool ground; //is the player on the ground
-        bool rightWall; //is there a wall to the right
-        bool leftWall; //is there a wall to the left
+        bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
         static bool stunned; //checks if player is stunned
 
         //properties
@@ -90,7 +88,10 @@ namespace ROOT
                 {
                     if (!ground)
                     {
-                        this.Y += 5;
+                        if(!topWall) //stop acceleration if they hit the bottom of a wall
+                        {
+                            this.Y -= 5;
+                        }
                     }
                 }
             }           
@@ -138,6 +139,15 @@ namespace ROOT
                     else
                     {
                         leftWall = false;
+                    }
+
+                    if(this.HitBox.Top.CompareTo(g.HitBox.Bottom) >= 0)
+                    {
+                        topWall = true;
+                    }
+                    else
+                    {
+                        topWall = false;
                     }
                 }
                 else if(g is Orb)
