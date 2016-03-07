@@ -39,6 +39,7 @@ namespace ROOT
         private double timer2;
         private bool hasOrbP1;
         private bool hasOrbP2;
+        private bool NEEDSCONDITION = true;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -92,9 +93,7 @@ namespace ROOT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
+            
             //Switch case for game state
             switch (currentState)
             {
@@ -105,7 +104,7 @@ namespace ROOT
                         //*Code to reset values*
                     }else if(currentMenuState== MenuState.Quit)
                     {
-                        //Code to exit the program
+                        Exit();
                     }
                     currentMenuState=menuManager.NextState(currentMenuState);
                     break;
@@ -114,8 +113,15 @@ namespace ROOT
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
                 case GameState.GameOver:
-                    //If the player chooses play again, change state to game and reset values
-                    //If the player chooses back to menu, change state to menu and menustate to main
+                    if (NEEDSCONDITION) //If the player chooses play again, change state to game and reset values
+                    {
+                        currentState = GameState.Game;
+                        //*Code to reset values*
+                    }else if (NEEDSCONDITION) //If the player chooses back to menu, change state to menu and menustate to main
+                    {
+                        currentState = GameState.Menu;
+                        currentMenuState = MenuState.Main;
+                    }
                     break;
             }
 
