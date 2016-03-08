@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace ROOT
 {
@@ -39,7 +40,10 @@ namespace ROOT
         private double timer2;
         private bool hasOrbP1;
         private bool hasOrbP2;
+        private int playerSize = 100;
         private bool NEEDSCONDITION = true;
+        private Player p1;
+        private Player p2;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -101,7 +105,7 @@ namespace ROOT
                     if (currentMenuState == MenuState.Start)
                     {
                         currentState = GameState.Game;
-                        //*Code to reset values*
+                        Reset();
                     }else if(currentMenuState== MenuState.Quit)
                     {
                         Exit();
@@ -110,6 +114,10 @@ namespace ROOT
                     break;
                 case GameState.Game:
                     //If either player wins, change state to game over
+                    if (timer1==0 || timer2 == 0)
+                    {
+                        currentState = GameState.GameOver;
+                    }
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
                 case GameState.GameOver:
@@ -140,5 +148,17 @@ namespace ROOT
 
             base.Draw(gameTime);
         }
+
+        //Resets variables to their initial values that they should have at the start
+        public void Reset()
+        {
+            timer1 = 180;
+            timer2 = 180;
+            hasOrbP1 = false;
+            hasOrbP2 = false;
+            p1 = new Player(0, 0, playerSize, playerSize, timer1);
+            p2 = new Player(0, 0, playerSize, playerSize, timer2);
+        }
+
     }
 }

@@ -10,6 +10,8 @@ namespace ROOT
 {
     class MenuMan
     {
+        private bool NEEDSCONDITION=true;
+ 
         //SpriteBatch needed for drawing the menu stuff in the draw method
         //Will be the SpriteBatch defined in Game1
         SpriteBatch sb;
@@ -53,17 +55,27 @@ namespace ROOT
             //Switch case for the menu state
             switch (currentState)
             {
-                case MenuState.Start:
-                    break;
                 case MenuState.Instructions:
+                    if (NEEDSCONDITION)
+                    {
+                        currentState = MenuState.Main;
+                    }
                     break;
                 case MenuState.Main:
+                    if (NEEDSCONDITION)
+                    {
+                        currentState = MenuState.Instructions;
+                    } else if (NEEDSCONDITION)
+                    {
+                        currentState = MenuState.Start;
+                    } else if (NEEDSCONDITION)
+                    {
+                        currentState = MenuState.Quit;
+                    }
                     break;
                 case MenuState.Options: //Unused for now
                     break;
                 case MenuState.Controls: //Unused for now
-                    break;
-                case MenuState.Quit:
                     break;
             }
             return currentState;
