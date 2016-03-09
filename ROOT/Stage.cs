@@ -17,10 +17,36 @@ namespace ROOT
         //Will definately change to at least be a platform list when platform class is made.
         List<Rectangle> stageBounds = new List<Rectangle>();
 
+        //SpriteBatch needed for the draw method
+        //Will be the SpriteBatch defined in Game1
+        SpriteBatch sb;
 
-        public Stage() { }
+        //Texture of the tiles
+        Texture2D tileTex;
 
-        public void Draw() { }
+        public SpriteBatch SB
+        {
+            set { sb = value; }
+        }
+
+        public Texture2D TileTex
+        {
+            set { tileTex = value; }
+        }
+
+        public Stage(SpriteBatch sb, Texture2D tileTex)
+        {
+            this.sb = sb;
+            this.tileTex = tileTex;
+        }
+
+        public void Draw()
+        {
+            for(int i=0; i<stageBounds.Count; i++)
+            {
+                sb.Draw(tileTex, stageBounds[i], Color.White);
+            }
+        }
 
 
         /// <summary>
@@ -52,7 +78,7 @@ namespace ROOT
                 int xpos = 0;
 
 
-                String[] subHolder = inputStrings[x].Split();
+                String[] subHolder = inputStrings[x].Split(' ');
 
 
                 //checks to see if a platform should be made in that position

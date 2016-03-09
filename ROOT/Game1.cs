@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace ROOT
 {
@@ -39,6 +40,10 @@ namespace ROOT
         private double timer2;
         private bool hasOrbP1;
         private bool hasOrbP2;
+        private int playerSize = 100;
+        private bool NEEDSCONDITION = true;
+        private Player p1;
+        private Player p2;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -92,25 +97,39 @@ namespace ROOT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
+            
             //Switch case for game state
             switch (currentState)
             {
                 case GameState.Menu:
-                    //If this returns Start, change state to Game and reset values
-                    //If this returns quit, end the program
-                    //Else call the menu's draw method
+                    if (currentMenuState == MenuState.Start)
+                    {
+                        currentState = GameState.Game;
+                        Reset();
+                    }else if(currentMenuState== MenuState.Quit)
+                    {
+                        Exit();
+                    }
                     currentMenuState=menuManager.NextState(currentMenuState);
                     break;
                 case GameState.Game:
                     //If either player wins, change state to game over
+                    if (timer1==0 || timer2 == 0)
+                    {
+                        currentState = GameState.GameOver;
+                    }
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
                 case GameState.GameOver:
-                    //If the player chooses play again, change state to game and reset values
-                    //If the player chooses back to menu, change state to menu and menustate to main
+                    if (NEEDSCONDITION) //If the player chooses play again, change state to game and reset values
+                    {
+                        currentState = GameState.Game;
+                        //*Code to reset values*
+                    }else if (NEEDSCONDITION) //If the player chooses back to menu, change state to menu and menustate to main
+                    {
+                        currentState = GameState.Menu;
+                        currentMenuState = MenuState.Main;
+                    }
                     break;
             }
 
@@ -129,5 +148,17 @@ namespace ROOT
 
             base.Draw(gameTime);
         }
+
+        //Resets variables to their initial values that they should have at the start
+        public void Reset()
+        {
+            timer1 = 180;
+            timer2 = 180;
+            hasOrbP1 = false;
+            hasOrbP2 = false;
+            p1 = new Player(0, 0, playerSize, playerSize, timer1);
+            p2 = new Player(0, 0, playerSize, playerSize, timer2);
+        }
+
     }
 }
