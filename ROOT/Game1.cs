@@ -45,6 +45,7 @@ namespace ROOT
         private Stage gameStage;
         private Orb orb;
         private Texture2D brickTexture;
+        private Texture2D menuTexture;
 
 
         //Variables for testing purposes
@@ -89,7 +90,8 @@ namespace ROOT
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             menuManager.SB = spriteBatch;
-            menuManager.MenuTex = Content.Load<Texture2D>("m2Menu");
+            menuTexture = Content.Load<Texture2D>("m2Menu");
+            menuManager.MenuTex = menuTexture;
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
@@ -197,8 +199,8 @@ namespace ROOT
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1);
             p2 = new Player(0, 0, playerSize, playerSize, timer2);
-            p1.Tex = brickTexture;
-            p2.Tex = brickTexture;
+            p1.Tex = menuTexture;
+            p2.Tex = menuTexture;
         }
 
         //Checks to see if a key was pressed exactly once
