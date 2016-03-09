@@ -73,7 +73,7 @@ namespace ROOT
             currentState = GameState.Menu;
             menuManager = new MenuMan();
             currentMenuState = MenuState.Main;
-            
+            Reset();
             
 
             base.Initialize();
@@ -133,8 +133,8 @@ namespace ROOT
                     break;
                 case GameState.Game:
                     //If either player wins, change state to game over
-                    //p1.Move();
-                    //p2.Move();
+                    p1.Move();
+                    p2.Move();
                     if (timer1==0 || timer2 == 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
@@ -174,8 +174,8 @@ namespace ROOT
                     break;
                 case GameState.Game:
                     gameStage.Draw();
-                   // p1.Draw(spriteBatch);
-                   // p2.Draw(spriteBatch);
+                    p1.Draw(spriteBatch);
+                    p2.Draw(spriteBatch);
                     //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
@@ -197,6 +197,8 @@ namespace ROOT
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1);
             p2 = new Player(0, 0, playerSize, playerSize, timer2);
+            p1.Tex = brickTexture;
+            p2.Tex = brickTexture;
         }
 
         //Checks to see if a key was pressed exactly once
