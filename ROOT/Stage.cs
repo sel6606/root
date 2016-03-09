@@ -94,6 +94,7 @@ namespace ROOT
 
                         xpos = xpos + 20;
                     }
+                    xpos = xpos + 20;
                 }
                 //shifts the position down
                 ypos = ypos + 20;
