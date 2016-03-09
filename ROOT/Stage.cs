@@ -15,7 +15,7 @@ namespace ROOT
         //The list that will contain all the rectangle objects that make the stage.
         //May change to a gameobject list to allow placement of players and orb as well
         //Will definately change to at least be a platform list when platform class is made.
-        List<Rectangle> stageBounds = new List<Rectangle>();
+        List<Tile> stageBounds = new List<Tile>();
 
         //SpriteBatch needed for the draw method
         //Will be the SpriteBatch defined in Game1
@@ -44,7 +44,8 @@ namespace ROOT
         {
             for(int i=0; i<stageBounds.Count; i++)
             {
-                sb.Draw(tileTex, stageBounds[i], Color.White);
+                stageBounds[i].Tex = tileTex;
+                stageBounds[i].Draw(sb);
             }
         }
 
@@ -65,7 +66,7 @@ namespace ROOT
 
 
             //should add each line of the file as a string to the list.
-            while(readStage.ReadLine() != null)
+            while(readStage.Peek() != -1)
             {
                 inputStrings.Add(readStage.ReadLine());
             }
@@ -78,7 +79,7 @@ namespace ROOT
                 int xpos = 0;
 
 
-                String[] subHolder = inputStrings[x].Split(' ');
+                String[] subHolder = inputStrings[x].Split('.');
 
 
                 //checks to see if a platform should be made in that position
@@ -89,15 +90,19 @@ namespace ROOT
                     {
                         //makes a platform in the current position then shifts the position to the right.
                         //will add more if else statments if including player stars and orb starts
-                        Rectangle added = new Rectangle(xpos, ypos, 20, 20);
+                        Tile added = new Tile(xpos, ypos, 50, 50);
                         stageBounds.Add(added);
 
-                        xpos = xpos + 20;
+                        xpos = xpos + 50;
                     }
-                    xpos = xpos + 20;
+                    else
+                    {
+                        xpos = xpos + 50;
+                    }
+                   
                 }
                 //shifts the position down
-                ypos = ypos + 20;
+                ypos = ypos + 50;
             }
 
         }

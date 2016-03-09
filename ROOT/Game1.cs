@@ -40,12 +40,18 @@ namespace ROOT
         private double timer2;
         private bool hasOrbP1;
         private bool hasOrbP2;
-        private int playerSize = 100;
-        private bool NEEDSCONDITION = true;
         private Player p1;
         private Player p2;
         private Stage gameStage;
         private Orb orb;
+        private Texture2D brickTexture;
+
+
+        //Variables for testing purposes
+        private KeyboardState kbState;
+        private KeyboardState previousKbState;
+        private int playerSize = 100;
+        private bool NEEDSCONDITION = false;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -67,6 +73,8 @@ namespace ROOT
             currentState = GameState.Menu;
             menuManager = new MenuMan();
             currentMenuState = MenuState.Main;
+            
+            
 
             base.Initialize();
         }
@@ -83,6 +91,9 @@ namespace ROOT
             menuManager.SB = spriteBatch;
             menuManager.MenuTex = Content.Load<Texture2D>("m2Menu");
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
+            brickTexture = Content.Load<Texture2D>("brick-wall");
+            gameStage = new Stage(spriteBatch, brickTexture);
+            gameStage.ReadStage("stagetest.txt");
         }
 
         /// <summary>
@@ -101,11 +112,16 @@ namespace ROOT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            
+            //Gets the current state of the keyboard
+            kbState = Keyboard.GetState();
+
             //Switch case for game state
             switch (currentState)
             {
                 case GameState.Menu:
+
+                    currentMenuState = menuManager.NextState(currentMenuState);
+
                     if (currentMenuState == MenuState.Start)
                     {
                         currentState = GameState.Game;
@@ -114,29 +130,30 @@ namespace ROOT
                     {
                         Exit();
                     }
-                    currentMenuState=menuManager.NextState(currentMenuState);
                     break;
                 case GameState.Game:
                     //If either player wins, change state to game over
-                    if (timer1==0 || timer2 == 0)
+                    //p1.Move();
+                    //p2.Move();
+                    if (timer1==0 || timer2 == 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
                     }
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
                 case GameState.GameOver:
-                    if (NEEDSCONDITION) //If the player chooses play again, change state to game and reset values
+                    if (NEEDSCONDITION || SingleKeyPress(Keys.R)) //If the player chooses play again, change state to game and reset values
                     {
                         currentState = GameState.Game;
                         //*Code to reset values*
-                    }else if (NEEDSCONDITION) //If the player chooses back to menu, change state to menu and menustate to main
+                    }else if (NEEDSCONDITION || SingleKeyPress(Keys.M)) //If the player chooses back to menu, change state to menu and menustate to main
                     {
                         currentState = GameState.Menu;
                         currentMenuState = MenuState.Main;
                     }
                     break;
             }
-
+            previousKbState = kbState;
             base.Update(gameTime);
         }
 
@@ -157,9 +174,9 @@ namespace ROOT
                     break;
                 case GameState.Game:
                     gameStage.Draw();
-                    p1.Draw(spriteBatch);
-                    p2.Draw(spriteBatch);
-                    orb.Draw(spriteBatch);
+                   // p1.Draw(spriteBatch);
+                   // p2.Draw(spriteBatch);
+                    //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
                     menuManager.Draw(currentMenuState);
@@ -180,6 +197,19 @@ namespace ROOT
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1);
             p2 = new Player(0, 0, playerSize, playerSize, timer2);
+        }
+
+        //Checks to see if a key was pressed exactly once
+        private bool SingleKeyPress(Keys key)
+        {
+            if (kbState.IsKeyDown(key) && previousKbState.IsKeyUp(key))
+            { //Returns true if the key being pressed is different from the key pressed in the previous state
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }

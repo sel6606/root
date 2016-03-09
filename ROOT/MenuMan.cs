@@ -10,7 +10,9 @@ namespace ROOT
 {
     class MenuMan
     {
-        private bool NEEDSCONDITION=true;
+        private bool NEEDSCONDITION=false;
+        private KeyboardState kbState;
+        private KeyboardState previousKbState;
  
         //SpriteBatch needed for drawing the menu stuff in the draw method
         //Will be the SpriteBatch defined in Game1
@@ -64,23 +66,26 @@ namespace ROOT
         //Will return the next state of the menu
         public MenuState NextState(MenuState currentState)
         {
+            //Gets the current state of the keyboard
+            kbState = Keyboard.GetState();
+
             //Switch case for the menu state
             switch (currentState)
             {
                 case MenuState.Instructions:
-                    if (NEEDSCONDITION)
+                    if (NEEDSCONDITION || SingleKeyPress(Keys.B))
                     {
                         currentState = MenuState.Main;
                     }
                     break;
                 case MenuState.Main:
-                    if (NEEDSCONDITION)
+                    if (NEEDSCONDITION || SingleKeyPress(Keys.I))
                     {
                         currentState = MenuState.Instructions;
-                    } else if (NEEDSCONDITION)
+                    } else if (NEEDSCONDITION || SingleKeyPress(Keys.S))
                     {
                         currentState = MenuState.Start;
-                    } else if (NEEDSCONDITION)
+                    } else if (NEEDSCONDITION || SingleKeyPress(Keys.Q))
                     {
                         currentState = MenuState.Quit;
                     }
@@ -90,7 +95,22 @@ namespace ROOT
                 case MenuState.Controls: //Unused for now
                     break;
             }
+            previousKbState = kbState;
             return currentState;
+        }
+
+
+        //Checks to see if a key was pressed exactly once
+        private bool SingleKeyPress(Keys key)
+        {
+            if (kbState.IsKeyDown(key) && previousKbState.IsKeyUp(key))
+            { //Returns true if the key being pressed is different from the key pressed in the previous state
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }
