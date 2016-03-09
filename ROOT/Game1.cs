@@ -82,7 +82,7 @@ namespace ROOT
 
             menuManager.SB = spriteBatch;
             menuManager.MenuTex = Content.Load<Texture2D>("m2Menu");
-            menuManager.MenuFont = Content.Load<SpriteFont>("ComicSansMS_14");
+            menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
         }
 
         /// <summary>
@@ -148,6 +148,8 @@ namespace ROOT
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
+            spriteBatch.Begin();
+
             switch (currentState)
             {
                 case GameState.Menu:
@@ -163,6 +165,8 @@ namespace ROOT
                     menuManager.Draw(currentMenuState);
                     break;
             }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

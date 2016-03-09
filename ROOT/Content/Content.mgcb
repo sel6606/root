@@ -24,8 +24,9 @@
 /processorParam:TextureFormat=Color
 /build:m2Menu.png
 
-#begin ComicSansMS_14.xnb
-/importer:
-/processor:
-/build:ComicSansMS_14.xnb
+#begin menuText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:menuText.spritefont
 
