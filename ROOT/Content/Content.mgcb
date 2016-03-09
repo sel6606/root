@@ -13,3 +13,19 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin m2Menu.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:TextureFormat=Color
+/build:m2Menu.png
+
+#begin ComicSansMS_14.xnb
+/importer:
+/processor:
+/build:ComicSansMS_14.xnb
+

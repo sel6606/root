@@ -44,6 +44,8 @@ namespace ROOT
         private bool NEEDSCONDITION = true;
         private Player p1;
         private Player p2;
+        private Stage gameStage;
+        private Orb orb;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -78,7 +80,9 @@ namespace ROOT
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            menuManager.SB = spriteBatch;
+            menuManager.MenuTex = Content.Load<Texture2D>("m2Menu");
+            menuManager.MenuFont = Content.Load<SpriteFont>("ComicSansMS_14");
         }
 
         /// <summary>
@@ -144,7 +148,21 @@ namespace ROOT
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            switch (currentState)
+            {
+                case GameState.Menu:
+                    menuManager.Draw(currentMenuState);
+                    break;
+                case GameState.Game:
+                    gameStage.Draw();
+                    p1.Draw(spriteBatch);
+                    p2.Draw(spriteBatch);
+                    orb.Draw(spriteBatch);
+                    break;
+                case GameState.GameOver:
+                    menuManager.Draw(currentMenuState);
+                    break;
+            }
 
             base.Draw(gameTime);
         }

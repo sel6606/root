@@ -19,6 +19,8 @@ namespace ROOT
         //Texture of the menu stuff
         Texture2D menuTex;
 
+        SpriteFont menuFont;
+
         //Sets the SpriteBatch
         public SpriteBatch SB
         {
@@ -31,6 +33,11 @@ namespace ROOT
             set { menuTex = value; }
         }
 
+        public SpriteFont MenuFont
+        {
+            set { menuFont = value; }
+        }
+
         public MenuMan() { }
 
         public void Draw(MenuState currentState)
@@ -40,7 +47,12 @@ namespace ROOT
                 case MenuState.Instructions:
                     break;
                 case MenuState.Main: //Priority
-                    //sb.Draw(menuTex, new Rectangle(10,10,10,10))
+                    sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
+                    sb.DrawString(menuFont, "Start", new Vector2(148, 115), Color.White);
+                    sb.Draw(menuTex, new Rectangle(100, 300, 100, 30), Color.White);
+                    sb.DrawString(menuFont, "Start", new Vector2(148, 315), Color.White);
+                    sb.Draw(menuTex, new Rectangle(100, 500, 100, 30), Color.White);
+                    sb.DrawString(menuFont, "Start", new Vector2(148, 515), Color.White);
                     break;
                 case MenuState.Options: //Unused for now
                     break;
