@@ -39,7 +39,7 @@ namespace ROOT
         public void Move() //movement should be complete by next meeting
         //it's move...what do you think it does
         {
-            while(!stunned)
+            if(!stunned)
             {
                 KeyboardState input = Keyboard.GetState();
                 if (input.IsKeyDown((Keys)moveRight) && input.IsKeyDown((Keys)jump))
@@ -90,7 +90,7 @@ namespace ROOT
                     {
                         if(!topWall) //stop acceleration if they hit the bottom of a wall
                         {
-                            this.Y -= 5;
+                            this.Y += 10;
                         }
                     }
                 }
