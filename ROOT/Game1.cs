@@ -89,7 +89,6 @@ namespace ROOT
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            menuManager.SB = spriteBatch;
             menuTexture = Content.Load<Texture2D>("m2Menu");
             menuManager.MenuTex = menuTexture;
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
@@ -135,8 +134,8 @@ namespace ROOT
                     break;
                 case GameState.Game:
                     //If either player wins, change state to game over
-                    p1.Move();
-                    p2.Move();
+                    //p1.Move();
+                    //p2.Move();
                     if (timer1==0 || timer2 == 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
@@ -172,7 +171,7 @@ namespace ROOT
             switch (currentState)
             {
                 case GameState.Menu:
-                    menuManager.Draw(currentMenuState);
+                    menuManager.Draw(currentMenuState, spriteBatch);
                     break;
                 case GameState.Game:
                     gameStage.Draw();
@@ -181,7 +180,7 @@ namespace ROOT
                     //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
-                    menuManager.Draw(currentMenuState);
+                    menuManager.Draw(currentMenuState, spriteBatch);
                     break;
             }
 
@@ -197,10 +196,8 @@ namespace ROOT
             timer2 = 180;
             hasOrbP1 = false;
             hasOrbP2 = false;
-            p1 = new Player(0, 0, playerSize, playerSize, timer1);
-            p2 = new Player(0, 0, playerSize, playerSize, timer2);
-            p1.Tex = menuTexture;
-            p2.Tex = menuTexture;
+            p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
+            p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
         }
 
         //Checks to see if a key was pressed exactly once

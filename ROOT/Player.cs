@@ -30,8 +30,8 @@ namespace ROOT
         public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
 
         //constructor, calls game object's but forces isSolid to be false
-        public Player(int x, int y, int width, int height, double time)
-            : base(x,y,width,height,false)
+        public Player(int x, int y, int width, int height, double time, Texture2D texture)
+            : base(x,y,width,height,false, texture)
         {
             hasOrb = false; //player doesn't start with orb
         }
