@@ -24,10 +24,11 @@ namespace ROOT
         public Texture2D Tex { get { return tex; } set { tex = value; } }
         
         //constructor
-        public GameObject(int x, int y, int width, int height, bool solid)
+        public GameObject(int x, int y, int width, int height, bool solid, Texture2D texture)
         //requires x/y coordinates for a starting point, dimensions for the hitbox rectangle,
         //and a solid bool value
         {
+            tex = texture;
             hitBox = new Rectangle(x, y, width, height);
             isSolid = solid;
         }

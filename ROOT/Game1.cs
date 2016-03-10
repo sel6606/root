@@ -45,6 +45,7 @@ namespace ROOT
         private Stage gameStage;
         private Orb orb;
         private Texture2D brickTexture;
+        private Texture2D menuTexture;
 
 
         //Variables for testing purposes
@@ -73,7 +74,7 @@ namespace ROOT
             currentState = GameState.Menu;
             menuManager = new MenuMan();
             currentMenuState = MenuState.Main;
-            
+            Reset();
             
 
             base.Initialize();
@@ -88,8 +89,8 @@ namespace ROOT
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            menuManager.SB = spriteBatch;
-            menuManager.MenuTex = Content.Load<Texture2D>("m2Menu");
+            menuTexture = Content.Load<Texture2D>("m2Menu");
+            menuManager.MenuTex = menuTexture;
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
@@ -170,7 +171,7 @@ namespace ROOT
             switch (currentState)
             {
                 case GameState.Menu:
-                    menuManager.Draw(currentMenuState);
+                    menuManager.Draw(currentMenuState, spriteBatch);
                     break;
                 case GameState.Game:
                     gameStage.Draw();
@@ -179,7 +180,7 @@ namespace ROOT
                     //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
-                    menuManager.Draw(currentMenuState);
+                    menuManager.Draw(currentMenuState, spriteBatch);
                     break;
             }
 
@@ -195,10 +196,8 @@ namespace ROOT
             timer2 = 180;
             hasOrbP1 = false;
             hasOrbP2 = false;
-            p1 = new Player(0, 0, playerSize, playerSize, timer1);
-            p2 = new Player(0, 0, playerSize, playerSize, timer2);
-            p1.Tex = brickTexture;
-            p2.Tex = brickTexture;
+            p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
+            p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
         }
 
         //Checks to see if a key was pressed exactly once

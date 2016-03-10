@@ -14,20 +14,13 @@ namespace ROOT
         private KeyboardState kbState;
         private KeyboardState previousKbState;
  
-        //SpriteBatch needed for drawing the menu stuff in the draw method
-        //Will be the SpriteBatch defined in Game1
-        SpriteBatch sb;
+       
 
         //Texture of the menu stuff
         Texture2D menuTex;
 
         SpriteFont menuFont;
 
-        //Sets the SpriteBatch
-        public SpriteBatch SB
-        {
-            set { sb = value; }
-        }
 
         //Sets the menu stuff texture
         public Texture2D MenuTex
@@ -42,7 +35,7 @@ namespace ROOT
 
         public MenuMan() { }
 
-        public void Draw(MenuState currentState)
+        public void Draw(MenuState currentState, SpriteBatch sb)
         {
             switch (currentState)
             {
