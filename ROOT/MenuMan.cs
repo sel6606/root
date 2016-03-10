@@ -45,9 +45,9 @@ namespace ROOT
                     sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
                     sb.DrawString(menuFont, "Start", new Vector2(148, 115), Color.White);
                     sb.Draw(menuTex, new Rectangle(100, 300, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Start", new Vector2(148, 315), Color.White);
-                    sb.Draw(menuTex, new Rectangle(100, 500, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Start", new Vector2(148, 515), Color.White);
+                    sb.DrawString(menuFont, "Instructions", new Vector2(148, 315), Color.White);
+                    sb.Draw(menuTex, new Rectangle(100, 400, 100, 30), Color.White);
+                    sb.DrawString(menuFont, "Quit", new Vector2(148, 415), Color.White);
                     break;
                 case MenuState.Options: //Unused for now
                     break;
