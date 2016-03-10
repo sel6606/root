@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace ROOT
 {
@@ -39,6 +40,19 @@ namespace ROOT
         private double timer2;
         private bool hasOrbP1;
         private bool hasOrbP2;
+        private Player p1;
+        private Player p2;
+        private Stage gameStage;
+        private Orb orb;
+        private Texture2D brickTexture;
+        private Texture2D menuTexture;
+
+
+        //Variables for testing purposes
+        private KeyboardState kbState;
+        private KeyboardState previousKbState;
+        private int playerSize = 100;
+        private bool NEEDSCONDITION = false;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -60,7 +74,9 @@ namespace ROOT
             currentState = GameState.Menu;
             menuManager = new MenuMan();
             currentMenuState = MenuState.Main;
+            Reset();
             
+
             base.Initialize();
         }
 
@@ -73,7 +89,12 @@ namespace ROOT
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            menuTexture = Content.Load<Texture2D>("m2Menu");
+            menuManager.MenuTex = menuTexture;
+            menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
+            brickTexture = Content.Load<Texture2D>("brick-wall");
+            gameStage = new Stage(spriteBatch, brickTexture);
+            gameStage.ReadStage("stagetest.txt");
         }
 
         /// <summary>
@@ -92,28 +113,49 @@ namespace ROOT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+            //Gets the current state of the keyboard
+            kbState = Keyboard.GetState();
 
             //Switch case for game state
             switch (currentState)
             {
                 case GameState.Menu:
-                    //If this returns Start, change state to Game and reset values
-                    //If this returns quit, end the program
-                    //Else call the menu's draw method
-                    currentMenuState=menuManager.NextState(currentMenuState);
+
+                    currentMenuState = menuManager.NextState(currentMenuState);
+
+                    if (currentMenuState == MenuState.Start)
+                    {
+                        currentState = GameState.Game;
+                        Reset();
+                    }else if(currentMenuState== MenuState.Quit)
+                    {
+                        Exit();
+                    }
                     break;
                 case GameState.Game:
                     //If either player wins, change state to game over
+                    p1.Move();
+                    p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
+                    //p2.Move();
+                    if (timer1==0 || timer2 == 0 || SingleKeyPress(Keys.O))
+                    {
+                        currentState = GameState.GameOver;
+                    }
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
                 case GameState.GameOver:
-                    //If the player chooses play again, change state to game and reset values
-                    //If the player chooses back to menu, change state to menu and menustate to main
+                    if (NEEDSCONDITION || SingleKeyPress(Keys.R)) //If the player chooses play again, change state to game and reset values
+                    {
+                        currentState = GameState.Game;
+                        //*Code to reset values*
+                    }else if (NEEDSCONDITION || SingleKeyPress(Keys.M)) //If the player chooses back to menu, change state to menu and menustate to main
+                    {
+                        currentState = GameState.Menu;
+                        currentMenuState = MenuState.Main;
+                    }
                     break;
             }
-
+            previousKbState = kbState;
             base.Update(gameTime);
         }
 
@@ -125,9 +167,52 @@ namespace ROOT
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            switch (currentState)
+            {
+                case GameState.Menu:
+                    menuManager.Draw(currentMenuState, spriteBatch);
+                    break;
+                case GameState.Game:
+                    gameStage.Draw();
+                    p1.Draw(spriteBatch);
+                    p2.Draw(spriteBatch);
+                    //orb.Draw(spriteBatch);
+                    break;
+                case GameState.GameOver:
+                    menuManager.Draw(currentMenuState, spriteBatch);
+                    break;
+            }
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
+
+        //Resets variables to their initial values that they should have at the start
+        public void Reset()
+        {
+            timer1 = 180;
+            timer2 = 180;
+            hasOrbP1 = false;
+            hasOrbP2 = false;
+            p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
+            p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
+        }
+
+        //Checks to see if a key was pressed exactly once
+        private bool SingleKeyPress(Keys key)
+        {
+            if (kbState.IsKeyDown(key) && previousKbState.IsKeyUp(key))
+            { //Returns true if the key being pressed is different from the key pressed in the previous state
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }
