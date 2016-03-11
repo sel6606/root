@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace ROOT
 {
@@ -46,7 +47,6 @@ namespace ROOT
         private Orb orb;
         private Texture2D brickTexture;
         private Texture2D menuTexture;
-
 
         //Variables for testing purposes
         private KeyboardState kbState;
@@ -133,9 +133,16 @@ namespace ROOT
                     }
                     break;
                 case GameState.Game:
+
                     //If either player wins, change state to game over
+                    p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
+                    p1.intersect = false;
+                    for (int i = 0; i < gameStage.StageBounds.Count; i++)
+                    {
+                        p1.CheckCollision(gameStage.StageBounds[i]);
+                    }
                     p1.Move();
-                    p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S); //set this somewhere else
+                    
                     //p2.Move();
                     if (timer1==0 || timer2 == 0 || SingleKeyPress(Keys.O))
                     {

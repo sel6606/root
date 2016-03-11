@@ -34,6 +34,11 @@ namespace ROOT
             set { tileTex = value; }
         }
 
+        public List<Tile> StageBounds
+        {
+            get { return stageBounds; }
+        }
+
         public Stage(SpriteBatch sb, Texture2D tileTex)
         {
             this.sb = sb;
