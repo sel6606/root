@@ -135,7 +135,7 @@ namespace ROOT
                 case GameState.Game:
                     //If either player wins, change state to game over
                     p1.Move();
-                    p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
+                    p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S); //set this somewhere else
                     //p2.Move();
                     if (timer1==0 || timer2 == 0 || SingleKeyPress(Keys.O))
                     {
