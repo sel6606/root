@@ -47,6 +47,10 @@ namespace ROOT
         private Orb orb;
         private Texture2D brickTexture;
         private Texture2D menuTexture;
+        private int buttonWidth;
+        private int buttonHeight;
+        private int halfScreen;
+        private int bottomDistance;
 
         //Variables for testing purposes
         private KeyboardState kbState;
@@ -101,6 +105,13 @@ namespace ROOT
             gameStage.ReadStage("stagetest.txt");
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
+
+            buttonWidth = 300;
+            buttonHeight = 100;
+            halfScreen = (GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
+            bottomDistance = (GraphicsDevice.Viewport.Height - (buttonHeight + 50));
+            restart = new Button(menuTexture, new Rectangle(halfScreen - ((buttonWidth/2) + 20), bottomDistance, buttonWidth, buttonHeight));
+            menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth/2) + 20), bottomDistance, buttonWidth, buttonHeight));
         }
 
         /// <summary>
@@ -194,6 +205,8 @@ namespace ROOT
                     break;
                 case GameState.GameOver:
                     menuManager.Draw(currentMenuState, spriteBatch);
+                    restart.Draw(spriteBatch);
+                    menu.Draw(spriteBatch);
                     break;
             }
 
