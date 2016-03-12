@@ -98,14 +98,14 @@ namespace ROOT
                     topWall = true;
                 }
                 if (this.HitBox.Left == g[i].HitBox.Right &&
-                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y - g[i].HitBox.Height))
-                {
-                    rightWall = true;
-                }
-                if (this.HitBox.Right == g[i].HitBox.Left &&
-                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y - g[i].HitBox.Height))
+                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height))
                 {
                     leftWall = true;
+                }
+                if (this.HitBox.Right == g[i].HitBox.Left &&
+                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height))
+                {
+                    rightWall = true;
                 }
             }
         }
