@@ -19,9 +19,13 @@ namespace ROOT
         private Button back;
         private MouseState mState;
         private MouseState previousMState;
+
+        //Width of each button
         private int buttonWidth;
+        //Height of each button    
         private int buttonHeight;
-        private int halfScreen;
+        //Finds half of the screen's width to help center the buttons   
+        private int halfScreen;     
 
 
         //Texture of the menu stuff
@@ -39,28 +43,35 @@ namespace ROOT
         {
             set { menuFont = value; }
         }
-
+        
+        //Constructor for MenuMan
         public MenuMan(Game1 game, Texture2D menuTexture)
         {
             buttonWidth = 300;
             buttonHeight = 100;
-            halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
+            //Sets halfScreen equal to half of the screen minus half the width of each button
+            //so the center of the button will be in the center of the screen
+            halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);  
             menuTex = menuTexture;
+            //First button on main menu screen
             start = new Button(menuTex, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
+            //Second button on main menu screen            
             instructions = new Button(menuTex, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));
+            //Third button on main menu screen      
             quit = new Button(menuTex, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
-            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
+            //Only button on instructions menu              
+            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));      
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
         {
             switch (currentState)
             {
-                case MenuState.Instructions:
+                case MenuState.Instructions: //Displays instructions screen
 
                     back.Draw(sb);
                     break;
-                case MenuState.Main: //Priority
+                case MenuState.Main:  //Displays main menu screen
 
                     start.Draw(sb);
                     instructions.Draw(sb);
@@ -77,6 +88,7 @@ namespace ROOT
         public MenuState NextState(MenuState currentState, MouseState mouseState, MouseState previousMouseState)
         {
             //Gets the current state of the keyboard
+            //Gets the current and previous state of the mouse
             kbState = Keyboard.GetState();
             mState = mouseState;
             previousMState = previousMouseState;
@@ -84,13 +96,13 @@ namespace ROOT
             //Switch case for the menu state
             switch (currentState)
             {
-                case MenuState.Instructions:
+                case MenuState.Instructions: //If the menu is on the instructions screen
                     if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Main;
                     }
                     break;
-                case MenuState.Main:
+                case MenuState.Main: //If you are at the main menu
                     if (instructions.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Instructions;
@@ -125,6 +137,7 @@ namespace ROOT
             }
         }
 
+        //Checks to see if there was a single click of the left mouse button
         private bool SingleMouseClick()
         {
             if (mState.LeftButton == ButtonState.Pressed &&
