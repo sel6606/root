@@ -175,12 +175,10 @@ namespace ROOT
                     //If either player wins, change state to game over
                     //p1.intersect = false;
                     
-                    p1.CheckCollisionY(gameStage.StageBounds);
-                    p1.MoveY();
+                    p1.CheckCollision(gameStage.StageBounds);
+                    p1.Move();
                    
-                    p1.CheckCollisionX(gameStage.StageBounds);
-                    p1.MoveX();
-                    
+                   
 
                     if (hasOrbP1)
                     {
