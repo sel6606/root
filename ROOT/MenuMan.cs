@@ -19,9 +19,9 @@ namespace ROOT
         private Button back;
         private MouseState mState;
         private MouseState previousMState;
-        private int buttonWidth;
-        private int buttonHeight;
-        private int halfScreen;
+        private int buttonWidth;                //Width of each button
+        private int buttonHeight;               //Height of each button
+        private int halfScreen;                 //Finds half of the screen's width to help center the buttons
 
 
         //Texture of the menu stuff
@@ -44,23 +44,24 @@ namespace ROOT
         {
             buttonWidth = 300;
             buttonHeight = 100;
-            halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
+            halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);  //Sets halfScreen equal to half of the screen minus half the width of each button
+                                                                                        //so the center of the button will be in the center of the screen
             menuTex = menuTexture;
-            start = new Button(menuTex, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
-            instructions = new Button(menuTex, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));
-            quit = new Button(menuTex, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
-            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
+            start = new Button(menuTex, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));              //First button on main menu screen
+            instructions = new Button(menuTex, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));      //Second button on main menu screen
+            quit = new Button(menuTex, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));              //Third button on main menu screen
+            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));      //Only button on instructions menu
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
         {
             switch (currentState)
             {
-                case MenuState.Instructions:
+                case MenuState.Instructions:    //Displays instructions screen
 
                     back.Draw(sb);
                     break;
-                case MenuState.Main: //Priority
+                case MenuState.Main:            //Displays main menu screen
 
                     start.Draw(sb);
                     instructions.Draw(sb);
