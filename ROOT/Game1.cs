@@ -51,7 +51,7 @@ namespace ROOT
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
-        private int playerSize = 100;
+        private int playerSize = 25;
         private bool NEEDSCONDITION = false;
 
         GraphicsDeviceManager graphics;
