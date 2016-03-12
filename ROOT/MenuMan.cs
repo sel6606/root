@@ -96,10 +96,10 @@ namespace ROOT
                     if (instructions.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Instructions;
-                    } else if (NEEDSCONDITION || SingleKeyPress(Keys.S))
+                    } else if (start.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Start;
-                    } else if (NEEDSCONDITION || SingleKeyPress(Keys.Q))
+                    } else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Quit;
                     }
