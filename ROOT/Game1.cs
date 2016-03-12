@@ -124,10 +124,8 @@ namespace ROOT
             switch (currentState)
             {
                 case GameState.Menu:
-
                     mState = Mouse.GetState();
-                    currentMenuState = menuManager.NextState(currentMenuState);
-
+                    currentMenuState = menuManager.NextState(currentMenuState,mState,previousMState);
                     if (currentMenuState == MenuState.Start)
                     {
                         currentState = GameState.Game;
@@ -226,6 +224,8 @@ namespace ROOT
                 return false;
             }
         }
+
+      
 
     }
 }
