@@ -135,7 +135,6 @@ namespace ROOT
                 case GameState.Game:
 
                     //If either player wins, change state to game over
-                    p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
                     p1.intersect = false;
                     for (int i = 0; i < gameStage.StageBounds.Count; i++)
                     {
@@ -205,6 +204,7 @@ namespace ROOT
             hasOrbP1 = false;
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
+            p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
         }
 
