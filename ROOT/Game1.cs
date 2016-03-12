@@ -59,6 +59,17 @@ namespace ROOT
         private MouseState previousMState;
         private Button restart;
         private Button menu;
+        private SpriteFont uiFont;
+
+        public double Timer1
+        {
+            get { return timer1; }
+        }
+
+        public double Timer2
+        {
+            get { return timer2; }
+        }
 
         //Variables for testing purposes
         private KeyboardState kbState;
@@ -112,6 +123,8 @@ namespace ROOT
             gameStage.ReadStage("teststage.txt", p1, p2, orb);
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
+            uiFont = Content.Load<SpriteFont>("menuText");
+            uiManager = new UIMan(this, uiFont, menuTexture);
 
             buttonWidth = 300;
             buttonHeight = 100;
@@ -223,6 +236,7 @@ namespace ROOT
                     gameStage.Draw();
                     p1.Draw(spriteBatch);
                     p2.Draw(spriteBatch);
+                    uiManager.Draw(spriteBatch);
                     //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:    //Draws the game over screen, drawing a restart button and a menu button
@@ -239,8 +253,8 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            timer1 = 10000;
-            timer2 = 10000;
+            timer1 = 10;
+            timer2 = 10;
             hasOrbP1 = true;
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
