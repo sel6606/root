@@ -13,8 +13,12 @@ namespace ROOT
         private bool NEEDSCONDITION=false;
         private KeyboardState kbState;
         private KeyboardState previousKbState;
- 
-       
+        private Button instructions;
+        private Button start;
+        private Button quit;
+        private Button back;
+
+
 
         //Texture of the menu stuff
         Texture2D menuTex;
@@ -33,7 +37,12 @@ namespace ROOT
             set { menuFont = value; }
         }
 
-        public MenuMan() { }
+        public MenuMan()
+        {
+            instructions = new Button();
+            start = new Button();
+            quit = new Button();
+        }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
         {

@@ -53,6 +53,8 @@ namespace ROOT
         private KeyboardState previousKbState;
         private int playerSize = 100;
         private bool NEEDSCONDITION = false;
+        private MouseState mState;
+        private MouseState previousMState;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -121,6 +123,7 @@ namespace ROOT
             {
                 case GameState.Menu:
 
+                    mState = Mouse.GetState();
                     currentMenuState = menuManager.NextState(currentMenuState);
 
                     if (currentMenuState == MenuState.Start)
@@ -162,6 +165,7 @@ namespace ROOT
                     break;
             }
             previousKbState = kbState;
+            previousMState = mState;
             base.Update(gameTime);
         }
 
