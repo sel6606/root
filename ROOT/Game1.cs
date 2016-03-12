@@ -47,6 +47,7 @@ namespace ROOT
         private Orb orb;
         private Texture2D brickTexture;
         private Texture2D menuTexture;
+        private Texture2D cancelTexture;
         //Width of each button
         private int buttonWidth;
         //Height of each button
@@ -120,11 +121,12 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt");
+            gameStage.ReadStage("teststage.txt", p1, p2, orb);
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
-            uiManager = new UIMan(this, uiFont, menuTexture);
+            cancelTexture = Content.Load<Texture2D>("cancel");
+            uiManager = new UIMan(this, uiFont, cancelTexture);
 
             buttonWidth = 300;
             buttonHeight = 100;
@@ -174,8 +176,12 @@ namespace ROOT
                 case GameState.Game:
                     //If either player wins, change state to game over
                     //p1.intersect = false;
+                    
                     p1.CheckCollision(gameStage.StageBounds);
                     p1.Move();
+                   
+                   
+
 
                     if (hasOrbP1)
                     {
@@ -191,6 +197,11 @@ namespace ROOT
                     if (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
+                    }
+                    if (uiManager.CheckExit(mState, previousMState))
+                    {
+                        currentMenuState = MenuState.Main;
+                        currentState = GameState.Menu;
                     }
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
@@ -248,8 +259,8 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            timer1 = 10;
-            timer2 = 10;
+            timer1 = 12;
+            timer2 = 12;
             hasOrbP1 = true;
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);

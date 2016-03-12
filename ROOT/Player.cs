@@ -88,12 +88,12 @@ namespace ROOT
             for (int i = 0; i < g.Count; i++)
             {
                 if (this.HitBox.Bottom == g[i].HitBox.Top && 
-                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.X + g[i].HitBox.Width))
+                    (this.X >= g[i].X && this.X <= g[i].X + g[i].HitBox.Width))
                 {
                     ground = true;
                 }
                 if (this.HitBox.Top == g[i].HitBox.Bottom &&
-                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.X + g[i].HitBox.Width))
+                    (this.X >= g[i].X && this.X <= g[i].X + g[i].HitBox.Width))
                 {
                     topWall = true;
                 }
