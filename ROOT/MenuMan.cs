@@ -46,9 +46,10 @@ namespace ROOT
             buttonHeight = 100;
             halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             menuTex = menuTexture;
-            instructions = new Button(menuTex, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));
             start = new Button(menuTex, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
+            instructions = new Button(menuTex, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));
             quit = new Button(menuTex, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
+            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -56,6 +57,8 @@ namespace ROOT
             switch (currentState)
             {
                 case MenuState.Instructions:
+
+                    back.Draw(sb);
                     break;
                 case MenuState.Main: //Priority
 
