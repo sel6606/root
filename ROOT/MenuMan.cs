@@ -13,14 +13,11 @@ namespace ROOT
         private bool NEEDSCONDITION=false;
         private KeyboardState kbState;
         private KeyboardState previousKbState;
- 
-       
 
         //Texture of the menu stuff
         Texture2D menuTex;
 
         SpriteFont menuFont;
-
 
         //Sets the menu stuff texture
         public Texture2D MenuTex
@@ -42,12 +39,16 @@ namespace ROOT
                 case MenuState.Instructions:
                     break;
                 case MenuState.Main: //Priority
-                    sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
+                    Start = new Button(menuTex, new Rectangle(0, 0, 100, 100));
+
+                    Start.Draw(sb);
+
+                    /*sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
                     sb.DrawString(menuFont, "Start", new Vector2(148, 115), Color.White);
                     sb.Draw(menuTex, new Rectangle(100, 300, 100, 30), Color.White);
                     sb.DrawString(menuFont, "Instructions", new Vector2(148, 315), Color.White);
                     sb.Draw(menuTex, new Rectangle(100, 400, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Quit", new Vector2(148, 415), Color.White);
+                    sb.DrawString(menuFont, "Quit", new Vector2(148, 415), Color.White);*/
                     break;
                 case MenuState.Options: //Unused for now
                     break;
