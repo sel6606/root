@@ -73,8 +73,9 @@ namespace ROOT
         /// </summary>
         protected override void Initialize()
         {
+            IsMouseVisible = true;
             currentState = GameState.Menu;
-            menuManager = new MenuMan();
+           
             currentMenuState = MenuState.Main;
             Reset();
             
@@ -92,11 +93,12 @@ namespace ROOT
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             menuTexture = Content.Load<Texture2D>("m2Menu");
-            menuManager.MenuTex = menuTexture;
-            menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
+            
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("stagetest.txt");
+            menuManager = new MenuMan(menuTexture);
+            menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
         }
 
         /// <summary>

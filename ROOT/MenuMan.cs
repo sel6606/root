@@ -25,7 +25,6 @@ namespace ROOT
 
         SpriteFont menuFont;
 
-
         //Sets the menu stuff texture
         public Texture2D MenuTex
         {
@@ -37,11 +36,12 @@ namespace ROOT
             set { menuFont = value; }
         }
 
-        public MenuMan()
+        public MenuMan(Texture2D menuTexture)
         {
-            instructions = new Button();
-            start = new Button();
-            quit = new Button();
+            menuTex = menuTexture;
+            //instructions = new Button();
+            start = new Button(menuTex, new Rectangle(0, 0, 100, 100)); ;
+            //quit = new Button();
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -51,12 +51,15 @@ namespace ROOT
                 case MenuState.Instructions:
                     break;
                 case MenuState.Main: //Priority
-                    sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
+
+                    start.Draw(sb);
+
+                    /*sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
                     sb.DrawString(menuFont, "Start", new Vector2(148, 115), Color.White);
                     sb.Draw(menuTex, new Rectangle(100, 300, 100, 30), Color.White);
                     sb.DrawString(menuFont, "Instructions", new Vector2(148, 315), Color.White);
                     sb.Draw(menuTex, new Rectangle(100, 400, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Quit", new Vector2(148, 415), Color.White);
+                    sb.DrawString(menuFont, "Quit", new Vector2(148, 415), Color.White);*/
                     break;
                 case MenuState.Options: //Unused for now
                     break;
