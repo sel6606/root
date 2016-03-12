@@ -47,9 +47,13 @@ namespace ROOT
         private Orb orb;
         private Texture2D brickTexture;
         private Texture2D menuTexture;
+        //Width of each button
         private int buttonWidth;
+        //Height of each button
         private int buttonHeight;
+        //Finds half of the screen's width to help center the buttons
         private int halfScreen;
+        //Distance of buttons from the bottom of the screen (used for the restart and menu buttons on the game over screen
         private int bottomDistance;
         private MouseState mState;
         private MouseState previousMState;
@@ -100,6 +104,7 @@ namespace ROOT
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            //Texture for buttons on the menus
             menuTexture = Content.Load<Texture2D>("m2Menu");
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
@@ -112,7 +117,9 @@ namespace ROOT
             buttonHeight = 100;
             halfScreen = (GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             bottomDistance = (GraphicsDevice.Viewport.Height - (buttonHeight + 50));
+            //Sets the location of the restart button
             restart = new Button(menuTexture, new Rectangle(halfScreen - ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
+            //Sets the location of the menu button
             menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
         }
 
@@ -194,16 +201,16 @@ namespace ROOT
 
             switch (currentState)
             {
-                case GameState.Menu:
+                case GameState.Menu:    //Draws a menu dependent on the current menu state
                     menuManager.Draw(currentMenuState, spriteBatch);
                     break;
-                case GameState.Game:
+                case GameState.Game:    //Draws the game screen, drawing the stage, both players, and the orb
                     gameStage.Draw();
                     p1.Draw(spriteBatch);
                     p2.Draw(spriteBatch);
                     //orb.Draw(spriteBatch);
                     break;
-                case GameState.GameOver:
+                case GameState.GameOver:    //Draws the game over screen, drawing a restart button and a menu button
                     restart.Draw(spriteBatch);
                     menu.Draw(spriteBatch);
                     break;
