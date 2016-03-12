@@ -19,6 +19,7 @@ namespace ROOT
         private Button back;
         private int buttonWidth;
         private int buttonHeight;
+        private int halfScreen;
 
 
         //Texture of the menu stuff
@@ -41,6 +42,7 @@ namespace ROOT
         {
             buttonWidth = 300;
             buttonHeight = 100;
+            halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             menuTex = menuTexture;
             instructions = new Button(menuTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2), 200, buttonWidth, buttonHeight));
             start = new Button(menuTex, new Rectangle((game.GraphicsDevice.Viewport.Width/2) - (buttonWidth/2), 50, buttonWidth, buttonHeight));
