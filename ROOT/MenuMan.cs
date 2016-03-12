@@ -13,14 +13,21 @@ namespace ROOT
         private bool NEEDSCONDITION=false;
         private KeyboardState kbState;
         private KeyboardState previousKbState;
- 
-       
+        private Button instructions;
+        private Button start;
+        private Button quit;
+        private Button back;
+        private MouseState mState;
+        private MouseState previousMState;
+        private int buttonWidth;
+        private int buttonHeight;
+        private int halfScreen;
+
 
         //Texture of the menu stuff
         Texture2D menuTex;
 
         SpriteFont menuFont;
-
 
         //Sets the menu stuff texture
         public Texture2D MenuTex
@@ -33,21 +40,31 @@ namespace ROOT
             set { menuFont = value; }
         }
 
-        public MenuMan() { }
+        public MenuMan(Game1 game, Texture2D menuTexture)
+        {
+            buttonWidth = 300;
+            buttonHeight = 100;
+            halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
+            menuTex = menuTexture;
+            start = new Button(menuTex, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
+            instructions = new Button(menuTex, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));
+            quit = new Button(menuTex, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
+            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
+        }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
         {
             switch (currentState)
             {
                 case MenuState.Instructions:
+
+                    back.Draw(sb);
                     break;
                 case MenuState.Main: //Priority
-                    sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Start", new Vector2(148, 115), Color.White);
-                    sb.Draw(menuTex, new Rectangle(100, 300, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Instructions", new Vector2(148, 315), Color.White);
-                    sb.Draw(menuTex, new Rectangle(100, 400, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Quit", new Vector2(148, 415), Color.White);
+
+                    start.Draw(sb);
+                    instructions.Draw(sb);
+                    quit.Draw(sb);
                     break;
                 case MenuState.Options: //Unused for now
                     break;
@@ -57,28 +74,30 @@ namespace ROOT
         }
 
         //Will return the next state of the menu
-        public MenuState NextState(MenuState currentState)
+        public MenuState NextState(MenuState currentState, MouseState mouseState, MouseState previousMouseState)
         {
             //Gets the current state of the keyboard
             kbState = Keyboard.GetState();
+            mState = mouseState;
+            previousMState = previousMouseState;
 
             //Switch case for the menu state
             switch (currentState)
             {
                 case MenuState.Instructions:
-                    if (NEEDSCONDITION || SingleKeyPress(Keys.B))
+                    if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Main;
                     }
                     break;
                 case MenuState.Main:
-                    if (NEEDSCONDITION || SingleKeyPress(Keys.I))
+                    if (instructions.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Instructions;
-                    } else if (NEEDSCONDITION || SingleKeyPress(Keys.S))
+                    } else if (start.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Start;
-                    } else if (NEEDSCONDITION || SingleKeyPress(Keys.Q))
+                    } else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Quit;
                     }
@@ -104,6 +123,20 @@ namespace ROOT
             {
                 return false;
             }
+        }
+
+        private bool SingleMouseClick()
+        {
+            if (mState.LeftButton == ButtonState.Pressed &&
+                previousMState.LeftButton == ButtonState.Released)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
     }
