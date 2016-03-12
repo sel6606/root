@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace ROOT
 {
@@ -45,7 +46,7 @@ namespace ROOT
         private Stage gameStage;
         private Orb orb;
         private Texture2D brickTexture;
-
+        private Texture2D menuTexture;
 
         //Variables for testing purposes
         private KeyboardState kbState;
@@ -73,8 +74,7 @@ namespace ROOT
             currentState = GameState.Menu;
             menuManager = new MenuMan();
             currentMenuState = MenuState.Main;
-            p1=new Player()
-            
+            Reset();
             
 
             base.Initialize();
@@ -89,8 +89,8 @@ namespace ROOT
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            menuManager.SB = spriteBatch;
-            menuManager.MenuTex = Content.Load<Texture2D>("m2Menu");
+            menuTexture = Content.Load<Texture2D>("m2Menu");
+            menuManager.MenuTex = menuTexture;
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
@@ -133,8 +133,16 @@ namespace ROOT
                     }
                     break;
                 case GameState.Game:
+
                     //If either player wins, change state to game over
-                    //p1.Move();
+                    p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
+                    p1.intersect = false;
+                    for (int i = 0; i < gameStage.StageBounds.Count; i++)
+                    {
+                        p1.CheckCollision(gameStage.StageBounds[i]);
+                    }
+                    p1.Move();
+                    
                     //p2.Move();
                     if (timer1==0 || timer2 == 0 || SingleKeyPress(Keys.O))
                     {
@@ -171,16 +179,16 @@ namespace ROOT
             switch (currentState)
             {
                 case GameState.Menu:
-                    menuManager.Draw(currentMenuState);
+                    menuManager.Draw(currentMenuState, spriteBatch);
                     break;
                 case GameState.Game:
                     gameStage.Draw();
-                   //p1.Draw(spriteBatch);
-                   //p2.Draw(spriteBatch);
+                    p1.Draw(spriteBatch);
+                    p2.Draw(spriteBatch);
                     //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
-                    menuManager.Draw(currentMenuState);
+                    menuManager.Draw(currentMenuState, spriteBatch);
                     break;
             }
 
@@ -196,8 +204,8 @@ namespace ROOT
             timer2 = 180;
             hasOrbP1 = false;
             hasOrbP2 = false;
-            p1 = new Player(0, 0, playerSize, playerSize, timer1);
-            p2 = new Player(0, 0, playerSize, playerSize, timer2);
+            p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
+            p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
         }
 
         //Checks to see if a key was pressed exactly once

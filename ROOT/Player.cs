@@ -25,13 +25,14 @@ namespace ROOT
         bool hasOrb; //checks if player has the orb
         bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
         static bool stunned; //checks if player is stunned
+        public bool intersect = false;
 
         //properties
         public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
 
         //constructor, calls game object's but forces isSolid to be false
-        public Player(int x, int y, int width, int height, double time)
-            : base(x,y,width,height,false)
+        public Player(int x, int y, int width, int height, double time, Texture2D texture)
+            : base(x,y,width,height,false, texture)
         {
             hasOrb = false; //player doesn't start with orb
         }
@@ -39,7 +40,14 @@ namespace ROOT
         public void Move() //movement should be complete by next meeting
         //it's move...what do you think it does
         {
-            while(!stunned)
+            //ground = true; //TEMPORARY STATEMENT
+
+            //ALL TEMPORARY STATEMENTS
+            rightWall = false;
+            leftWall = false;
+            topWall = false;
+           
+            if(!stunned)
             {
                 KeyboardState input = Keyboard.GetState();
                 if (input.IsKeyDown((Keys)moveRight) && input.IsKeyDown((Keys)jump))
@@ -90,7 +98,7 @@ namespace ROOT
                     {
                         if(!topWall) //stop acceleration if they hit the bottom of a wall
                         {
-                            this.Y -= 5;
+                            this.Y += 10;
                         }
                     }
                 }
@@ -109,6 +117,7 @@ namespace ROOT
         public void CheckCollision(GameObject g)
         //checks if the player has collided with the given game object
         {
+            
             if(this.HitBox.Intersects(g.HitBox))
             {
                 if(g.IsSolid) //stops player movement if they hit a solid object
@@ -117,6 +126,7 @@ namespace ROOT
                     if (this.HitBox.Bottom.CompareTo(g.HitBox.Top) >= 0)
                     {
                         ground = true;
+                        intersect = true;
                     }
                     else
                     {
@@ -156,6 +166,11 @@ namespace ROOT
                     //set orb's active property to false in game 1
                 }
             }
+            if (!intersect)
+            {
+                ground = false;
+            }
+
         }
 
         public void CheckPlayerCollision(Player p)

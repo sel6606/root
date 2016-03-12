@@ -34,6 +34,11 @@ namespace ROOT
             set { tileTex = value; }
         }
 
+        public List<Tile> StageBounds
+        {
+            get { return stageBounds; }
+        }
+
         public Stage(SpriteBatch sb, Texture2D tileTex)
         {
             this.sb = sb;
@@ -44,7 +49,6 @@ namespace ROOT
         {
             for(int i=0; i<stageBounds.Count; i++)
             {
-                stageBounds[i].Tex = tileTex;
                 stageBounds[i].Draw(sb);
             }
         }
@@ -90,7 +94,7 @@ namespace ROOT
                     {
                         //makes a platform in the current position then shifts the position to the right.
                         //will add more if else statments if including player stars and orb starts
-                        Tile added = new Tile(xpos, ypos, 50, 50);
+                        Tile added = new Tile(xpos, ypos, 50, 50, tileTex);
                         stageBounds.Add(added);
 
                         xpos = xpos + 50;

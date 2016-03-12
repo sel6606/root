@@ -14,20 +14,13 @@ namespace ROOT
         private KeyboardState kbState;
         private KeyboardState previousKbState;
  
-        //SpriteBatch needed for drawing the menu stuff in the draw method
-        //Will be the SpriteBatch defined in Game1
-        SpriteBatch sb;
+       
 
         //Texture of the menu stuff
         Texture2D menuTex;
 
         SpriteFont menuFont;
 
-        //Sets the SpriteBatch
-        public SpriteBatch SB
-        {
-            set { sb = value; }
-        }
 
         //Sets the menu stuff texture
         public Texture2D MenuTex
@@ -42,7 +35,7 @@ namespace ROOT
 
         public MenuMan() { }
 
-        public void Draw(MenuState currentState)
+        public void Draw(MenuState currentState, SpriteBatch sb)
         {
             switch (currentState)
             {
@@ -52,9 +45,9 @@ namespace ROOT
                     sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
                     sb.DrawString(menuFont, "Start", new Vector2(148, 115), Color.White);
                     sb.Draw(menuTex, new Rectangle(100, 300, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Start", new Vector2(148, 315), Color.White);
-                    sb.Draw(menuTex, new Rectangle(100, 500, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Start", new Vector2(148, 515), Color.White);
+                    sb.DrawString(menuFont, "Instructions", new Vector2(148, 315), Color.White);
+                    sb.Draw(menuTex, new Rectangle(100, 400, 100, 30), Color.White);
+                    sb.DrawString(menuFont, "Quit", new Vector2(148, 415), Color.White);
                     break;
                 case MenuState.Options: //Unused for now
                     break;
