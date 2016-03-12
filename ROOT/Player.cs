@@ -74,7 +74,7 @@ namespace ROOT
             if (ground) //player shouldn't be able to jump unless they are on the ground
             {
                 if(!topWall)
-                Y -= 50; //temperary measure until acceleration can be implemented
+                Y -= 75; //temperary measure until acceleration can be implemented
             }
         }
 
@@ -88,24 +88,24 @@ namespace ROOT
             for (int i = 0; i < g.Count; i++)
             {
                 if (this.HitBox.Bottom == g[i].HitBox.Top && 
-                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.Width))
+                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.X + g[i].HitBox.Width))
                 {
                     ground = true;
                 }
                 if (this.HitBox.Top == g[i].HitBox.Bottom &&
-                    (this.X >= g[i].X && this.X <= g[i].HitBox.Width))
+                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.X + g[i].HitBox.Width))
                 {
                     topWall = true;
                 }
                 if (this.HitBox.Left == g[i].HitBox.Right &&
-                    (this.Y >= g[i].Y && this.Y <= g[i].HitBox.Height))
-                {
-                    rightWall = true;
-                }
-                if (this.HitBox.Right == g[i].HitBox.Left &&
-                    (this.Y >= g[i].Y && this.Y <= g[i].HitBox.Height))
+                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height))
                 {
                     leftWall = true;
+                }
+                if (this.HitBox.Right == g[i].HitBox.Left &&
+                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height))
+                {
+                    rightWall = true;
                 }
             }
         }
@@ -155,26 +155,27 @@ namespace ROOT
             use = (int)u;
         }
 
-        //public void ScreenWrap()
-        //wraps the player around the screen if they go out of bounds
-        //{
-           // if(this.HitBox.Center.X < 0)
-            //{
-                //need way to find far side of x axis
-            //}
-            //if(this.HitBox.Center.X > BLANK) //still need far side of x axis
-            //{
-                //this.X = 0;
-            //} 
-            //if(this.HitBox.Center.Y < 0)
-            //{
-                //need way to find far side of y axis
-            //}
-            //if(this.HitBox.Center.Y > BLANK) //still need far side of y axis
-            //{
-                //this.Y = 0;
-            //}
-        //}
+        public void ScreenWrap(int maxX, int maxY)
+        //pre: the max X and Y coordinates of the screen
+        //post: wraps the player around the screen if they go out of bounds
+        {
+            if(this.HitBox.Center.X < 0)
+            {
+                this.X = maxX;
+            }
+            if(this.HitBox.Center.X > maxX)
+            {
+                this.X = 0;
+            } 
+            if(this.HitBox.Center.Y < 0)
+            {
+                this.Y = maxY;
+            }
+            if(this.HitBox.Center.Y > maxY)
+            {
+                this.Y = 0;
+            }
+       }
 
         public void UsePowerUp() { }
     }
