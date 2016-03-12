@@ -248,7 +248,7 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            timer1 = 10;
+            timer1 = 100000000;
             timer2 = 10;
             hasOrbP1 = true;
             hasOrbP2 = false;
