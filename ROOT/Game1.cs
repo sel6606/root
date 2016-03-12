@@ -59,7 +59,7 @@ namespace ROOT
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
-        private int playerSize = 100;
+        private int playerSize = 25;
         private bool NEEDSCONDITION = false;
 
 
@@ -151,13 +151,10 @@ namespace ROOT
                         Exit();
                     }
                     break;
-                case GameState.Game: //If the game is in progress
-                    //INCOMPLETE
-                    p1.intersect = false;
-                    for (int i = 0; i < gameStage.StageBounds.Count; i++)
-                    {
-                        p1.CheckCollision(gameStage.StageBounds[i]);
-                    }
+                case GameState.Game:
+                    //If either player wins, change state to game over
+                    //p1.intersect = false;
+                    p1.CheckCollision(gameStage.StageBounds);
                     p1.Move();
 
                     //p2.Move();
