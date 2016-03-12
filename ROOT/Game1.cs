@@ -94,7 +94,8 @@ namespace ROOT
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt");
+            gameStage.ReadStage("teststage.txt",p1,p2,orb);
+            
         }
 
         /// <summary>
@@ -127,7 +128,16 @@ namespace ROOT
                     {
                         currentState = GameState.Game;
                         Reset();
-                    }else if(currentMenuState== MenuState.Quit)
+                        if(gameStage.P1startX != null && gameStage.P2startX != null)
+                        {
+                            p1.X = gameStage.P1startX;
+                            p1.Y = gameStage.P1startY;
+                            p2.X = gameStage.P2startX;
+                            p2.Y = gameStage.P2startY;
+                        }
+                        
+                    }
+                    else if(currentMenuState== MenuState.Quit)
                     {
                         Exit();
                     }
@@ -136,6 +146,7 @@ namespace ROOT
 
                     //If either player wins, change state to game over
                     p1.intersect = false;
+                    p1.ground = false;
                     for (int i = 0; i < gameStage.StageBounds.Count; i++)
                     {
                         p1.CheckCollision(gameStage.StageBounds[i]);
@@ -203,9 +214,10 @@ namespace ROOT
             timer2 = 180;
             hasOrbP1 = false;
             hasOrbP2 = false;
-            p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
+            p1 = new Player(0,0,playerSize, playerSize, timer1, menuTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
-            p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
+            p2 = new Player(0,0,playerSize, playerSize, timer2, menuTexture);
+
         }
 
         //Checks to see if a key was pressed exactly once

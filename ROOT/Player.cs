@@ -23,16 +23,20 @@ namespace ROOT
         }
         int moveRight, moveLeft, jump, use; //will correspond to player controls
         bool hasOrb; //checks if player has the orb
-        bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
+        public bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
         static bool stunned; //checks if player is stunned
         public bool intersect = false;
+        public int jumpUp = -5;
+        public int gravity;
+        
+        
 
         //properties
         public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
 
         //constructor, calls game object's but forces isSolid to be false
         public Player(int x, int y, int width, int height, double time, Texture2D texture)
-            : base(x,y,width,height,false, texture)
+            : base(x, y, width,height,false, texture)
         {
             hasOrb = false; //player doesn't start with orb
         }
@@ -78,7 +82,7 @@ namespace ROOT
                     }
                     if (!ground) //gravity should only be in effect when player is not on the ground
                     {
-                        this.Y += 5;
+                        //this.Y += 5;
                     }
                 }
                 else if (input.IsKeyDown((Keys)moveLeft))
@@ -89,7 +93,7 @@ namespace ROOT
                     }
                     if (!ground)
                     {
-                        this.Y += 5;
+                        //this.Y += 5;
                     }
                 }
                 else
@@ -98,10 +102,25 @@ namespace ROOT
                     {
                         if(!topWall) //stop acceleration if they hit the bottom of a wall
                         {
-                            this.Y += 10;
+                           // this.Y += 10;
                         }
                     }
                 }
+                //check for jumping in every frame
+                
+                //{
+                    //only applies if in the air
+                    if (!ground)
+                    {
+                        this.Y = this.Y - jumpUp;
+                        if(jumpUp > -5)
+                        {
+                            jumpUp = jumpUp - 2;
+                        }
+                        
+
+                    }
+                //}
             }           
         }
 
@@ -110,7 +129,13 @@ namespace ROOT
         {
             if (ground) //player shouldn't be able to jump unless they are on the ground
             {
-                Y -= 5; //temperary measure until acceleration can be implemented
+                //Y -= 5; //temperary measure until acceleration can be implemented
+                //code for juping with gravity and acceleration
+                jumpUp = 7;
+
+
+
+
             }
         }
 
@@ -128,10 +153,10 @@ namespace ROOT
                         ground = true;
                         intersect = true;
                     }
-                    else
-                    {
-                        ground = false;
-                    }
+                    //else
+                   // {
+                      //  ground = false;
+                    //}
                     //is there a wall to the right
                     if (this.HitBox.Right.CompareTo(g.HitBox.Left) == 0)
                     {
@@ -166,10 +191,10 @@ namespace ROOT
                     //set orb's active property to false in game 1
                 }
             }
-            if (!intersect)
-            {
-                ground = false;
-            }
+           // if (!intersect)
+           // {
+             //   ground = false;
+          //  }
 
         }
 
