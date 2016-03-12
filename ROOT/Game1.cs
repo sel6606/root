@@ -9,7 +9,7 @@ namespace ROOT
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    
+
     //Enum for the menu states
     public enum MenuState
     {
@@ -51,16 +51,17 @@ namespace ROOT
         private int buttonHeight;
         private int halfScreen;
         private int bottomDistance;
+        private MouseState mState;
+        private MouseState previousMState;
+        private Button restart;
+        private Button menu;
 
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
         private int playerSize = 100;
         private bool NEEDSCONDITION = false;
-        private MouseState mState;
-        private MouseState previousMState;
-        private Button restart;
-        private Button menu;
+
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -79,12 +80,13 @@ namespace ROOT
         /// </summary>
         protected override void Initialize()
         {
+            //Sets mouse to visible and sets the inital GameState and MenuState
+            //Also sets inital values
             IsMouseVisible = true;
             currentState = GameState.Menu;
-           
             currentMenuState = MenuState.Main;
             Reset();
-            
+
 
             base.Initialize();
         }
@@ -99,7 +101,7 @@ namespace ROOT
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             menuTexture = Content.Load<Texture2D>("m2Menu");
-            
+
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("stagetest.txt");
@@ -110,8 +112,8 @@ namespace ROOT
             buttonHeight = 100;
             halfScreen = (GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             bottomDistance = (GraphicsDevice.Viewport.Height - (buttonHeight + 50));
-            restart = new Button(menuTexture, new Rectangle(halfScreen - ((buttonWidth/2) + 20), bottomDistance, buttonWidth, buttonHeight));
-            menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth/2) + 20), bottomDistance, buttonWidth, buttonHeight));
+            restart = new Button(menuTexture, new Rectangle(halfScreen - ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
+            menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
         }
 
         /// <summary>
@@ -130,49 +132,49 @@ namespace ROOT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            //Gets the current state of the keyboard
+            //Gets the current state of the keyboard and Mouse
             kbState = Keyboard.GetState();
             mState = Mouse.GetState();
 
             //Switch case for game state
             switch (currentState)
             {
-                case GameState.Menu:
-                    currentMenuState = menuManager.NextState(currentMenuState,mState,previousMState);
+                case GameState.Menu: //If the game is on the menu
+                    currentMenuState = menuManager.NextState(currentMenuState, mState, previousMState);
                     if (currentMenuState == MenuState.Start)
-                    {
+                    { //If the player pressed start, start the game 
                         currentState = GameState.Game;
                         Reset();
-                    }else if(currentMenuState== MenuState.Quit)
-                    {
+                    }
+                    else if (currentMenuState == MenuState.Quit)
+                    { //If the player pressed quit, exit the game
                         Exit();
                     }
                     break;
-                case GameState.Game:
-
-                    //If either player wins, change state to game over
+                case GameState.Game: //If the game is in progress
+                    //INCOMPLETE
                     p1.intersect = false;
                     for (int i = 0; i < gameStage.StageBounds.Count; i++)
                     {
                         p1.CheckCollision(gameStage.StageBounds[i]);
                     }
                     p1.Move();
-                    
+
                     //p2.Move();
-                    if (timer1==0 || timer2 == 0 || SingleKeyPress(Keys.O))
+                    if (timer1 == 0 || timer2 == 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
                     }
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
-                case GameState.GameOver:
+                case GameState.GameOver: //If the game is on the game over screen
                     if (restart.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses play again, change state to game and reset values
-                    {
+                    { //If the player clicks restart, restart the game
                         currentState = GameState.Game;
                         Reset();
-                        //*Code to reset values*
-                    }else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
-                    {
+                    }
+                    else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
+                    { //If the player clicks menu, return to the main menu
                         currentState = GameState.Menu;
                         currentMenuState = MenuState.Main;
                     }
@@ -240,6 +242,7 @@ namespace ROOT
             }
         }
 
+        //Checks to see if the left mouse button was clicked exactly once
         private bool SingleMouseClick()
         {
             if (mState.LeftButton == ButtonState.Pressed &&
