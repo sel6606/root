@@ -124,7 +124,7 @@ namespace ROOT
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
-            uiManager = new UIMan(this, uiFont);
+            uiManager = new UIMan(this, uiFont, menuTexture);
 
             buttonWidth = 300;
             buttonHeight = 100;
