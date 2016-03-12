@@ -123,7 +123,7 @@ namespace ROOT
                 if(g.IsSolid) //stops player movement if they hit a solid object
                 {
                     //should check if the player is on top of a solid object
-                    if (this.HitBox.Bottom.CompareTo(g.HitBox.Top) >= 0)
+                    if (this.HitBox.Bottom.CompareTo(g.HitBox.Top) == 0)
                     {
                         ground = true;
                         intersect = true;
@@ -133,7 +133,7 @@ namespace ROOT
                         ground = false;
                     }
                     //is there a wall to the right
-                    if (this.HitBox.Right.CompareTo(g.HitBox.Left) >= 0)
+                    if (this.HitBox.Right.CompareTo(g.HitBox.Left) == 0)
                     {
                         rightWall = true;
                     }
@@ -142,7 +142,7 @@ namespace ROOT
                         rightWall = false;
                     }
                     //is there a wall to the left
-                    if (this.HitBox.Left.CompareTo(g.HitBox.Right) >= 0)
+                    if (this.HitBox.Left.CompareTo(g.HitBox.Right) == 0)
                     {
                         leftWall = true;
                     }
@@ -151,7 +151,7 @@ namespace ROOT
                         leftWall = false;
                     }
 
-                    if(this.HitBox.Top.CompareTo(g.HitBox.Bottom) >= 0)
+                    if(this.HitBox.Top.CompareTo(g.HitBox.Bottom) == 0)
                     {
                         topWall = true;
                     }
@@ -178,16 +178,19 @@ namespace ROOT
         {
             if (this.HitBox.Intersects(p.HitBox))
             {
-                if (hasOrb) //if this player has the orb
+                if(!stunned)
                 {
-                    Stun();
-                    hasOrb = false;
-                    p.Orb = true;
-                }
-                else if (p.Orb) //if other player has orb
-                {
-                    p.Orb = false;
-                    hasOrb = true;
+                    if (hasOrb) //if this player has the orb
+                    {
+                        Stun();
+                        hasOrb = false;
+                        p.Orb = true;
+                    }
+                    else if (p.Orb) //if other player has orb
+                    {
+                        p.Orb = false;
+                        hasOrb = true;
+                    }
                 }
             }
         }
