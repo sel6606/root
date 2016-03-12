@@ -17,12 +17,12 @@ namespace ROOT
         private MouseState previousMState;
         private Texture2D powerupTex;
 
-        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture)
+        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture,Texture2D powerupTexture)
         {
             this.game = game;
             this.UIFont = UIFont;
             stop = new Button(stopTexture, new Rectangle(0, 0, 30, 30));
-            powerupTex = stopTexture;
+            powerupTex = powerupTexture;
         }
 
         public void Draw(SpriteBatch s)

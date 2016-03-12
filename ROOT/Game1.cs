@@ -126,7 +126,8 @@ namespace ROOT
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
-            uiManager = new UIMan(this, uiFont, cancelTexture);
+            uiManager = new UIMan(this, uiFont, cancelTexture,Content.Load<Texture2D>("placeholder"));
+            
 
             buttonWidth = 300;
             buttonHeight = 100;
