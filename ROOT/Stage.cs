@@ -11,10 +11,23 @@ namespace ROOT
 {
     class Stage
     {
+        //fields to hold new starting positions for the player or orbs
+        private int p1startX;
+        private int p2startX;
+        private int orbstartX;
+        private int p1startY;
+        private int p2startY;
+        private int orbstartY;
 
-        //The list that will contain all the rectangle objects that make the stage.
-        //May change to a gameobject list to allow placement of players and orb as well
-        //Will definately change to at least be a platform list when platform class is made.
+        public int P1startX { get { return p1startX; } }
+        public int P2startX { get { return p2startX; } }
+        public int OrbstartX { get { return orbstartX; } }
+        public int P1startY { get { return p1startY; } }
+        public int P2startY { get { return p2startY; } }
+        public int OrbstartY { get { return orbstartY; } }
+
+
+        //List of the tiles that make up the stage
         List<Tile> stageBounds = new List<Tile>();
 
         //SpriteBatch needed for the draw method
@@ -57,10 +70,13 @@ namespace ROOT
         /// <summary>
         /// Reads in a stage from a textfile, parameter is String of file location
         /// </summary>
-        public void ReadStage(String fileName)
+        public void ReadStage(String fileName, Player p1, Player p2, Orb orb)
         {
             //sets the initial y position for the platforms
             int ypos = 0;
+
+            //to check whether to change player 1 or player 2
+            int playCount = 0;
 
             StreamReader readStage = new StreamReader(fileName);
 
@@ -99,6 +115,33 @@ namespace ROOT
 
                         xpos = xpos + 50;
                     }
+
+                    //Changes the players starting positions
+                    else if(subHolder[y] == "p")
+                    {
+
+                        //checks to see whether to set position of player 1 or 2
+                        if(playCount == 0)
+                        {
+                            p1startX = xpos;
+                            p1startY = ypos;
+                            playCount++;
+                        }
+                        else
+                        {
+                            p2startX = xpos;
+                            p2startY = ypos;
+                        }
+                        xpos = xpos + 50;
+                    }
+
+                    //changes the orbs starting position
+                    //else if(subHolder[y] == "o")
+                   // {
+                     //   orbstartX = xpos;
+                     //   orbstartY = ypos;
+                     //   xpos = xpos + 50;
+                    //}
                     else
                     {
                         xpos = xpos + 50;

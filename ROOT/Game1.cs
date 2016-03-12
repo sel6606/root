@@ -121,7 +121,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt");
+            gameStage.ReadStage("teststage.txt", p1, p2, orb);
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
@@ -176,8 +176,11 @@ namespace ROOT
                 case GameState.Game:
                     //If either player wins, change state to game over
                     //p1.intersect = false;
+                    
                     p1.CheckCollision(gameStage.StageBounds);
                     p1.Move();
+                   
+                   
 
 
                     if (hasOrbP1)
