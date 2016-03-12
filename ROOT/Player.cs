@@ -37,16 +37,13 @@ namespace ROOT
             hasOrb = false; //player doesn't start with orb
         }
 
-        public void Move() //movement should be complete by next meeting
+        public void MoveX() //movement should be complete by next meeting
         //it's move...what do you think it does
         {  
             if(!stunned)
             {
                 KeyboardState input = Keyboard.GetState();
-                if(input.IsKeyDown((Keys)jump))
-                {
-                    Jump();
-                }
+                
                 if(input.IsKeyDown((Keys)moveRight))
                 {
                     if(!rightWall)
@@ -61,13 +58,23 @@ namespace ROOT
                         this.X -= 1;
                     }
                 }
-                if(!ground)
-                {
-                    this.Y += 1;
-                }
+                
             }           
         }
+        public void MoveY()
+        {
 
+
+            KeyboardState input = Keyboard.GetState();
+            if (!ground)
+                {
+                this.Y += 1;
+            }
+            if (input.IsKeyDown((Keys)jump))
+            {
+                Jump();
+            }
+        }
         public void Jump()
         //player ascends as though they have actual physics (don't move at constant speed)
         {
@@ -78,7 +85,7 @@ namespace ROOT
             }
         }
 
-        public void CheckCollision(List<Tile> g)
+        public void CheckCollisionY(List<Tile> g)
         //checks if the player has collided with the given game object
         {
             ground = false;
@@ -88,7 +95,8 @@ namespace ROOT
             for (int i = 0; i < g.Count; i++)
             {
                 if (this.HitBox.Bottom == g[i].HitBox.Top && 
-                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.X + g[i].HitBox.Width))
+                    (this.HitBox.X >= g[i].X && this.HitBox.X <= g[i].HitBox.X + g[i].HitBox.Width)
+                    && this.HitBox.X + Width >= g[i].X && this.HitBox.X + Width<= g[i].HitBox.X + g[i].HitBox.Width)
                 {
                     ground = true;
                 }
@@ -97,19 +105,27 @@ namespace ROOT
                 {
                     topWall = true;
                 }
+                
+            }
+        }
+        public void CheckCollisionX(List<Tile> g)
+        {
+            for (int i = 0; i < g.Count; i++)
+            {
                 if (this.HitBox.Left == g[i].HitBox.Right &&
-                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height))
+                    (this.HitBox.Y >= g[i].Y && this.HitBox.Y <= g[i].HitBox.Y + g[i].HitBox.Height)
+                    && this.HitBox.Y + this.Height >= g[i].Y && this.HitBox.Y + Height <= g[i].HitBox.Y + g[i].HitBox.Height)
                 {
                     leftWall = true;
                 }
                 if (this.HitBox.Right == g[i].HitBox.Left &&
-                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height))
+                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height)
+                    && this.HitBox.Center.Y + this.Height >= g[i].Y && this.HitBox.Y + Height <= g[i].HitBox.Y + g[i].HitBox.Height)
                 {
                     rightWall = true;
                 }
             }
         }
-
         public void CheckPlayerCollision(Player p)
         //this method specifically handles logic for player on player collision
         {
