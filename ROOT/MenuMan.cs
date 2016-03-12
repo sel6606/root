@@ -85,7 +85,7 @@ namespace ROOT
             switch (currentState)
             {
                 case MenuState.Instructions:
-                    if (NEEDSCONDITION || SingleKeyPress(Keys.B))
+                    if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Main;
                     }

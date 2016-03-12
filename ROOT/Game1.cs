@@ -55,6 +55,8 @@ namespace ROOT
         private bool NEEDSCONDITION = false;
         private MouseState mState;
         private MouseState previousMState;
+        private Button restart;
+        private Button menu;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
