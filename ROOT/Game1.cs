@@ -73,6 +73,7 @@ namespace ROOT
             currentState = GameState.Menu;
             menuManager = new MenuMan();
             currentMenuState = MenuState.Main;
+            p1=new Player()
             
             
 
@@ -174,8 +175,8 @@ namespace ROOT
                     break;
                 case GameState.Game:
                     gameStage.Draw();
-                   // p1.Draw(spriteBatch);
-                   // p2.Draw(spriteBatch);
+                   //p1.Draw(spriteBatch);
+                   //p2.Draw(spriteBatch);
                     //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
