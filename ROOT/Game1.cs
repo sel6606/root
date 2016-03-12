@@ -97,7 +97,7 @@ namespace ROOT
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("stagetest.txt");
-            menuManager = new MenuMan(menuTexture);
+            menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
         }
 

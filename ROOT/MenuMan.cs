@@ -19,8 +19,8 @@ namespace ROOT
         private Button back;
         private MouseState mState;
         private MouseState previousMState;
-
-
+        private int buttonWidth;
+        private int buttonHeight;
 
 
         //Texture of the menu stuff
@@ -39,12 +39,14 @@ namespace ROOT
             set { menuFont = value; }
         }
 
-        public MenuMan(Texture2D menuTexture)
+        public MenuMan(Game1 game, Texture2D menuTexture)
         {
+            buttonWidth = 300;
+            buttonHeight = 100;
             menuTex = menuTexture;
-            //instructions = new Button();
-            start = new Button(menuTex, new Rectangle(0, 0, 100, 100)); ;
-            //quit = new Button();
+            instructions = new Button(menuTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2), 200, buttonWidth, buttonHeight));
+            start = new Button(menuTex, new Rectangle((game.GraphicsDevice.Viewport.Width/2) - (buttonWidth/2), 50, buttonWidth, buttonHeight));
+            quit = new Button(menuTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2), 350, buttonWidth, buttonHeight));
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -56,6 +58,8 @@ namespace ROOT
                 case MenuState.Main: //Priority
 
                     start.Draw(sb);
+                    instructions.Draw(sb);
+                    quit.Draw(sb);
 
                     /*sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
                     sb.DrawString(menuFont, "Start", new Vector2(148, 115), Color.White);
