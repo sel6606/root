@@ -164,8 +164,18 @@ namespace ROOT
                     p1.CheckCollision(gameStage.StageBounds);
                     p1.Move();
 
+                    if (hasOrbP1)
+                    {
+                        timer1 -= gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else if (hasOrbP2)
+                    {
+                        timer2 -= gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+
+                    
                     //p2.Move();
-                    if (timer1 == 0 || timer2 == 0 || SingleKeyPress(Keys.O))
+                    if (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
                     }
@@ -224,9 +234,9 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            timer1 = 180;
-            timer2 = 180;
-            hasOrbP1 = false;
+            timer1 = 10000;
+            timer2 = 10000;
+            hasOrbP1 = true;
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
