@@ -47,12 +47,20 @@ namespace ROOT
         private Orb orb;
         private Texture2D brickTexture;
         private Texture2D menuTexture;
+        private int buttonWidth;
+        private int buttonHeight;
+        private int halfScreen;
+        private int bottomDistance;
 
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
         private int playerSize = 25;
         private bool NEEDSCONDITION = false;
+        private MouseState mState;
+        private MouseState previousMState;
+        private Button restart;
+        private Button menu;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -71,8 +79,9 @@ namespace ROOT
         /// </summary>
         protected override void Initialize()
         {
+            IsMouseVisible = true;
             currentState = GameState.Menu;
-            menuManager = new MenuMan();
+           
             currentMenuState = MenuState.Main;
             Reset();
             
@@ -90,11 +99,19 @@ namespace ROOT
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             menuTexture = Content.Load<Texture2D>("m2Menu");
-            menuManager.MenuTex = menuTexture;
-            menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
+            
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("stagetest.txt");
+            menuManager = new MenuMan(this, menuTexture);
+            menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
+
+            buttonWidth = 300;
+            buttonHeight = 100;
+            halfScreen = (GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
+            bottomDistance = (GraphicsDevice.Viewport.Height - (buttonHeight + 50));
+            restart = new Button(menuTexture, new Rectangle(halfScreen - ((buttonWidth/2) + 20), bottomDistance, buttonWidth, buttonHeight));
+            menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth/2) + 20), bottomDistance, buttonWidth, buttonHeight));
         }
 
         /// <summary>
@@ -115,14 +132,13 @@ namespace ROOT
         {
             //Gets the current state of the keyboard
             kbState = Keyboard.GetState();
+            mState = Mouse.GetState();
 
             //Switch case for game state
             switch (currentState)
             {
                 case GameState.Menu:
-
-                    currentMenuState = menuManager.NextState(currentMenuState);
-
+                    currentMenuState = menuManager.NextState(currentMenuState,mState,previousMState);
                     if (currentMenuState == MenuState.Start)
                     {
                         currentState = GameState.Game;
@@ -147,11 +163,12 @@ namespace ROOT
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
                 case GameState.GameOver:
-                    if (NEEDSCONDITION || SingleKeyPress(Keys.R)) //If the player chooses play again, change state to game and reset values
+                    if (restart.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses play again, change state to game and reset values
                     {
                         currentState = GameState.Game;
+                        Reset();
                         //*Code to reset values*
-                    }else if (NEEDSCONDITION || SingleKeyPress(Keys.M)) //If the player chooses back to menu, change state to menu and menustate to main
+                    }else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
                     {
                         currentState = GameState.Menu;
                         currentMenuState = MenuState.Main;
@@ -159,6 +176,7 @@ namespace ROOT
                     break;
             }
             previousKbState = kbState;
+            previousMState = mState;
             base.Update(gameTime);
         }
 
@@ -184,7 +202,8 @@ namespace ROOT
                     //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
-                    menuManager.Draw(currentMenuState, spriteBatch);
+                    restart.Draw(spriteBatch);
+                    menu.Draw(spriteBatch);
                     break;
             }
 
@@ -217,6 +236,22 @@ namespace ROOT
                 return false;
             }
         }
+
+        private bool SingleMouseClick()
+        {
+            if (mState.LeftButton == ButtonState.Pressed &&
+                previousMState.LeftButton == ButtonState.Released)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+
 
     }
 }
