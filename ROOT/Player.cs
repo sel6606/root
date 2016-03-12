@@ -85,7 +85,7 @@ namespace ROOT
             }
         }
 
-        public void CheckCollisionY(List<Tile> g)
+        public void CheckCollisionX(List<Tile> g)
         //checks if the player has collided with the given game object
         {
             ground = false;
@@ -95,20 +95,19 @@ namespace ROOT
             for (int i = 0; i < g.Count; i++)
             {
                 if (this.HitBox.Bottom == g[i].HitBox.Top && 
-                    (this.HitBox.X >= g[i].X && this.HitBox.X <= g[i].HitBox.X + g[i].HitBox.Width)
-                    && this.HitBox.X + Width >= g[i].X && this.HitBox.X + Width<= g[i].HitBox.X + g[i].HitBox.Width)
+                    (this.X >= g[i].X && this.X <= g[i].HitBox.X + g[i].HitBox.Width))
                 {
                     ground = true;
                 }
                 if (this.HitBox.Top == g[i].HitBox.Bottom &&
-                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.X + g[i].HitBox.Width))
+                    (this.X >= g[i].X && this.X <= g[i].HitBox.X + g[i].HitBox.Width))
                 {
                     topWall = true;
                 }
                 
             }
         }
-        public void CheckCollisionX(List<Tile> g)
+        public void CheckCollisionY(List<Tile> g)
         {
             for (int i = 0; i < g.Count; i++)
             {
