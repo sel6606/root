@@ -117,60 +117,29 @@ namespace ROOT
         public void CheckCollision(GameObject g)
         //checks if the player has collided with the given game object
         {
-            
-            if(this.HitBox.Intersects(g.HitBox))
-            {
-                if(g.IsSolid) //stops player movement if they hit a solid object
-                {
-                    //should check if the player is on top of a solid object
-                    if (this.HitBox.Bottom.CompareTo(g.HitBox.Top) == 0)
-                    {
-                        ground = true;
-                        intersect = true;
-                    }
-                    else
-                    {
-                        ground = false;
-                    }
-                    //is there a wall to the right
-                    if (this.HitBox.Right.CompareTo(g.HitBox.Left) == 0)
-                    {
-                        rightWall = true;
-                    }
-                    else
-                    {
-                        rightWall = false;
-                    }
-                    //is there a wall to the left
-                    if (this.HitBox.Left.CompareTo(g.HitBox.Right) == 0)
-                    {
-                        leftWall = true;
-                    }
-                    else
-                    {
-                        leftWall = false;
-                    }
-
-                    if(this.HitBox.Top.CompareTo(g.HitBox.Bottom) == 0)
-                    {
-                        topWall = true;
-                    }
-                    else
-                    {
-                        topWall = false;
-                    }
-                }
-                else if(g is Orb)
-                {
-                    hasOrb = true;
-                    //set orb's active property to false in game 1
-                }
-            }
-            if (!intersect)
+            if(g.IsSolid)
             {
                 ground = false;
+                topWall = false;
+                rightWall = false;
+                leftWall = false;
+                if (this.HitBox.Bottom == g.HitBox.Top && this.HitBox.X == g.HitBox.X)
+                {
+                    ground = true;
+                }
+                if(this.HitBox.Top == g.HitBox.Bottom && this.HitBox.X == g.HitBox.X)
+                {
+                    topWall = true;
+                }
+                if (this.HitBox.Left == g.HitBox.Right && this.HitBox.Y == g.HitBox.Y)
+                {
+                    rightWall = true;
+                }
+                if(this.HitBox.Right == g.HitBox.Left && this.HitBox.Y == g.HitBox.Y)
+                {
+                    leftWall = true;
+                }
             }
-
         }
 
         public void CheckPlayerCollision(Player p)
