@@ -25,6 +25,8 @@ namespace ROOT
         bool hasOrb; //checks if player has the orb
         bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
         static bool stunned; //checks if player is stunned
+        private int jumpUp = -1;
+        private int gravDelay = 0;
         //public bool intersect = false;
 
         //properties
@@ -39,42 +41,49 @@ namespace ROOT
 
         public void Move() //movement should be complete by next meeting
         //it's move...what do you think it does
-        {  
-            if(!stunned)
+        {
+            if (!stunned)
             {
                 KeyboardState input = Keyboard.GetState();
-                if(input.IsKeyDown((Keys)jump))
+                if (input.IsKeyDown((Keys)jump))
                 {
                     Jump();
                 }
-                if(input.IsKeyDown((Keys)moveRight))
+                if (input.IsKeyDown((Keys)moveRight))
                 {
-                    if(!rightWall)
+                    if (!rightWall)
                     {
                         this.X += 1;
                     }
                 }
-                if(input.IsKeyDown((Keys)moveLeft))
+                if (input.IsKeyDown((Keys)moveLeft))
                 {
-                    if(!leftWall)
+                    if (!leftWall)
                     {
                         this.X -= 1;
                     }
                 }
-                if(!ground)
+
+                if (!ground)
                 {
                     this.Y += 1;
                 }
-            }           
+            }
         }
+                
+                    
+                     
+                     
+        
 
         public void Jump()
         //player ascends as though they have actual physics (don't move at constant speed)
         {
             if (ground) //player shouldn't be able to jump unless they are on the ground
             {
-                if(!topWall)
-                Y -= 50; //temperary measure until acceleration can be implemented
+                
+                    jumpUp = 5;
+                gravDelay = 3;
             }
         }
 
@@ -88,24 +97,24 @@ namespace ROOT
             for (int i = 0; i < g.Count; i++)
             {
                 if (this.HitBox.Bottom == g[i].HitBox.Top && 
-                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.Width))
+                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].X + g[i].HitBox.Width))
                 {
                     ground = true;
                 }
                 if (this.HitBox.Top == g[i].HitBox.Bottom &&
-                    (this.X >= g[i].X && this.X <= g[i].HitBox.Width))
+                    (this.X >= g[i].X && this.X <= g[i].X + g[i].HitBox.Width))
                 {
                     topWall = true;
                 }
                 if (this.HitBox.Left == g[i].HitBox.Right &&
-                    (this.Y >= g[i].Y && this.Y <= g[i].HitBox.Height))
-                {
-                    rightWall = true;
-                }
-                if (this.HitBox.Right == g[i].HitBox.Left &&
-                    (this.Y >= g[i].Y && this.Y <= g[i].HitBox.Height))
+                    (this.Y >= g[i].Y && this.Y <= g[i].Y + g[i].HitBox.Height))
                 {
                     leftWall = true;
+                }
+                if (this.HitBox.Right == g[i].HitBox.Left &&
+                    (this.Y >= g[i].Y && this.Y <= g[i].Y + g[i].HitBox.Height))
+                {
+                    rightWall = true;
                 }
             }
         }

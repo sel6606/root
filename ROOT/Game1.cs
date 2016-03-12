@@ -102,11 +102,11 @@ namespace ROOT
             
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-<<<<<<< HEAD
+
             gameStage.ReadStage("teststage.txt",p1,p2,orb);
             
-=======
-            gameStage.ReadStage("stagetest.txt");
+
+            
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
 
@@ -116,7 +116,7 @@ namespace ROOT
             bottomDistance = (GraphicsDevice.Viewport.Height - (buttonHeight + 50));
             restart = new Button(menuTexture, new Rectangle(halfScreen - ((buttonWidth/2) + 20), bottomDistance, buttonWidth, buttonHeight));
             menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth/2) + 20), bottomDistance, buttonWidth, buttonHeight));
->>>>>>> 0a1b5bdf0ca153e2d150ed37d58edaf2f2c1e6b8
+
         }
 
         /// <summary>
@@ -165,17 +165,16 @@ namespace ROOT
                 case GameState.Game:
 
                     //If either player wins, change state to game over
-<<<<<<< HEAD
-                    p1.intersect = false;
-                    p1.ground = false;
-                    for (int i = 0; i < gameStage.StageBounds.Count; i++)
-                    {
-                        p1.CheckCollision(gameStage.StageBounds[i]);
-                    }
-=======
+
+                   
+                    
+                    
+                    p1.CheckCollision(gameStage.StageBounds);
+                    
+
                     //p1.intersect = false;
                     p1.CheckCollision(gameStage.StageBounds);
->>>>>>> 0a1b5bdf0ca153e2d150ed37d58edaf2f2c1e6b8
+
                     p1.Move();
                     
                     //p2.Move();
@@ -190,8 +189,16 @@ namespace ROOT
                     {
                         currentState = GameState.Game;
                         Reset();
+                        if (gameStage.P1startX != null && gameStage.P2startX != null)
+                        {
+                            p1.X = gameStage.P1startX;
+                            p1.Y = gameStage.P1startY;
+                            p2.X = gameStage.P2startX;
+                            p2.Y = gameStage.P2startY;
+                        }
                         //*Code to reset values*
-                    }else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
+                    }
+                    else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
                     {
                         currentState = GameState.Menu;
                         currentMenuState = MenuState.Main;
