@@ -121,12 +121,13 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("teststage.txt", p1, p2, orb);
+            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
-            uiManager = new UIMan(this, uiFont, cancelTexture);
+            uiManager = new UIMan(this, uiFont, cancelTexture,Content.Load<Texture2D>("placeholder"));
+            
 
             buttonWidth = 300;
             buttonHeight = 100;
