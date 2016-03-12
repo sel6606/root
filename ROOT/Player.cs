@@ -25,7 +25,7 @@ namespace ROOT
         bool hasOrb; //checks if player has the orb
         bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
         static bool stunned; //checks if player is stunned
-        public bool intersect = false;
+        //public bool intersect = false;
 
         //properties
         public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
@@ -39,68 +39,31 @@ namespace ROOT
 
         public void Move() //movement should be complete by next meeting
         //it's move...what do you think it does
-        {
-            //ground = true; //TEMPORARY STATEMENT
-
-            //ALL TEMPORARY STATEMENTS
-            rightWall = false;
-            leftWall = false;
-            topWall = false;
-           
+        {  
             if(!stunned)
             {
                 KeyboardState input = Keyboard.GetState();
-                if (input.IsKeyDown((Keys)moveRight) && input.IsKeyDown((Keys)jump))
+                if(input.IsKeyDown((Keys)jump))
                 {
                     Jump();
+                }
+                if(input.IsKeyDown((Keys)moveRight))
+                {
                     if(!rightWall)
                     {
-                        this.X += 5;
+                        this.X += 1;
                     }
                 }
-                else if (input.IsKeyDown((Keys)moveLeft) && input.IsKeyDown((Keys)jump))
+                if(input.IsKeyDown((Keys)moveLeft))
                 {
-                    Jump();
                     if(!leftWall)
                     {
-                        this.X -= 5;
+                        this.X -= 1;
                     }
                 }
-                else if(input.IsKeyDown((Keys)jump))
+                if(!ground)
                 {
-                    Jump();
-                }
-                else if (input.IsKeyDown((Keys)moveRight))
-                {
-                    if (!rightWall)
-                    {
-                        this.X += 5;
-                    }
-                    if (!ground) //gravity should only be in effect when player is not on the ground
-                    {
-                        this.Y += 5;
-                    }
-                }
-                else if (input.IsKeyDown((Keys)moveLeft))
-                {
-                    if (!leftWall)
-                    {
-                        this.X -= 5;
-                    }
-                    if (!ground)
-                    {
-                        this.Y += 5;
-                    }
-                }
-                else
-                {
-                    if (!ground)
-                    {
-                        if(!topWall) //stop acceleration if they hit the bottom of a wall
-                        {
-                            this.Y += 10;
-                        }
-                    }
+                    this.Y += 1;
                 }
             }           
         }
@@ -110,32 +73,37 @@ namespace ROOT
         {
             if (ground) //player shouldn't be able to jump unless they are on the ground
             {
-                Y -= 5; //temperary measure until acceleration can be implemented
+                if(!topWall)
+                Y -= 50; //temperary measure until acceleration can be implemented
             }
         }
 
-        public void CheckCollision(GameObject g)
+        public void CheckCollision(List<Tile> g)
         //checks if the player has collided with the given game object
         {
-            if(g.IsSolid)
+            ground = false;
+            topWall = false;
+            leftWall = false;
+            rightWall = false;
+            for (int i = 0; i < g.Count; i++)
             {
-                ground = false;
-                topWall = false;
-                rightWall = false;
-                leftWall = false;
-                if (this.HitBox.Bottom == g.HitBox.Top && this.HitBox.X == g.HitBox.X)
+                if (this.HitBox.Bottom == g[i].HitBox.Top && 
+                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].HitBox.Width))
                 {
                     ground = true;
                 }
-                if(this.HitBox.Top == g.HitBox.Bottom && this.HitBox.X == g.HitBox.X)
+                if (this.HitBox.Top == g[i].HitBox.Bottom &&
+                    (this.X >= g[i].X && this.X <= g[i].HitBox.Width))
                 {
                     topWall = true;
                 }
-                if (this.HitBox.Left == g.HitBox.Right && this.HitBox.Y == g.HitBox.Y)
+                if (this.HitBox.Left == g[i].HitBox.Right &&
+                    (this.Y >= g[i].Y && this.Y <= g[i].HitBox.Height))
                 {
                     rightWall = true;
                 }
-                if(this.HitBox.Right == g.HitBox.Left && this.HitBox.Y == g.HitBox.Y)
+                if (this.HitBox.Right == g[i].HitBox.Left &&
+                    (this.Y >= g[i].Y && this.Y <= g[i].HitBox.Height))
                 {
                     leftWall = true;
                 }
@@ -186,5 +154,28 @@ namespace ROOT
             jump = (int)j;
             use = (int)u;
         }
+
+        //public void ScreenWrap()
+        //wraps the player around the screen if they go out of bounds
+        //{
+           // if(this.HitBox.Center.X < 0)
+            //{
+                //need way to find far side of x axis
+            //}
+            //if(this.HitBox.Center.X > BLANK) //still need far side of x axis
+            //{
+                //this.X = 0;
+            //} 
+            //if(this.HitBox.Center.Y < 0)
+            //{
+                //need way to find far side of y axis
+            //}
+            //if(this.HitBox.Center.Y > BLANK) //still need far side of y axis
+            //{
+                //this.Y = 0;
+            //}
+        //}
+
+        public void UsePowerUp() { }
     }
 }

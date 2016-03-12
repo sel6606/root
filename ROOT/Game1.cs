@@ -51,7 +51,7 @@ namespace ROOT
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
-        private int playerSize = 100;
+        private int playerSize = 25;
         private bool NEEDSCONDITION = false;
 
         GraphicsDeviceManager graphics;
@@ -135,11 +135,8 @@ namespace ROOT
                 case GameState.Game:
 
                     //If either player wins, change state to game over
-                    p1.intersect = false;
-                    for (int i = 0; i < gameStage.StageBounds.Count; i++)
-                    {
-                        p1.CheckCollision(gameStage.StageBounds[i]);
-                    }
+                    //p1.intersect = false;
+                    p1.CheckCollision(gameStage.StageBounds);
                     p1.Move();
                     
                     //p2.Move();
