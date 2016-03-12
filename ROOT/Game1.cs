@@ -132,12 +132,12 @@ namespace ROOT
         {
             //Gets the current state of the keyboard
             kbState = Keyboard.GetState();
+            mState = Mouse.GetState();
 
             //Switch case for game state
             switch (currentState)
             {
                 case GameState.Menu:
-                    mState = Mouse.GetState();
                     currentMenuState = menuManager.NextState(currentMenuState,mState,previousMState);
                     if (currentMenuState == MenuState.Start)
                     {
@@ -169,6 +169,7 @@ namespace ROOT
                     if (restart.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses play again, change state to game and reset values
                     {
                         currentState = GameState.Game;
+                        Reset();
                         //*Code to reset values*
                     }else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
                     {
@@ -204,7 +205,6 @@ namespace ROOT
                     //orb.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
-                    menuManager.Draw(currentMenuState, spriteBatch);
                     restart.Draw(spriteBatch);
                     menu.Draw(spriteBatch);
                     break;
