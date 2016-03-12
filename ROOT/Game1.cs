@@ -155,11 +155,11 @@ namespace ROOT
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
                 case GameState.GameOver:
-                    if (NEEDSCONDITION || SingleKeyPress(Keys.R)) //If the player chooses play again, change state to game and reset values
+                    if (restart.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses play again, change state to game and reset values
                     {
                         currentState = GameState.Game;
                         //*Code to reset values*
-                    }else if (NEEDSCONDITION || SingleKeyPress(Keys.M)) //If the player chooses back to menu, change state to menu and menustate to main
+                    }else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
                     {
                         currentState = GameState.Menu;
                         currentMenuState = MenuState.Main;
@@ -227,7 +227,21 @@ namespace ROOT
             }
         }
 
-      
+        private bool SingleMouseClick()
+        {
+            if (mState.LeftButton == ButtonState.Pressed &&
+                previousMState.LeftButton == ButtonState.Released)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+
 
     }
 }
