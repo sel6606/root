@@ -17,6 +17,8 @@ namespace ROOT
         private Button start;
         private Button quit;
         private Button back;
+        private MouseState mState;
+        private MouseState previousMState;
         private int buttonWidth;
         private int buttonHeight;
         private int halfScreen;
@@ -76,10 +78,12 @@ namespace ROOT
         }
 
         //Will return the next state of the menu
-        public MenuState NextState(MenuState currentState)
+        public MenuState NextState(MenuState currentState, MouseState mouseState, MouseState previousMouseState)
         {
             //Gets the current state of the keyboard
             kbState = Keyboard.GetState();
+            mState = mouseState;
+            previousMState = previousMouseState;
 
             //Switch case for the menu state
             switch (currentState)
@@ -91,13 +95,13 @@ namespace ROOT
                     }
                     break;
                 case MenuState.Main:
-                    if (NEEDSCONDITION || SingleKeyPress(Keys.I))
+                    if (instructions.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Instructions;
-                    } else if (NEEDSCONDITION || SingleKeyPress(Keys.S))
+                    } else if (start.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Start;
-                    } else if (NEEDSCONDITION || SingleKeyPress(Keys.Q))
+                    } else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Quit;
                     }
@@ -123,6 +127,20 @@ namespace ROOT
             {
                 return false;
             }
+        }
+
+        private bool SingleMouseClick()
+        {
+            if (mState.LeftButton == ButtonState.Pressed &&
+                previousMState.LeftButton == ButtonState.Released)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
     }
