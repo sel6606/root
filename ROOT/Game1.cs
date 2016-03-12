@@ -47,6 +47,7 @@ namespace ROOT
         private Orb orb;
         private Texture2D brickTexture;
         private Texture2D menuTexture;
+        private Texture2D cancelTexture;
         //Width of each button
         private int buttonWidth;
         //Height of each button
@@ -124,7 +125,8 @@ namespace ROOT
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
-            uiManager = new UIMan(this, uiFont, menuTexture);
+            cancelTexture = Content.Load<Texture2D>("cancel");
+            uiManager = new UIMan(this, uiFont, cancelTexture);
 
             buttonWidth = 300;
             buttonHeight = 100;
@@ -180,6 +182,7 @@ namespace ROOT
                    
                    
 
+
                     if (hasOrbP1)
                     {
                         timer1 -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -194,6 +197,11 @@ namespace ROOT
                     if (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
+                    }
+                    if (uiManager.CheckExit(mState, previousMState))
+                    {
+                        currentMenuState = MenuState.Main;
+                        currentState = GameState.Menu;
                     }
                     //Otherwise, run logic and call the UI and Player draw methods
                     break;
@@ -251,8 +259,8 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            timer1 = 100000000;
-            timer2 = 10;
+            timer1 = 12;
+            timer2 = 12;
             hasOrbP1 = true;
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
