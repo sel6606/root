@@ -46,9 +46,9 @@ namespace ROOT
             buttonHeight = 100;
             halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             menuTex = menuTexture;
-            instructions = new Button(menuTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2), 200, buttonWidth, buttonHeight));
-            start = new Button(menuTex, new Rectangle((game.GraphicsDevice.Viewport.Width/2) - (buttonWidth/2), 50, buttonWidth, buttonHeight));
-            quit = new Button(menuTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2), 350, buttonWidth, buttonHeight));
+            instructions = new Button(menuTex, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));
+            start = new Button(menuTex, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
+            quit = new Button(menuTex, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -62,13 +62,6 @@ namespace ROOT
                     start.Draw(sb);
                     instructions.Draw(sb);
                     quit.Draw(sb);
-
-                    /*sb.Draw(menuTex, new Rectangle(100, 100, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Start", new Vector2(148, 115), Color.White);
-                    sb.Draw(menuTex, new Rectangle(100, 300, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Instructions", new Vector2(148, 315), Color.White);
-                    sb.Draw(menuTex, new Rectangle(100, 400, 100, 30), Color.White);
-                    sb.DrawString(menuFont, "Quit", new Vector2(148, 415), Color.White);*/
                     break;
                 case MenuState.Options: //Unused for now
                     break;
