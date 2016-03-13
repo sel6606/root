@@ -87,7 +87,7 @@ namespace ROOT
             for (int i = 0; i < g.Count; i++)
             {
                 if (this.HitBox.Bottom == g[i].HitBox.Top && 
-                    (this.HitBox.Center.X >= g[i].X && this.HitBox.Center.X <= g[i].X + g[i].HitBox.Width))
+                    (this.HitBox.Center.X+(this.HitBox.Width/2)-1 >= g[i].X && this.HitBox.Center.X - (this.HitBox.Width / 2) + 1 <= g[i].X + g[i].HitBox.Width))
                 {
                     ground = true;
                 }
@@ -96,13 +96,13 @@ namespace ROOT
                 {
                     topWall = true;
                 }
-                if (this.HitBox.Left == g[i].HitBox.Right &&
-                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height))
+                if ((this.HitBox.Intersects(g[i].HitBox) ||this.HitBox.Left == g[i].HitBox.Right) &&
+                    (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height))
                 {
                     leftWall = true;
                 }
-                if (this.HitBox.Right == g[i].HitBox.Left &&
-                    (this.HitBox.Center.Y >= g[i].Y && this.HitBox.Center.Y <= g[i].HitBox.Y + g[i].HitBox.Height))
+                if ((this.HitBox.Right == g[i].HitBox.Left  || this.HitBox.Intersects(g[i].HitBox))&&
+                    (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height))
                 {
                     rightWall = true;
                 }

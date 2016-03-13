@@ -260,8 +260,8 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            timer1 = 12;
-            timer2 = 12;
+            timer1 = 120;
+            timer2 = 120;
             hasOrbP1 = true;
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
