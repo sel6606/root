@@ -27,10 +27,12 @@ namespace ROOT
 
         public void Draw(SpriteBatch s)
         {
-            s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer1) + "      |      " + String.Format("{0:0.00}", game.Timer2), new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 50, 30), Color.White);
+            s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer1), new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 50, 10), Color.White);
+            s.DrawString(UIFont, "      |      ", new Vector2((game.GraphicsDevice.Viewport.Width / 2), 10), Color.White);
+            s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer2), new Vector2((game.GraphicsDevice.Viewport.Width / 2) + 50, 10), Color.White);
             stop.Draw(s);
-            s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 60, 30, 30), Color.White);
-            s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 30, 60, 30, 30), Color.White);
+            s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.White);
+            s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.White);
         }
 
         public bool CheckExit(MouseState mouseState, MouseState previousMouseState)
