@@ -126,8 +126,8 @@ namespace ROOT
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
-            uiManager = new UIMan(this, uiFont, cancelTexture,Content.Load<Texture2D>("placeholder"));
-            
+            uiManager = new UIMan(this, uiFont, cancelTexture, Content.Load<Texture2D>("placeholder"));
+
 
             buttonWidth = 300;
             buttonHeight = 100;
@@ -177,11 +177,11 @@ namespace ROOT
                 case GameState.Game:
                     //If either player wins, change state to game over
                     //p1.intersect = false;
-                    
+
                     p1.CheckCollision(gameStage.StageBounds);
                     p1.Move();
-                   
-                   
+
+
 
 
                     if (hasOrbP1)
@@ -193,7 +193,7 @@ namespace ROOT
                         timer2 -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
 
-                    
+
                     //p2.Move();
                     if (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))
                     {
