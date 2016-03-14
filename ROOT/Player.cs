@@ -87,13 +87,8 @@ namespace ROOT
             rightWall = false;
             for (int i = 0; i < g.Count; i++)
             {
-
-                if (this.HitBox.Bottom == g[i].HitBox.Top && //checks for solid platforms beneath player
-                    (this.HitBox.Center.X+(this.HitBox.Width/2)-1 >= g[i].X && this.HitBox.Center.X - (this.HitBox.Width / 2) + 1 <= g[i].X + g[i].HitBox.Width)) //(checks that tile and player are in the same relative x-coordinate)
-
                 if (this.HitBox.Bottom == g[i].HitBox.Top &&
                     (this.HitBox.Center.X + (this.HitBox.Width / 2) - 1 >= g[i].X && this.HitBox.Center.X - (this.HitBox.Width / 2) + 1 <= g[i].X + g[i].HitBox.Width))
-
                 {
                     ground = true;
                 }
@@ -102,15 +97,6 @@ namespace ROOT
                 {
                     topWall = true;
                 }
-
-                if ((this.HitBox.Intersects(g[i].HitBox) ||this.HitBox.Left == g[i].HitBox.Right) && //checks for walls to the left of the player
-                    (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height)) //(checks that tile and player are in the same relative y-coordinate)
-                {
-                    leftWall = true;
-                }
-                if ((this.HitBox.Right == g[i].HitBox.Left  || this.HitBox.Intersects(g[i].HitBox))&& //checks for walls to the right of the player
-                    (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height)) //(checks that tile and player are in the same relative y-coordinate)
-
                 if ((this.HitBox.Intersects(g[i].HitBox) || this.HitBox.Left == g[i].HitBox.Right) &&
                     (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height))
                 {
@@ -118,7 +104,6 @@ namespace ROOT
                 }
                 if ((this.HitBox.Right == g[i].HitBox.Left || this.HitBox.Intersects(g[i].HitBox)) &&
                     (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height))
-
                 {
                     rightWall = true;
                 }
