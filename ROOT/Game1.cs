@@ -180,7 +180,7 @@ namespace ROOT
 
                     p1.CheckCollision(gameStage.StageBounds);
                     p1.Move();
-
+                    p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
 
 

@@ -181,6 +181,10 @@ namespace ROOT
             }
         }
 
-        public void UsePowerUp() { }
+        public void UsePowerUp()
+        //will eventually work as powerup functionality
+        {
+
+        }
     }
 }
