@@ -10,7 +10,7 @@ namespace ROOT
 {
     class MenuMan
     {
-        private bool NEEDSCONDITION=false;
+        private bool NEEDSCONDITION = false;
         private KeyboardState kbState;
         private KeyboardState previousKbState;
         private Button instructions;
@@ -25,7 +25,7 @@ namespace ROOT
         //Height of each button    
         private int buttonHeight;
         //Finds half of the screen's width to help center the buttons   
-        private int halfScreen;     
+        private int halfScreen;
 
 
         //Texture of the menu stuff
@@ -43,7 +43,7 @@ namespace ROOT
         {
             set { menuFont = value; }
         }
-        
+
         //Constructor for MenuMan
         public MenuMan(Game1 game, Texture2D menuTexture)
         {
@@ -51,7 +51,7 @@ namespace ROOT
             buttonHeight = 100;
             //Sets halfScreen equal to half of the screen minus half the width of each button
             //so the center of the button will be in the center of the screen
-            halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);  
+            halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             menuTex = menuTexture;
             //First button on main menu screen
             start = new Button(menuTex, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
@@ -60,7 +60,7 @@ namespace ROOT
             //Third button on main menu screen      
             quit = new Button(menuTex, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
             //Only button on instructions menu              
-            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));      
+            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -106,10 +106,12 @@ namespace ROOT
                     if (instructions.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Instructions;
-                    } else if (start.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
+                    }
+                    else if (start.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Start;
-                    } else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
+                    }
+                    else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         currentState = MenuState.Quit;
                     }

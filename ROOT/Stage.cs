@@ -60,7 +60,7 @@ namespace ROOT
 
         public void Draw()
         {
-            for(int i=0; i<stageBounds.Count; i++)
+            for (int i = 0; i < stageBounds.Count; i++)
             {
                 stageBounds[i].Draw(sb);
             }
@@ -86,14 +86,14 @@ namespace ROOT
 
 
             //should add each line of the file as a string to the list.
-            while(readStage.Peek() != -1)
+            while (readStage.Peek() != -1)
             {
                 inputStrings.Add(readStage.ReadLine());
             }
 
 
-            
-            for(int x = 0; x < inputStrings.Count; x++)
+
+            for (int x = 0; x < inputStrings.Count; x++)
             {
                 //resets the xposition for each new line
                 int xpos = 0;
@@ -103,10 +103,10 @@ namespace ROOT
 
 
                 //checks to see if a platform should be made in that position
-                for(int y = 0; y < subHolder.Length; y++)
+                for (int y = 0; y < subHolder.Length; y++)
                 {
 
-                    if(subHolder[y] == "x")
+                    if (subHolder[y] == "x")
                     {
                         //makes a platform in the current position then shifts the position to the right.
                         //will add more if else statments if including player stars and orb starts
@@ -117,11 +117,11 @@ namespace ROOT
                     }
 
                     //Changes the players starting positions
-                    else if(subHolder[y] == "p")
+                    else if (subHolder[y] == "p")
                     {
 
                         //checks to see whether to set position of player 1 or 2
-                        if(playCount == 0)
+                        if (playCount == 0)
                         {
                             p1startX = xpos;
                             p1startY = ypos;
@@ -137,16 +137,16 @@ namespace ROOT
 
                     //changes the orbs starting position
                     //else if(subHolder[y] == "o")
-                   // {
-                     //   orbstartX = xpos;
-                     //   orbstartY = ypos;
-                     //   xpos = xpos + 50;
+                    // {
+                    //   orbstartX = xpos;
+                    //   orbstartY = ypos;
+                    //   xpos = xpos + 50;
                     //}
                     else
                     {
                         xpos = xpos + 50;
                     }
-                   
+
                 }
                 //shifts the position down
                 ypos = ypos + 50;

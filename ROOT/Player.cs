@@ -25,83 +25,113 @@ namespace ROOT
         bool hasOrb; //checks if player has the orb
         bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
         static bool stunned; //checks if player is stunned
+        private int jumpUp = -1;
+        private int gravDelay = 0;
 
         //properties
         public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
 
         //constructor, calls game object's but forces isSolid to be false
         public Player(int x, int y, int width, int height, double time, Texture2D texture)
-            : base(x,y,width,height,false, texture)
+            : base(x, y, width, height, false, texture)
         {
             hasOrb = false; //player doesn't start with orb
         }
 
-        public void Move() 
+        public void Move()
         //it's move...what do you think it does
-        {  
-            if(!stunned)
+        {
+            if (!stunned)
             {
                 KeyboardState input = Keyboard.GetState();
-                if(input.IsKeyDown((Keys)jump))
+                if (input.IsKeyDown((Keys)jump))
                 {
                     Jump();
                 }
-                if(input.IsKeyDown((Keys)moveRight))
+                if (input.IsKeyDown((Keys)moveRight))
                 {
-                    if(!rightWall)
+                    if (!rightWall)
                     {
                         this.X += 1;
                     }
                 }
-                if(input.IsKeyDown((Keys)moveLeft))
+                if (input.IsKeyDown((Keys)moveLeft))
                 {
-                    if(!leftWall)
+                    if (!leftWall)
                     {
                         this.X -= 1;
                     }
                 }
-                if(!ground)
+                if (!ground)
                 {
-                    this.Y += 1;
+                    //jumps
+                    this.Y = this.Y - jumpUp;
+                    //makes the arc work properly
+                    if (gravDelay > 0)
+                    {
+                        gravDelay = gravDelay - 1;
+                    }
+                    else
+                    {
+                        //edit this to change negative acceleration
+                        if (jumpUp > -1)
+                        {
+                            jumpUp = jumpUp - 1;
+                        }
+                    }
+
                 }
-            }           
+                else
+                {
+                    //makes them jump while on the ground
+                    if (jumpUp > 0)
+                    {
+                        this.Y = this.Y - jumpUp;
+                    }
+                }
+            }
         }
 
         public void Jump()
         //player ascends as though they have actual physics (don't move at constant speed)
         {
-            if (ground) 
+            if (ground)
             {
-                if(!topWall)
-                Y -= 75; //temperary measure until acceleration can be implemented
+                if (!topWall)
+                {
+                    jumpUp = 8;
+                    gravDelay = 3;
+                }
+
             }
         }
 
         public void CheckCollision(List<Tile> g)
         //checks if the player has collided with a tile in the given list
         {
+            //resets all the flags that check for solid walls
             ground = false;
             topWall = false;
             leftWall = false;
             rightWall = false;
             for (int i = 0; i < g.Count; i++)
             {
-                if (this.HitBox.Bottom == g[i].HitBox.Top && 
-                    (this.HitBox.Center.X+(this.HitBox.Width/2)-1 >= g[i].X && this.HitBox.Center.X - (this.HitBox.Width / 2) + 1 <= g[i].X + g[i].HitBox.Width))
+                if (this.HitBox.Bottom == g[i].HitBox.Top &&
+                    (this.HitBox.Center.X + (this.HitBox.Width / 2) - 1 >= g[i].X && this.HitBox.Center.X - (this.HitBox.Width / 2) + 1 <= g[i].X + g[i].HitBox.Width))
                 {
                     ground = true;
                 }
-                if (this.HitBox.Top == g[i].HitBox.Bottom &&
-                    (this.X >= g[i].X && this.X <= g[i].X + g[i].HitBox.Width))
+                if (this.HitBox.Top == g[i].HitBox.Bottom && //checks for platforms above the player
+                    (this.HitBox.Center.X + (this.HitBox.Width / 2) - 1 >= g[i].X && this.HitBox.Center.X - (this.HitBox.Width / 2) + 1 <= g[i].X + g[i].HitBox.Width)) //(checks that tile and player are in the same relative x-coordinate)
                 {
                     topWall = true;
                 }
-                if ((this.HitBox.Intersects(g[i].HitBox) ||this.HitBox.Left == g[i].HitBox.Right) &&
+                if ((this.HitBox.Intersects(g[i].HitBox) || this.HitBox.Left == g[i].HitBox.Right) &&
                     (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height))
                 {
                     leftWall = true;
                 }
-                if ((this.HitBox.Right == g[i].HitBox.Left  || this.HitBox.Intersects(g[i].HitBox))&&
+                if ((this.HitBox.Right == g[i].HitBox.Left || this.HitBox.Intersects(g[i].HitBox)) &&
                     (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height))
                 {
                     rightWall = true;
@@ -114,7 +144,7 @@ namespace ROOT
         {
             if (this.HitBox.Intersects(p.HitBox))
             {
-                if(!stunned)
+                if (!stunned)
                 {
                     if (hasOrb) //if this player has the orb
                     {
@@ -158,23 +188,23 @@ namespace ROOT
         //pre: the max X and Y coordinates of the screen
         //post: wraps the player around the screen if they go out of bounds
         {
-            if(this.HitBox.Center.X < 0)
+            if (this.HitBox.Center.X < 0)
             {
                 this.X = maxX;
             }
-            if(this.HitBox.Center.X > maxX)
+            if (this.HitBox.Center.X > maxX)
             {
                 this.X = 0;
-            } 
-            if(this.HitBox.Center.Y < 0)
+            }
+            if (this.HitBox.Center.Y < 0)
             {
                 this.Y = maxY;
             }
-            if(this.HitBox.Center.Y > maxY)
+            if (this.HitBox.Center.Y > maxY)
             {
                 this.Y = 0;
             }
-       }
+        }
 
         public void UsePowerUp() { }
     }
