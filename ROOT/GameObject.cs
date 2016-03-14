@@ -22,6 +22,11 @@ namespace ROOT
         public int Y { get { return hitBox.Y; } set { hitBox.Y = value; } }
         public int Width { get { return hitBox.Width; } }
         public int Height { get { return hitBox.Height; } }
+        public Microsoft.Xna.Framework.Point Center { get { return hitBox.Center; } }
+        public int Left { get { return hitBox.Left; } }
+        public int Right { get{ return hitBox.Right; } }
+        public int Bottom { get { return hitBox.Bottom; } }
+        public int Top { get { return hitBox.Top; } }
         public Texture2D Tex { get { return tex; } set { tex = value; } }
 
 
