@@ -17,7 +17,7 @@ namespace ROOT
         private MouseState previousMState;
         private Texture2D powerupTex;
 
-        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture,Texture2D powerupTexture)
+        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture, Texture2D powerupTexture)
         {
             this.game = game;
             this.UIFont = UIFont;
