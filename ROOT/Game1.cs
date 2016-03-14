@@ -182,8 +182,10 @@ namespace ROOT
                     p1.Move();
                     p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
-
-
+                    if(hasOrbP1 || hasOrbP2)
+                    {
+                        orb.Active = false; //orb is not drawn if either player has it
+                    }
                     if (hasOrbP1)
                     {
                         timer1 -= gameTime.ElapsedGameTime.TotalSeconds;
@@ -242,6 +244,7 @@ namespace ROOT
                 case GameState.Game:    //Draws the game screen, drawing the stage, both players, and the orb
                     gameStage.Draw();
                     p1.Draw(spriteBatch);
+                    orb.Draw(spriteBatch);
                     p2.Draw(spriteBatch);
                     uiManager.Draw(spriteBatch);
                     //orb.Draw(spriteBatch);
@@ -262,7 +265,8 @@ namespace ROOT
         {
             timer1 = 120;
             timer2 = 120;
-            hasOrbP1 = true;
+            orb = new Orb(50, 50, 25, 25, cancelTexture); //creates the orb object for the game
+            hasOrbP1 = false;
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
