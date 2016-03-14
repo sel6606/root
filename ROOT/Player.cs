@@ -165,7 +165,7 @@ namespace ROOT
         {
             if (this.HitBox.Center.X < 0)
             {
-                this.X = maxX;
+                this.X = maxX - this.Width/2;
             }
             if (this.HitBox.Center.X > maxX)
             {
@@ -173,7 +173,7 @@ namespace ROOT
             }
             if (this.HitBox.Center.Y < 0)
             {
-                this.Y = maxY;
+                this.Y = maxY - this.Height/2; //top of the screen seems to act as some sort of solid wall for some reason
             }
             if (this.HitBox.Center.Y > maxY)
             {
