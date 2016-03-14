@@ -25,6 +25,8 @@ namespace ROOT
         bool hasOrb; //checks if player has the orb
         bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
         static bool stunned; //checks if player is stunned
+        private int jumpUp = -1;
+        private int gravDelay = 0;
 
         //properties
         public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
@@ -62,7 +64,30 @@ namespace ROOT
                 }
                 if (!ground)
                 {
-                    this.Y += 1;
+                    //jumps
+                    this.Y = this.Y - jumpUp;
+                    //makes the arc work properly
+                    if (gravDelay > 0)
+                    {
+                        gravDelay = gravDelay - 1;
+                    }
+                    else
+                    {
+                        //edit this to change negative acceleration
+                        if (jumpUp > -1)
+                        {
+                            jumpUp = jumpUp - 1;
+                        }
+                    }
+
+                }
+                else
+                {
+                    //makes them jump while on the ground
+                    if (jumpUp > 0)
+                    {
+                        this.Y = this.Y - jumpUp;
+                    }
                 }
             }
         }
@@ -73,7 +98,11 @@ namespace ROOT
             if (ground)
             {
                 if (!topWall)
-                    Y -= 75; //temperary measure until acceleration can be implemented
+                {
+                    jumpUp = 8;
+                    gravDelay = 3;
+                }
+
             }
         }
 
