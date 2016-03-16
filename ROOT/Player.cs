@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,12 @@ namespace ROOT
         static bool stunned; //checks if player is stunned
         private int jumpUp = -1;
         private int gravDelay = 0;
+        private Vector2 previousPosition;
+        private Vector2 currentPosition;
+        private int previousGravSpeed=-2;
+        private int gravSpeed=-2;
+        private Rectangle between;
+        
 
         //properties
         public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
@@ -41,6 +48,9 @@ namespace ROOT
         public void Move()
         //it's move...what do you think it does
         {
+            previousPosition = new Vector2(this.X, this.Y);
+            currentPosition = new Vector2(this.X, this.Y);
+
             if (!stunned)
             {
                 KeyboardState input = Keyboard.GetState();
@@ -52,6 +62,7 @@ namespace ROOT
                 {
                     if (!rightWall)
                     {
+                        currentPosition.X += 1;
                         this.X += 1;
                     }
                 }
@@ -59,12 +70,14 @@ namespace ROOT
                 {
                     if (!leftWall)
                     {
+                        currentPosition.X -= 1;
                         this.X -= 1;
                     }
                 }
                 if (!ground)
                 {
                     //jumps
+                    currentPosition.Y = currentPosition.Y - jumpUp;
                     this.Y = this.Y - jumpUp;
                     //makes the arc work properly
                     if (gravDelay > 0)
@@ -74,7 +87,7 @@ namespace ROOT
                     else
                     {
                         //edit this to change negative acceleration
-                        if (jumpUp > -1)
+                        if (jumpUp > gravSpeed)
                         {
                             jumpUp = jumpUp - 1;
                         }
@@ -86,9 +99,13 @@ namespace ROOT
                     //makes them jump while on the ground
                     if (jumpUp > 0)
                     {
+                        currentPosition.Y = currentPosition.Y - jumpUp;
                         this.Y = this.Y - jumpUp;
                     }
                 }
+
+                
+                
             }
         }
 
@@ -114,15 +131,19 @@ namespace ROOT
             topWall = false;
             leftWall = false;
             rightWall = false;
+            between = new Rectangle((int)previousPosition.X, (int)previousPosition.Y, (int)(currentPosition.X + this.Width - previousPosition.X), (int)(currentPosition.Y + this.Height - previousPosition.Y));
+
             for (int i = 0; i < g.Count; i++)
             {
+                
                 if (this.Bottom == g[i].Top && //checks for platforms below the player
                     (this.Center.X + (this.Width / 2) - 1 >= g[i].X && this.Center.X - (this.Width / 2) + 1 <= g[i].X + g[i].Width)) //(checks that tile and player are in the same relative x-coordinate)
                 {
                     //move method will work as though the player were on the ground
                     ground = true;
+                    gravSpeed = previousGravSpeed;
                 }
-                if (this.Top == g[i].Bottom && //checks for platforms above the player
+                if (this.Top == g[i].HitBox.Bottom && //checks for platforms above the player
                     (this.Center.X + (this.Width / 2) - 1 >= g[i].X && this.Center.X - (this.Width / 2) + 1 <= g[i].X + g[i].Width)) //(checks that tile and player are in the same relative x-coordinate)
                 {
                     //jump method will stop moving the player up
@@ -140,29 +161,38 @@ namespace ROOT
                     //player will stop moving right because of the wall
                     rightWall = true;
                 }
+                if (between.Intersects(g[i].HitBox) && !ground)
+                {
+                    gravSpeed = -1;
+                    jumpUp = -1;
+                    currentPosition = previousPosition;
+                }
             }
+
+            this.X = (int)currentPosition.X;
+            this.Y = (int)currentPosition.Y;
         }
 
-        public void CheckPlayerCollision(Player p)
-        //this method specifically handles logic for player on player collision
+        public bool CheckPlayerCollision(Player p)
+        //this method specifically handles logic for player on player collision\
+        //returns false unless the player who called this method has taken the orb
         {
             if (this.HitBox.Intersects(p.HitBox))
             {
                 if (!stunned)
                 {
-                    if (hasOrb) //if this player has the orb
+                    if (this.Orb) //if this player has the orb
                     {
                         Stun();
-                        hasOrb = false;
-                        p.Orb = true;
+                        return true;
                     }
                     else if (p.Orb) //if other player has orb
                     {
-                        p.Orb = false;
-                        hasOrb = true;
+                        return false;
                     }
                 }
             }
+            return false;
         }
 
         public static void Stun()
@@ -176,6 +206,7 @@ namespace ROOT
         public override void Draw(SpriteBatch s)
         {
             base.Draw(s);
+            s.Draw(this.Tex, between, Color.Black);
         }
 
         public void SetControls(Keys r, Keys l, Keys j, Keys u)

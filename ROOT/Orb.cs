@@ -20,10 +20,7 @@ namespace ROOT
 
         public override void Draw(SpriteBatch s)
         {
-            while(active)
-            {
-                base.Draw(s);
-            }
+            base.Draw(s);
         }
 
     }

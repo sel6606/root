@@ -48,6 +48,7 @@ namespace ROOT
         private Texture2D brickTexture;
         private Texture2D menuTexture;
         private Texture2D cancelTexture;
+        private Texture2D orbTexture;
         //Width of each button
         private int buttonWidth;
         //Height of each button
@@ -127,6 +128,7 @@ namespace ROOT
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
             uiManager = new UIMan(this, uiFont, cancelTexture, Content.Load<Texture2D>("placeholder"));
+            orbTexture = Content.Load<Texture2D>("orb");
 
 
             buttonWidth = 300;
@@ -176,21 +178,36 @@ namespace ROOT
                     break;
                 case GameState.Game:
                     //If either player wins, change state to game over
-                    //p1.intersect = false;
-
-                    p1.CheckCollision(gameStage.StageBounds);
                     p1.Move();
+                    p1.CheckCollision(gameStage.StageBounds); 
                     p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
-                    if(hasOrbP1 || hasOrbP2)
+                    p2.Move();
+                    p2.CheckCollision(gameStage.StageBounds);
+                    p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+                    p1.CheckPlayerCollision(p2);
+                    p2.CheckPlayerCollision(p1);
+
+                    //checking for orb collision
+                    if (p1.HitBox.Intersects(orb.HitBox))
+                    {
+                        p1.Orb = true;
+                    }
+                    else if(p2.HitBox.Intersects(orb.HitBox))
+                    {
+                        p2.Orb = true;
+                    }
+
+                    if(p1.Orb || p2.Orb)
                     {
                         orb.Active = false; //orb is not drawn if either player has it
                     }
-                    if (hasOrbP1)
+                    if (p1.Orb)
                     {
                         timer1 -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
-                    else if (hasOrbP2)
+                    else if (p2.Orb)
                     {
                         timer2 -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
@@ -243,10 +260,13 @@ namespace ROOT
                     break;
                 case GameState.Game:    //Draws the game screen, drawing the stage, both players, and the orb
                     gameStage.Draw();
-                    p1.Draw(spriteBatch);
+                    p1.Draw(spriteBatch); //player should change color to show they have the orb
                     p2.Draw(spriteBatch);
                     uiManager.Draw(spriteBatch);
-                    //orb.Draw(spriteBatch);
+                    if(!p1.Orb && !p2.Orb)
+                    {
+                        orb.Draw(spriteBatch);
+                    }
                     break;
                 case GameState.GameOver:    //Draws the game over screen, drawing a restart button and a menu button
                     restart.Draw(spriteBatch);
@@ -264,11 +284,11 @@ namespace ROOT
         {
             timer1 = 120;
             timer2 = 120;
-            hasOrbP1 = true;
-            hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
+            orb = new Orb(100, 75, 25, 25, orbTexture);
             p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
+            p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
         }
 
         //Checks to see if a key was pressed exactly once
