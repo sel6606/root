@@ -244,7 +244,6 @@ namespace ROOT
                 case GameState.Game:    //Draws the game screen, drawing the stage, both players, and the orb
                     gameStage.Draw();
                     p1.Draw(spriteBatch);
-                    orb.Draw(spriteBatch);
                     p2.Draw(spriteBatch);
                     uiManager.Draw(spriteBatch);
                     //orb.Draw(spriteBatch);
@@ -265,8 +264,7 @@ namespace ROOT
         {
             timer1 = 120;
             timer2 = 120;
-            orb = new Orb(50, 50, 25, 25, cancelTexture); //creates the orb object for the game
-            hasOrbP1 = false;
+            hasOrbP1 = true;
             hasOrbP2 = false;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
