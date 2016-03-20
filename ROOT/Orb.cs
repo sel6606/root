@@ -15,15 +15,12 @@ namespace ROOT
         public Orb(int x, int y, int width, int height, Texture2D texture)
             : base(x,y,width,height,false, texture)
         {
-
+            active = true;
         }
 
         public override void Draw(SpriteBatch s)
         {
-            while(active)
-            {
-                base.Draw(s);
-            }
+            base.Draw(s);
         }
 
     }

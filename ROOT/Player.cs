@@ -136,27 +136,27 @@ namespace ROOT
             for (int i = 0; i < g.Count; i++)
             {
                 
-                if (this.HitBox.Bottom == g[i].HitBox.Top && //checks for platforms below the player
-                    (this.HitBox.Center.X + (this.HitBox.Width / 2) - 1 >= g[i].X && this.HitBox.Center.X - (this.HitBox.Width / 2) + 1 <= g[i].X + g[i].HitBox.Width)) //(checks that tile and player are in the same relative x-coordinate)
+                if (this.Bottom == g[i].Top && //checks for platforms below the player
+                    (this.Center.X + (this.Width / 2) - 1 >= g[i].X && this.Center.X - (this.Width / 2) + 1 <= g[i].X + g[i].Width)) //(checks that tile and player are in the same relative x-coordinate)
                 {
                     //move method will work as though the player were on the ground
                     ground = true;
                     gravSpeed = previousGravSpeed;
                 }
-                if (this.HitBox.Top == g[i].HitBox.Bottom && //checks for platforms above the player
-                    (this.HitBox.Center.X + (this.HitBox.Width / 2) - 1 >= g[i].X && this.HitBox.Center.X - (this.HitBox.Width / 2) + 1 <= g[i].X + g[i].HitBox.Width)) //(checks that tile and player are in the same relative x-coordinate)
+                if (this.Top == g[i].HitBox.Bottom && //checks for platforms above the player
+                    (this.Center.X + (this.Width / 2) - 1 >= g[i].X && this.Center.X - (this.Width / 2) + 1 <= g[i].X + g[i].Width)) //(checks that tile and player are in the same relative x-coordinate)
                 {
                     //jump method will stop moving the player up
                     topWall = true;
                 }
-                if ((this.HitBox.Intersects(g[i].HitBox) || this.HitBox.Left == g[i].HitBox.Right) && //checks for walls to the left of the player
-                    (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height)) //(checks that tile and player are in the same relative y-coordinate)
+                if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) && //checks for walls to the left of the player
+                    (this.Center.Y + (this.Height / 2) >= g[i].Y && this.Center.Y - (this.Height / 2) <= g[i].Y + g[i].Height)) //(checks that tile and player are in the same relative y-coordinate)
                 {
                     //player will stop moving left because of the wall
                     leftWall = true;
                 }
-                if ((this.HitBox.Right == g[i].HitBox.Left || this.HitBox.Intersects(g[i].HitBox)) && //checks for walls to the right of the player
-                    (this.HitBox.Center.Y + (this.HitBox.Height / 2) >= g[i].Y && this.HitBox.Center.Y - (this.HitBox.Height / 2) <= g[i].HitBox.Y + g[i].HitBox.Height)) //(checks that tile and player are in the same relative y-coordinate)
+                if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) && //checks for walls to the right of the player
+                    (this.Center.Y + (this.Height / 2) >= g[i].Y && this.Center.Y - (this.Height / 2) <= g[i].Y + g[i].Height)) //(checks that tile and player are in the same relative y-coordinate)
                 {
                     //player will stop moving right because of the wall
                     rightWall = true;
@@ -173,26 +173,26 @@ namespace ROOT
             this.Y = (int)currentPosition.Y;
         }
 
-        public void CheckPlayerCollision(Player p)
-        //this method specifically handles logic for player on player collision
+        public bool CheckPlayerCollision(Player p)
+        //this method specifically handles logic for player on player collision\
+        //returns false unless the player who called this method has taken the orb
         {
             if (this.HitBox.Intersects(p.HitBox))
             {
                 if (!stunned)
                 {
-                    if (hasOrb) //if this player has the orb
+                    if (this.Orb) //if this player has the orb
                     {
                         Stun();
-                        hasOrb = false;
-                        p.Orb = true;
+                        return true;
                     }
                     else if (p.Orb) //if other player has orb
                     {
-                        p.Orb = false;
-                        hasOrb = true;
+                        return false;
                     }
                 }
             }
+            return false;
         }
 
         public static void Stun()
