@@ -213,7 +213,6 @@ namespace ROOT
                     }
 
 
-                    //p2.Move();
                     if (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
