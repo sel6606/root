@@ -15,19 +15,80 @@ namespace ROOT
         private Texture2D tex; //object's texture
 
 
-        //properties
-        public bool IsSolid { get { return isSolid; } }
-        public Rectangle HitBox { get { return hitBox; } }
-        public int X { get { return hitBox.X; } set { hitBox.X = value; } }
-        public int Y { get { return hitBox.Y; } set { hitBox.Y = value; } }
-        public int Width { get { return hitBox.Width; } }
-        public int Height { get { return hitBox.Height; } }
-        public Microsoft.Xna.Framework.Point Center { get { return hitBox.Center; } }
-        public int Left { get { return hitBox.Left; } }
-        public int Right { get{ return hitBox.Right; } }
-        public int Bottom { get { return hitBox.Bottom; } }
-        public int Top { get { return hitBox.Top; } }
-        public Texture2D Tex { get { return tex; } set { tex = value; } }
+        //Properties for isSolid
+        public bool IsSolid
+        {
+            get { return isSolid; }
+        }
+
+        //Properties for hitBox
+        public Rectangle HitBox
+        {
+            get { return hitBox; }
+        }
+
+        //Properties for the x value of the hitbox
+        public int X
+        {
+            get { return hitBox.X; }
+            set { hitBox.X = value; }
+        }
+
+        //Properties for the y value of the hitbox
+        public int Y
+        {
+            get { return hitBox.Y; }
+            set { hitBox.Y = value; }
+        }
+
+        //Properties for the width of the hitbox
+        public int Width
+        {
+            get { return hitBox.Width; }
+        }
+
+        //Properties for the height of the hitbox
+        public int Height
+        {
+            get { return hitBox.Height; }
+        }
+
+        //Properties for the center of the hitbox
+        public Point Center
+        {
+            get { return hitBox.Center; }
+        }
+
+        //Properties for the left edge of the hitbox
+        public int Left
+        {
+            get { return hitBox.Left; }
+        }
+
+        //Properties for the right edge of the hitbox
+        public int Right
+        {
+            get { return hitBox.Right; }
+        }
+
+        //Properties for the bottom edge of the hitbox
+        public int Bottom
+        {
+            get { return hitBox.Bottom; }
+        }
+
+        //Properties for the top edge of the hitbox
+        public int Top
+        {
+            get { return hitBox.Top; }
+        }
+        
+        //Properties for tex
+        public Texture2D Tex
+        {
+            get { return tex; }
+            set { tex = value; }
+        }
 
 
         //constructor

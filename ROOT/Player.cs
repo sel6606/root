@@ -31,10 +31,10 @@ namespace ROOT
 
         //Fields for collision logic
         private bool hasOrb;
-        bool ground;
-        bool topWall;
-        bool leftWall;
-        bool rightWall;
+        private bool ground;
+        private bool topWall;
+        private bool leftWall;
+        private bool rightWall;
         static bool stunned; //checks if player is stunned
 
         //Fields for position and movement logic
@@ -61,6 +61,7 @@ namespace ROOT
             hasOrb = false; //player doesn't start with orb
         }
 
+        //Updates the position of the player depending on the user input
         public void Move()
         {
             //Previous position is the position at the start of the movement
@@ -159,8 +160,8 @@ namespace ROOT
             int lBound = this.Center.X - (this.Width / 2) + 1;
 
             //Y coordinates for the bounds of the player
-            int bBound = this.Center.Y + (this.Height / 2);
-            int uBound = this.Center.Y - (this.Height / 2);
+            int bBound = this.Center.Y + (this.Height / 2) - 1;
+            int uBound = this.Center.Y - (this.Height / 2) + 1;
 
             //For each tile in the list
             for (int i = 0; i < g.Count; i++)
