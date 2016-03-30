@@ -11,7 +11,7 @@ namespace ROOT
 {
     class Player : GameObject
     {
-        //Fields
+        //Enum for playerState
         enum PlayerState //keeps track of what player is doing
         {
             FaceRight,
@@ -22,21 +22,37 @@ namespace ROOT
             JumpLeft,
             PowerUp
         }
-        int moveRight, moveLeft, jump, use; //will correspond to player controls
-        bool hasOrb; //checks if player has the orb
-        bool ground, topWall, leftWall, rightWall; //are there solid walls nearby
+
+        //Fields for player controls
+        int moveRight;
+        int moveLeft;
+        int jump;
+        int use;
+
+        //Fields for collision logic
+        private bool hasOrb;
+        bool ground;
+        bool topWall;
+        bool leftWall;
+        bool rightWall;
         static bool stunned; //checks if player is stunned
+
+        //Fields for position and movement logic
         private int jumpUp = -1;
         private int gravDelay = 0;
         private Vector2 previousPosition;
         private Vector2 currentPosition;
-        private int previousGravSpeed=-2;
-        private int gravSpeed=-2;
+        private int previousGravSpeed = -2;
+        private int gravSpeed = -2;
         private Rectangle between;
-        
 
-        //properties
-        public bool Orb { get { return hasOrb; } set { hasOrb = value; } }
+
+        //Properties for hasOrb
+        public bool Orb
+        {
+            get { return hasOrb; }
+            set { hasOrb = value; }
+        }
 
         //constructor, calls game object's but forces isSolid to be false
         public Player(int x, int y, int width, int height, double time, Texture2D texture)
@@ -46,37 +62,40 @@ namespace ROOT
         }
 
         public void Move()
-        //it's move...what do you think it does
         {
+            //Previous position is the position at the start of the movement
+            //Current position is the position at the end of movement
             previousPosition = new Vector2(this.X, this.Y);
             currentPosition = new Vector2(this.X, this.Y);
 
             if (!stunned)
-            {
+            { //If the player isn't stunned, do the movement logic
                 KeyboardState input = Keyboard.GetState();
                 if (input.IsKeyDown((Keys)jump))
-                {
+                { //If the jump key is pressed
                     Jump();
                 }
                 if (input.IsKeyDown((Keys)moveRight))
-                {
+                { //If the "right" key is pressed
                     if (!rightWall)
-                    {
+                    { //If the player is not colliding with a wall on the right
+                      //update the x position
                         currentPosition.X += 1;
                         this.X += 1;
                     }
                 }
                 if (input.IsKeyDown((Keys)moveLeft))
-                {
+                { //If the "left" key is pressed
                     if (!leftWall)
-                    {
+                    { //If the player is not colliding with a wall on the left
+                      //update the x position
                         currentPosition.X -= 1;
                         this.X -= 1;
                     }
                 }
                 if (!ground)
-                {
-                    //jumps
+                { //If the player is in the air
+                  //Run the gravity logic
                     currentPosition.Y = currentPosition.Y - jumpUp;
                     this.Y = this.Y - jumpUp;
                     //makes the arc work properly
@@ -104,18 +123,18 @@ namespace ROOT
                     }
                 }
 
-                
-                
+
+
             }
         }
 
+        //Sets parameters for jumping
         public void Jump()
-        //player ascends as though they have actual physics (don't move at constant speed)
         {
             if (ground)
-            {
+            { //If the player is on the ground
                 if (!topWall)
-                {
+                { //If the player is not colliding with a wall above them
                     jumpUp = 8;
                     gravDelay = 3;
                 }
@@ -123,23 +142,24 @@ namespace ROOT
             }
         }
 
+        //Checks if the player is colliding with anything in the given list of tiles
         public void CheckCollision(List<Tile> g)
-        //checks if the player has collided with a tile in the given list
         {
-            //resets all the flags that check for solid walls
+            //Initially sets all collisions to false
             ground = false;
             topWall = false;
             leftWall = false;
             rightWall = false;
+
+            //Rectangle that represents the change in position of the player
             between = new Rectangle((int)previousPosition.X, (int)previousPosition.Y, (int)(currentPosition.X + this.Width - previousPosition.X), (int)(currentPosition.Y + this.Height - previousPosition.Y));
 
             for (int i = 0; i < g.Count; i++)
-            {
-                
-                if (this.Bottom == g[i].Top && //checks for platforms below the player
-                    (this.Center.X + (this.Width / 2) - 1 >= g[i].X && this.Center.X - (this.Width / 2) + 1 <= g[i].X + g[i].Width)) //(checks that tile and player are in the same relative x-coordinate)
-                {
-                    //move method will work as though the player were on the ground
+            { //For each tile in the list
+              //Checks for platforms below the player and 
+              //checks that tile and player are in the same relative x-coordinate
+                if (this.Bottom == g[i].Top && (this.Center.X + (this.Width / 2) - 1 >= g[i].X && this.Center.X - (this.Width / 2) + 1 <= g[i].X + g[i].Width))
+                { //Move method will work as though the player were on the ground
                     ground = true;
                     gravSpeed = previousGravSpeed;
                 }
@@ -225,7 +245,7 @@ namespace ROOT
         {
             if (this.HitBox.Center.X < 0)
             {
-                this.X = maxX - this.Width/2;
+                this.X = maxX - this.Width / 2;
             }
             if (this.HitBox.Center.X > maxX)
             {
@@ -233,7 +253,7 @@ namespace ROOT
             }
             if (this.HitBox.Center.Y < 0)
             {
-                this.Y = maxY - this.Height/2; //top of the screen seems to act as some sort of solid wall for some reason
+                this.Y = maxY - this.Height / 2; //top of the screen seems to act as some sort of solid wall for some reason
             }
             if (this.HitBox.Center.Y > maxY)
             {
