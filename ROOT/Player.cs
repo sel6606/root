@@ -154,31 +154,48 @@ namespace ROOT
             //Rectangle that represents the change in position of the player
             between = new Rectangle((int)previousPosition.X, (int)previousPosition.Y, (int)(currentPosition.X + this.Width - previousPosition.X), (int)(currentPosition.Y + this.Height - previousPosition.Y));
 
+            //X coordinates for the bounds of the player
+            int rBound = this.Center.X + (this.Width / 2) - 1;
+            int lBound = this.Center.X - (this.Width / 2) + 1;
+
+            //Y coordinates for the bounds of the player
+            int bBound = this.Center.Y + (this.Height / 2);
+            int uBound = this.Center.Y - (this.Height / 2);
+
+            //For each tile in the list
             for (int i = 0; i < g.Count; i++)
-            { //For each tile in the list
-              //Checks for platforms below the player and 
-              //checks that tile and player are in the same relative x-coordinate
-                if (this.Bottom == g[i].Top && (this.Center.X + (this.Width / 2) - 1 >= g[i].X && this.Center.X - (this.Width / 2) + 1 <= g[i].X + g[i].Width))
-                { //Move method will work as though the player were on the ground
+            {
+                //Checks for platforms below the player and 
+                //checks that tile and player are in the same relative x-coordinate
+                if (this.Bottom == g[i].Top && (rBound >= g[i].X && lBound <= g[i].X + g[i].Width))
+                {
+                    //Move method will work as though the player were on the ground
                     ground = true;
                     gravSpeed = previousGravSpeed;
                 }
+
                 if (this.Top == g[i].HitBox.Bottom && //checks for platforms above the player
-                    (this.Center.X + (this.Width / 2) - 1 >= g[i].X && this.Center.X - (this.Width / 2) + 1 <= g[i].X + g[i].Width)) //(checks that tile and player are in the same relative x-coordinate)
+                 (rBound >= g[i].X && lBound <= g[i].X + g[i].Width)) //(checks that tile and player are in the same relative x-coordinate)
                 {
-                    //jump method will stop moving the player up
+                    //Jump method will stop moving the player up
                     topWall = true;
                 }
-                if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) && //checks for walls to the left of the player
-                    (this.Center.Y + (this.Height / 2) >= g[i].Y && this.Center.Y - (this.Height / 2) <= g[i].Y + g[i].Height)) //(checks that tile and player are in the same relative y-coordinate)
+
+                //Checks for walls to the left of the player 
+                //and that tile and player are in the same relative y-coordinate
+                if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) &&
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height))
                 {
-                    //player will stop moving left because of the wall
+                    //Player will stop moving left because of the wall
                     leftWall = true;
                 }
-                if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) && //checks for walls to the right of the player
-                    (this.Center.Y + (this.Height / 2) >= g[i].Y && this.Center.Y - (this.Height / 2) <= g[i].Y + g[i].Height)) //(checks that tile and player are in the same relative y-coordinate)
+
+                //Checks for walls to the right of the player
+                //and that tile and player are in the same relative y-coordinate
+                if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) &&
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height))
                 {
-                    //player will stop moving right because of the wall
+                    //Player will stop moving right because of the wall
                     rightWall = true;
                 }
                 if (between.Intersects(g[i].HitBox) && !ground)
@@ -189,13 +206,14 @@ namespace ROOT
                 }
             }
 
+            //Updates the x and y of the player with the current position
             this.X = (int)currentPosition.X;
             this.Y = (int)currentPosition.Y;
         }
 
-        public bool CheckPlayerCollision(Player p)
-        //this method specifically handles logic for player on player collision\
+        //this method specifically handles logic for player on player collision
         //returns false unless the player who called this method has taken the orb
+        public bool CheckPlayerCollision(Player p)
         {
             if (this.HitBox.Intersects(p.HitBox))
             {
