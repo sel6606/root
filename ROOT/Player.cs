@@ -256,6 +256,7 @@ namespace ROOT
                 p1.Stun(gameTime);
                 p2.Stun(gameTime);
             }
+            
         }
 
         public void Stun(double gameTime)
