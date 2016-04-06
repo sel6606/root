@@ -22,12 +22,12 @@ namespace ROOT
 
         public override void Effect()
         {
-            throw new NotImplementedException();
+            user.speed = 2;
         }
 
         public override void EndEffect()
         {
-            throw new NotImplementedException();
+            user.speed = 1;
         }
     }
 }

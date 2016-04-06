@@ -42,7 +42,6 @@
     <Compile Include="DefaultPower.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
-    <Compile Include="GenPow.cs" />
     <Compile Include="MenuMan.cs" />
     <Compile Include="Orb.cs" />
     <Compile Include="Player.cs" />
