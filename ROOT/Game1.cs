@@ -286,6 +286,8 @@ namespace ROOT
             p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             powerManager = new PowMan(p1, p2);
+            gameStage = new Stage(spriteBatch, brickTexture);
+            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
         }
 
         //Checks to see if a key was pressed exactly once
