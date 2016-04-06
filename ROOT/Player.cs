@@ -24,10 +24,10 @@ namespace ROOT
         }
 
         //Fields for player controls
-        int moveRight;
-        int moveLeft;
-        int jump;
-        int use;
+        public int moveRight;
+        public int moveLeft;
+        public int jump;
+        public int use;
 
         //Fields for collision logic
         private bool hasOrb;
@@ -290,10 +290,5 @@ namespace ROOT
             }
         }
 
-        public void UsePowerUp()
-        //will eventually work as powerup functionality
-        {
-
-        }
     }
 }
