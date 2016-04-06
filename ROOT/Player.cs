@@ -234,16 +234,16 @@ namespace ROOT
         //returns false unless the player who called this method has taken the orb
         public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
-            if (p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
+            if(p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
             {
-                if (p1.Orb)
+                if(p1.Orb)
                 {
                     p2.Orb = true;
                     p1.Orb = false;
                     p1.Stunned = true;
                     p1.Stun(gameTime);
                 }
-                else if (p2.Orb)
+                else if(p2.Orb)
                 {
                     p1.Orb = true;
                     p2.Orb = false;
@@ -256,7 +256,7 @@ namespace ROOT
                 p1.Stun(gameTime);
                 p2.Stun(gameTime);
             }
-
+            
         }
 
         public void Stun(double gameTime)
