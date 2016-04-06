@@ -181,13 +181,15 @@ namespace ROOT
                     p1.Move();
                     p1.CheckCollision(gameStage.StageBounds); 
                     p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+                    p1.Stun(gameTime.ElapsedGameTime.TotalSeconds);
 
                     p2.Move();
                     p2.CheckCollision(gameStage.StageBounds);
                     p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+                    p2.Stun(gameTime.ElapsedGameTime.TotalSeconds);
 
-                    p1.CheckPlayerCollision(p2);
-                    p2.CheckPlayerCollision(p1);
+                    //p1.CheckPlayerCollision(p2);
+                    //p2.CheckPlayerCollision(p1);
 
                     //checking for orb collision
                     if (p1.HitBox.Intersects(orb.HitBox))

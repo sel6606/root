@@ -35,7 +35,8 @@ namespace ROOT
         private bool topWall;
         private bool leftWall;
         private bool rightWall;
-        static bool stunned; //checks if player is stunned
+        bool stunned; //checks if player is stunned
+        private double stunTime; //keeps track of how long a player is stunned
 
         //Fields for position and movement logic
         private int jumpUp = -1;
@@ -214,7 +215,7 @@ namespace ROOT
 
         //this method specifically handles logic for player on player collision
         //returns false unless the player who called this method has taken the orb
-        public bool CheckPlayerCollision(Player p)
+        public void CheckPlayerCollision(Player p)
         {
             if (this.HitBox.Intersects(p.HitBox))
             {
@@ -222,24 +223,29 @@ namespace ROOT
                 {
                     if (this.Orb) //if this player has the orb
                     {
-                        Stun();
-                        return true;
+                        stunned = true;
+                        p.Orb = true;
                     }
                     else if (p.Orb) //if other player has orb
                     {
-                        return false;
+                        this.Orb = false;
                     }
                 }
             }
-            return false;
         }
 
-        public static void Stun()
+        public void Stun(double gameTime)
         //player will be unable to move while stunned, player will also blink
         {
-            stunned = true;
-            //use a thread to keep player stunned
-            stunned = false;
+            if(stunned)
+            {
+                stunTime -= gameTime;
+                if(stunTime <= 0)
+                {
+                    stunned = false;
+                    stunTime = 3.00;
+                }
+            }
         }
 
         public override void Draw(SpriteBatch s)
