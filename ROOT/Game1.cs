@@ -187,11 +187,11 @@ namespace ROOT
                     p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds);
 
                     //checking for orb collision
-                    if (p1.HitBox.Intersects(orb.HitBox))
+                    if (p1.HitBox.Intersects(orb.HitBox) && orb.Active)
                     {
                         p1.Orb = true;
                     }
-                    else if(p2.HitBox.Intersects(orb.HitBox))
+                    else if(p2.HitBox.Intersects(orb.HitBox) && orb.Active)
                     {
                         p2.Orb = true;
                     }

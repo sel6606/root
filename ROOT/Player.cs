@@ -36,7 +36,7 @@ namespace ROOT
         private bool leftWall;
         private bool rightWall;
         bool stunned; //checks if player is stunned
-        private double stunTime; //keeps track of how long a player is stunned
+        private double stunTime = 3.00; //keeps track of how long a player is stunned
 
         //Fields for position and movement logic
         private int jumpUp = -1;
@@ -54,6 +54,12 @@ namespace ROOT
         {
             get { return hasOrb; }
             set { hasOrb = value; }
+        }
+
+        public bool Stunned
+        {
+            get { return stunned; }
+            set { stunned = value; }
         }
 
         //constructor, calls game object's but forces isSolid to be false
@@ -228,19 +234,20 @@ namespace ROOT
         //returns false unless the player who called this method has taken the orb
         public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
-            bool orb1 = p1.Orb; //true if player one has the orb, false if player two
-            if(p1.HitBox.Intersects(p2.HitBox))
+            if(p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
             {
                 if(p1.Orb)
                 {
                     p2.Orb = true;
                     p1.Orb = false;
+                    p1.Stunned = true;
                     p1.Stun(gameTime);
                 }
                 else if(p2.Orb)
                 {
                     p1.Orb = true;
                     p2.Orb = false;
+                    p2.Stunned = true;
                     p2.Stun(gameTime);
                 }
             }
@@ -249,7 +256,7 @@ namespace ROOT
         public void Stun(double gameTime)
         //player will be unable to move while stunned, player will also blink
         {
-            if(stunned)
+            if (stunned)
             {
                 stunTime -= gameTime;
                 if(stunTime <= 0)
