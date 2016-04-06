@@ -23,6 +23,8 @@ namespace ROOT
             powerP2 = new DefaultPower(player2);
         }
 
+
+        //updates all powerups.
         public void Update(double elapsedTime)
         {
             KeyboardState input = Keyboard.GetState();
