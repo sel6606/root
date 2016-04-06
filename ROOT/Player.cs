@@ -24,10 +24,10 @@ namespace ROOT
         }
 
         //Fields for player controls
-        int moveRight;
-        int moveLeft;
-        int jump;
-        int use;
+        public int moveRight;
+        public int moveLeft;
+        public int jump;
+        public int use;
 
         //Fields for collision logic
         private bool hasOrb;
@@ -46,6 +46,7 @@ namespace ROOT
         private int previousGravSpeed = -2;
         private int gravSpeed = -2;
         private Rectangle between;
+        public int speed = 1;
 
 
         //Properties for hasOrb
@@ -82,8 +83,8 @@ namespace ROOT
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
-                        currentPosition.X += 1;
-                        this.X += 1;
+                        currentPosition.X += speed;
+                        this.X += speed;
                     }
                 }
                 if (input.IsKeyDown((Keys)moveLeft))
@@ -91,15 +92,18 @@ namespace ROOT
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
-                        currentPosition.X -= 1;
-                        this.X -= 1;
+                        currentPosition.X -= speed;
+                        this.X -= speed;
                     }
                 }
+                
                 if (!ground)
                 { //If the player is in the air
                   //Run the gravity logic
+                    
                     currentPosition.Y = currentPosition.Y - jumpUp;
                     this.Y = this.Y - jumpUp;
+                    
                     //makes the arc work properly
                     if (gravDelay > 0)
                     {
@@ -154,7 +158,14 @@ namespace ROOT
             rightWall = false;
 
             //Rectangle that represents the change in position of the player
-            between = new Rectangle((int)previousPosition.X, (int)previousPosition.Y, (int)(currentPosition.X + this.Width - previousPosition.X), (int)(currentPosition.Y + this.Height - previousPosition.Y));
+            if (jumpUp < 0)
+            {
+                between = new Rectangle((int)previousPosition.X, (int)previousPosition.Y, (int)(currentPosition.X + this.Width - previousPosition.X), (int)(currentPosition.Y + this.Height - previousPosition.Y));
+            }
+            else
+            {
+                between = new Rectangle((int)currentPosition.X, (int)currentPosition.Y, (int)(previousPosition.X + this.Width - currentPosition.X), (int)(previousPosition.Y + this.Height - currentPosition.Y));
+            }
 
             //X coordinates for the bounds of the player
             int rBound = this.Center.X + (this.Width / 2) - 1;
@@ -186,7 +197,7 @@ namespace ROOT
                 //Checks for walls to the left of the player 
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height))
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height && this.Right>g[i].Left))
                 {
                     //Player will stop moving left because of the wall
                     leftWall = true;
@@ -195,7 +206,7 @@ namespace ROOT
                 //Checks for walls to the right of the player
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height))
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Right)
                 {
                     //Player will stop moving right because of the wall
                     rightWall = true;
@@ -286,10 +297,5 @@ namespace ROOT
             }
         }
 
-        public void UsePowerUp()
-        //will eventually work as powerup functionality
-        {
-
-        }
     }
 }
