@@ -226,21 +226,22 @@ namespace ROOT
 
         //this method specifically handles logic for player on player collision
         //returns false unless the player who called this method has taken the orb
-        public void CheckPlayerCollision(Player p)
+        public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
-            if (this.HitBox.Intersects(p.HitBox))
+            bool orb1 = p1.Orb; //true if player one has the orb, false if player two
+            if(p1.HitBox.Intersects(p2.HitBox))
             {
-                if (!stunned)
+                if(p1.Orb)
                 {
-                    if (this.Orb) //if this player has the orb
-                    {
-                        stunned = true;
-                        p.Orb = true;
-                    }
-                    else if (p.Orb) //if other player has orb
-                    {
-                        this.Orb = false;
-                    }
+                    p2.Orb = true;
+                    p1.Orb = false;
+                    p1.Stun(gameTime);
+                }
+                else if(p2.Orb)
+                {
+                    p1.Orb = true;
+                    p2.Orb = false;
+                    p2.Stun(gameTime);
                 }
             }
         }

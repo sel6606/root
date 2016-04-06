@@ -178,19 +178,13 @@ namespace ROOT
                     }
                     break;
                 case GameState.Game:
-                    p1.Move();
                     powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
                     //If either player wins, change state to game over
-                    p1.Move();
-                    p1.CheckCollision(gameStage.StageBounds); 
-                    p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+                    PlayerOneStuff(gameTime);
 
-                    p2.Move();
-                    p2.CheckCollision(gameStage.StageBounds);
-                    p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+                    PlayerTwoStuff(gameTime);
 
-                    p1.CheckPlayerCollision(p2);
-                    p2.CheckPlayerCollision(p1);
+                    p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds);
 
                     //checking for orb collision
                     if (p1.HitBox.Intersects(orb.HitBox))
@@ -322,7 +316,21 @@ namespace ROOT
 
         }
 
+        public void PlayerOneStuff(GameTime gameTime)
+        //all of players 1's logic is handled here
+        {
+            p1.Move();
+            p1.CheckCollision(gameStage.StageBounds);
+            p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        }
 
+        public void PlayerTwoStuff(GameTime gameTime)
+        //all of player 2's logic is handled here
+        {
+            p2.Move();
+            p2.CheckCollision(gameStage.StageBounds);
+            p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        }
 
     }
 }
