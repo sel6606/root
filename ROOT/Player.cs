@@ -45,6 +45,7 @@ namespace ROOT
         private int previousGravSpeed = -2;
         private int gravSpeed = -2;
         private Rectangle between;
+        public int speed = 1;
 
 
         //Properties for hasOrb
@@ -81,8 +82,8 @@ namespace ROOT
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
-                        currentPosition.X += 1;
-                        this.X += 1;
+                        currentPosition.X += speed;
+                        this.X += speed;
                     }
                 }
                 if (input.IsKeyDown((Keys)moveLeft))
@@ -90,8 +91,8 @@ namespace ROOT
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
-                        currentPosition.X -= 1;
-                        this.X -= 1;
+                        currentPosition.X -= speed;
+                        this.X -= speed;
                     }
                 }
                 
