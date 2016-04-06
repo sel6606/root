@@ -37,7 +37,6 @@ namespace ROOT
         private MenuState currentMenuState;
         private MenuMan menuManager;
         private UIMan uiManager;
-        private PowMan powerManager;
         private double timer1;
         private double timer2;
         private bool hasOrbP1;
@@ -178,7 +177,6 @@ namespace ROOT
                     }
                     break;
                 case GameState.Game:
-                    powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
                     //If either player wins, change state to game over
                     p1.Move();
                     p1.CheckCollision(gameStage.StageBounds); 
@@ -190,8 +188,8 @@ namespace ROOT
                     p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
                     p2.Stun(gameTime.ElapsedGameTime.TotalSeconds);
 
-                    //p1.CheckPlayerCollision(p2);
-                    //p2.CheckPlayerCollision(p1);
+                    p1.CheckPlayerCollision(p2);
+                    p2.CheckPlayerCollision(p1);
 
                     //checking for orb collision
                     if (p1.HitBox.Intersects(orb.HitBox))
@@ -292,7 +290,6 @@ namespace ROOT
             orb = new Orb(100, 75, 25, 25, orbTexture);
             p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
-            powerManager = new PowMan(p1, p2);
         }
 
         //Checks to see if a key was pressed exactly once
