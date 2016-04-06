@@ -178,6 +178,7 @@ namespace ROOT
                     }
                     break;
                 case GameState.Game:
+                    p1.Move();
                     powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
                     //If either player wins, change state to game over
                     p1.Move();
