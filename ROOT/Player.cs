@@ -157,6 +157,7 @@ namespace ROOT
         //Checks if the player is colliding with anything in the given list of tiles
         public void CheckCollision(List<Tile> g)
         {
+            gravSpeed = previousGravSpeed;
             //Initially sets all collisions to false
             ground = false;
             topWall = false;
