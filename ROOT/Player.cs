@@ -218,7 +218,7 @@ namespace ROOT
                     //Player will stop moving right because of the wall
                     rightWall = true;
                 }
-                if (between.Intersects(g[i].HitBox) && !ground)
+                if (between.Intersects(g[i].HitBox) && !ground && rBound >= g[i].X && lBound <= g[i].X + g[i].Width)
                 {
                     gravSpeed = -1;
                     jumpUp = -1;
