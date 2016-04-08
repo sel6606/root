@@ -37,6 +37,7 @@ namespace ROOT
         private MenuState currentMenuState;
         private MenuMan menuManager;
         private UIMan uiManager;
+        private PowMan powerManager;
         private double timer1;
         private double timer2;
         private bool hasOrbP1;
@@ -177,24 +178,20 @@ namespace ROOT
                     }
                     break;
                 case GameState.Game:
+                    powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
                     //If either player wins, change state to game over
-                    p1.Move();
-                    p1.CheckCollision(gameStage.StageBounds); 
-                    p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+                    PlayerOneStuff(gameTime);
 
-                    p2.Move();
-                    p2.CheckCollision(gameStage.StageBounds);
-                    p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+                    PlayerTwoStuff(gameTime);
 
-                    p1.CheckPlayerCollision(p2);
-                    p2.CheckPlayerCollision(p1);
+                    p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds);
 
                     //checking for orb collision
-                    if (p1.HitBox.Intersects(orb.HitBox))
+                    if (p1.HitBox.Intersects(orb.HitBox) && orb.Active)
                     {
                         p1.Orb = true;
                     }
-                    else if(p2.HitBox.Intersects(orb.HitBox))
+                    else if(p2.HitBox.Intersects(orb.HitBox) && orb.Active)
                     {
                         p2.Orb = true;
                     }
@@ -288,6 +285,9 @@ namespace ROOT
             orb = new Orb(100, 75, 25, 25, orbTexture);
             p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
+            powerManager = new PowMan(p1, p2);
+            gameStage = new Stage(spriteBatch, brickTexture);
+            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
         }
 
         //Checks to see if a key was pressed exactly once
@@ -318,7 +318,21 @@ namespace ROOT
 
         }
 
+        public void PlayerOneStuff(GameTime gameTime)
+        //all of players 1's logic is handled here
+        {
+            p1.Move();
+            p1.CheckCollision(gameStage.StageBounds);
+            p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        }
 
+        public void PlayerTwoStuff(GameTime gameTime)
+        //all of player 2's logic is handled here
+        {
+            p2.Move();
+            p2.CheckCollision(gameStage.StageBounds);
+            p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+        }
 
     }
 }

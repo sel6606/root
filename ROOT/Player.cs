@@ -24,10 +24,10 @@ namespace ROOT
         }
 
         //Fields for player controls
-        int moveRight;
-        int moveLeft;
-        int jump;
-        int use;
+        public int moveRight;
+        public int moveLeft;
+        public int jump;
+        public int use;
 
         //Fields for collision logic
         private bool hasOrb;
@@ -35,7 +35,8 @@ namespace ROOT
         private bool topWall;
         private bool leftWall;
         private bool rightWall;
-        static bool stunned; //checks if player is stunned
+        bool stunned; //checks if player is stunned
+        private double stunTime = 3.00; //keeps track of how long a player is stunned
 
         //Fields for position and movement logic
         private int jumpUp = -1;
@@ -45,6 +46,7 @@ namespace ROOT
         private int previousGravSpeed = -2;
         private int gravSpeed = -2;
         private Rectangle between;
+        public int speed = 1;
 
 
         //Properties for hasOrb
@@ -52,6 +54,12 @@ namespace ROOT
         {
             get { return hasOrb; }
             set { hasOrb = value; }
+        }
+
+        public bool Stunned
+        {
+            get { return stunned; }
+            set { stunned = value; }
         }
 
         //constructor, calls game object's but forces isSolid to be false
@@ -81,8 +89,8 @@ namespace ROOT
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
-                        currentPosition.X += 1;
-                        this.X += 1;
+                        currentPosition.X += speed;
+                        this.X += speed;
                     }
                 }
                 if (input.IsKeyDown((Keys)moveLeft))
@@ -90,8 +98,8 @@ namespace ROOT
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
-                        currentPosition.X -= 1;
-                        this.X -= 1;
+                        currentPosition.X -= speed;
+                        this.X -= speed;
                     }
                 }
                 
@@ -149,6 +157,7 @@ namespace ROOT
         //Checks if the player is colliding with anything in the given list of tiles
         public void CheckCollision(List<Tile> g)
         {
+            gravSpeed = previousGravSpeed;
             //Initially sets all collisions to false
             ground = false;
             topWall = false;
@@ -224,32 +233,45 @@ namespace ROOT
 
         //this method specifically handles logic for player on player collision
         //returns false unless the player who called this method has taken the orb
-        public bool CheckPlayerCollision(Player p)
+        public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
-            if (this.HitBox.Intersects(p.HitBox))
+            if(p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
             {
-                if (!stunned)
+                if(p1.Orb)
                 {
-                    if (this.Orb) //if this player has the orb
-                    {
-                        Stun();
-                        return true;
-                    }
-                    else if (p.Orb) //if other player has orb
-                    {
-                        return false;
-                    }
+                    p2.Orb = true;
+                    p1.Orb = false;
+                    p1.Stunned = true;
+                    p1.Stun(gameTime);
+                }
+                else if(p2.Orb)
+                {
+                    p1.Orb = true;
+                    p2.Orb = false;
+                    p2.Stunned = true;
+                    p2.Stun(gameTime);
                 }
             }
-            return false;
+            else
+            {
+                p1.Stun(gameTime);
+                p2.Stun(gameTime);
+            }
+            
         }
 
-        public static void Stun()
+        public void Stun(double gameTime)
         //player will be unable to move while stunned, player will also blink
         {
-            stunned = true;
-            //use a thread to keep player stunned
-            stunned = false;
+            if (stunned)
+            {
+                stunTime -= gameTime;
+                if(stunTime <= 0)
+                {
+                    stunned = false;
+                    stunTime = 3.00;
+                }
+            }
         }
 
         public override void Draw(SpriteBatch s)
@@ -290,10 +312,5 @@ namespace ROOT
             }
         }
 
-        public void UsePowerUp()
-        //will eventually work as powerup functionality
-        {
-
-        }
     }
 }
