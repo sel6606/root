@@ -204,7 +204,7 @@ namespace ROOT
                 //Checks for walls to the left of the player 
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height && this.Right>g[i].Left))
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height && this.Right>g[i].Right))
                 {
                     //Player will stop moving left because of the wall
                     leftWall = true;
@@ -213,7 +213,7 @@ namespace ROOT
                 //Checks for walls to the right of the player
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Right)
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Left)
                 {
                     //Player will stop moving right because of the wall
                     rightWall = true;
