@@ -278,14 +278,16 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            timer1 = 120;
-            timer2 = 120;
+            timer1 = 1200;
+            timer2 = 1200;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(100, 75, 25, 25, orbTexture);
             p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             powerManager = new PowMan(p1, p2);
+            gameStage = new Stage(spriteBatch, brickTexture);
+            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
         }
 
         //Checks to see if a key was pressed exactly once
