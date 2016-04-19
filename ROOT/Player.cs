@@ -69,8 +69,20 @@ namespace ROOT
             hasOrb = false; //player doesn't start with orb
         }
 
+        public void Update(List<Tile> tiles)
+        {
+            KeyboardState input = Keyboard.GetState();
+            bool up = input.IsKeyDown((Keys)jump);
+            bool right = input.IsKeyDown((Keys)moveRight);
+            bool left = input.IsKeyDown((Keys)moveLeft);
+            for(int i=0;i< speed; i++)
+            {
+                Move(up, right, left);
+                CheckCollision(tiles);
+            }
+        }
         //Updates the position of the player depending on the user input
-        public void Move()
+        public void Move(bool up, bool right, bool left)
         {
             //Previous position is the position at the start of the movement
             //Current position is the position at the end of movement
@@ -79,27 +91,26 @@ namespace ROOT
 
             if (!stunned)
             { //If the player isn't stunned, do the movement logic
-                KeyboardState input = Keyboard.GetState();
-                if (input.IsKeyDown((Keys)jump))
+                if (up)
                 { //If the jump key is pressed
                     Jump();
                 }
-                if (input.IsKeyDown((Keys)moveRight))
+                if (right)
                 { //If the "right" key is pressed
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
-                        currentPosition.X += speed;
-                        this.X += speed;
+                        currentPosition.X += 1;
+                        this.X += 1;
                     }
                 }
-                if (input.IsKeyDown((Keys)moveLeft))
+                if (left)
                 { //If the "left" key is pressed
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
-                        currentPosition.X -= speed;
-                        this.X -= speed;
+                        currentPosition.X -= 1;
+                        this.X -= 1;
                     }
                 }
                 
@@ -203,21 +214,22 @@ namespace ROOT
                 //Checks for walls to the left of the player 
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height && this.Right>g[i].Left))
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height) && this.Right>g[i].Right)
                 {
                     //Player will stop moving left because of the wall
+
                     leftWall = true;
                 }
 
                 //Checks for walls to the right of the player
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Right)
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Left)
                 {
                     //Player will stop moving right because of the wall
                     rightWall = true;
                 }
-                if (between.Intersects(g[i].HitBox) && !ground)
+                if (between.Intersects(g[i].HitBox) && !ground && rBound >= g[i].X && lBound <= g[i].X + g[i].Width)
                 {
                     gravSpeed = -1;
                     jumpUp = -1;
