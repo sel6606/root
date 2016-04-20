@@ -123,7 +123,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
+            gameStage.ReadStage("stagetest2.txt", p1, p2, orb);
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
@@ -280,12 +280,15 @@ namespace ROOT
         {
             timer1 = 120;
             timer2 = 120;
-            p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
+            gameStage = new Stage(spriteBatch, brickTexture);
+            gameStage.ReadStage("stagetest2.txt", p1, p2, orb);
+            p1 = new Player(gameStage.P1startX, gameStage.P1startY, playerSize, playerSize, timer1, menuTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
-            orb = new Orb(100, 75, 25, 25, orbTexture);
-            p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
+            orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
+            p2 = new Player(gameStage.P2startX, gameStage.P2startY, playerSize, playerSize, timer2, menuTexture);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             powerManager = new PowMan(p1, p2);
+            
         }
 
         //Checks to see if a key was pressed exactly once
