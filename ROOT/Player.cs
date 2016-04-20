@@ -294,7 +294,7 @@ namespace ROOT
         public override void Draw(SpriteBatch s)
         {
             base.Draw(s);
-            s.Draw(this.Tex, between, Color.Black);
+            //s.Draw(this.Tex, between, Color.Black);
         }
 
         public void SetControls(Keys r, Keys l, Keys j, Keys u)
