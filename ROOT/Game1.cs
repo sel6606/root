@@ -128,7 +128,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
+            gameStage.ReadStage("stagetest2.txt", p1, p2, orb);
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
@@ -283,16 +283,21 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
+
+
+
+            gameStage = new Stage(spriteBatch, brickTexture);
+            gameStage.ReadStage("milestone3.txt", p1, p2, orb);
             timer1 = 1200;
             timer2 = 1200;
-            p1 = new Player(this, 0, 0, playerWidth, playerHeight, timer1, playerTexture);
+            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
-            orb = new Orb(100, 75, 25, 25, orbTexture);
-            p2 = new Player(this, 0, 0, playerWidth, playerHeight, timer2, playerTexture);
+            orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
+            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             powerManager = new PowMan(p1, p2);
-            gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
+            
+
         }
 
         //Checks to see if a key was pressed exactly once
