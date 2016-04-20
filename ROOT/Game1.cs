@@ -47,6 +47,11 @@ namespace ROOT
         private Stage gameStage;
         private Orb orb;
         private Texture2D brickTexture;
+        private Texture2D startTexture;
+        private Texture2D instructionsTexture;
+        private Texture2D quitTexture;
+        private Texture2D backTexture;
+        private Texture2D restartTexture;
         private Texture2D menuTexture;
         private Texture2D cancelTexture;
         private Texture2D orbTexture;
@@ -121,7 +126,12 @@ namespace ROOT
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             //Texture for buttons on the menus
-            menuTexture = Content.Load<Texture2D>("m2Menu");
+            startTexture = Content.Load<Texture2D>("MenuStart");
+            instructionsTexture = Content.Load<Texture2D>("MenuInstructions");
+            quitTexture = Content.Load<Texture2D>("MenuQuit");
+            backTexture = Content.Load<Texture2D>("MenuBack");
+            restartTexture = Content.Load<Texture2D>("MenuRestart");
+            menuTexture = Content.Load<Texture2D>("MenuMenu");
 
             playerTexture = Content.Load<Texture2D>("Mario");
 
@@ -129,7 +139,7 @@ namespace ROOT
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("stagetest2.txt", p1, p2, orb);
-            menuManager = new MenuMan(this, menuTexture);
+            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
@@ -142,7 +152,7 @@ namespace ROOT
             halfScreen = (GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             bottomDistance = (GraphicsDevice.Viewport.Height - (buttonHeight + 50));
             //Sets the location of the restart button
-            restart = new Button(menuTexture, new Rectangle(halfScreen - ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
+            restart = new Button(restartTexture, new Rectangle(halfScreen - ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
             //Sets the location of the menu button
             menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
         }
