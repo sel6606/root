@@ -48,6 +48,7 @@ namespace ROOT
         private int gravSpeed = -3;
         private Rectangle between;
         public int speed = 1;
+        private PlayerState currentState = PlayerState.FaceRight;
 
 
         //Properties for hasOrb
@@ -150,6 +151,91 @@ namespace ROOT
                         }
                     }
                     jumped = true;
+                }
+
+                switch (currentState)
+                {
+                    case PlayerState.FaceLeft:
+                        if (right)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+
+                        else if (left)
+                        {
+                            currentState = PlayerState.MoveLeft;
+                        }
+
+                        /*else if (input.IsKeyDown((Keys)jump))
+                        {
+                            currentState = PlayerState.JumpLeft;
+                        }*/
+                        break;
+
+                    case PlayerState.FaceRight:
+                        if (right)
+                        {
+                            currentState = PlayerState.FaceLeft;
+                        }
+
+                        else if (left)
+                        {
+                            currentState = PlayerState.MoveRight;
+                        }
+
+                        /*else if (input.IsKeyDown((Keys)jump))
+                        {
+                            currentState = PlayerState.JumpRight;
+                        }*/
+                        break;
+
+                    case PlayerState.JumpLeft:
+                        if (right)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+
+                        else if (left)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+                        break;
+
+                    case PlayerState.JumpRight:
+                        if (right)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+
+                        else if (left)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+                        break;
+
+                    case PlayerState.MoveLeft:
+                        if (!left)
+                        {
+                            currentState = PlayerState.FaceLeft;
+                        }
+
+                        /*else if (input.IsKeyDown((Keys)jump))
+                        {
+                            currentState = PlayerState.JumpLeft;
+                        }*/
+                        break;
+
+                    case PlayerState.MoveRight:
+                        if (!right)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+
+                        /*else if (input.IsKeyDown((Keys)jump))
+                        {
+                            currentState = PlayerState.JumpRight;
+                        }*/
+                        break;
                 }
 
 
@@ -293,8 +379,38 @@ namespace ROOT
 
         public override void Draw(SpriteBatch s)
         {
-            base.Draw(s);
+            //base.Draw(s);
             //s.Draw(this.Tex, between, Color.Black);
+            switch (currentState)
+            {
+                case PlayerState.FaceLeft:
+                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.FaceRight:
+                    DrawStanding(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.JumpLeft:
+                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.JumpRight:
+                    DrawStanding(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.MoveLeft:
+                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.MoveRight:
+                    DrawStanding(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.PowerUp:
+                    s.Draw(this.Tex, between, Color.Black);
+                    break;
+            }
         }
 
         public void SetControls(Keys r, Keys l, Keys j, Keys u)
@@ -329,5 +445,9 @@ namespace ROOT
             }
         }
 
+        private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
+        {
+            s.Draw(this.Tex, new Vector2(between.X, between.Y), new Rectangle(0, 0, 10, 10), Color.White, 0, Vector2.Zero, 1.0f, flipSprite, 0);
+        }
     }
 }
