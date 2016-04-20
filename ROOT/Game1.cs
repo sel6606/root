@@ -40,7 +40,7 @@ namespace ROOT
         private PowMan powerManager;
         private double timer1;
         private double timer2;
-        private bool hasOrbP1;
+        private bool hasOrbsP1;
         private bool hasOrbP2;
         private Player p1;
         private Player p2;
@@ -285,30 +285,21 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-<<<<<<< HEAD
-            timer1 = 120;
-            timer2 = 120;
+
+
+
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest2.txt", p1, p2, orb);
-            p1 = new Player(gameStage.P1startX, gameStage.P1startY, playerSize, playerSize, timer1, menuTexture);
+            gameStage.ReadStage("milestone3.txt", p1, p2, orb);
+            timer1 = 1200;
+            timer2 = 1200;
+            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
-            p2 = new Player(gameStage.P2startX, gameStage.P2startY, playerSize, playerSize, timer2, menuTexture);
+            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             powerManager = new PowMan(p1, p2);
             
-=======
-            timer1 = 1200;
-            timer2 = 1200;
-            p1 = new Player(this, 0, 0, playerWidth, playerHeight, timer1, playerTexture);
-            p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
-            orb = new Orb(100, 75, 25, 25, orbTexture);
-            p2 = new Player(this, 0, 0, playerWidth, playerHeight, timer2, playerTexture);
-            p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
-            powerManager = new PowMan(p1, p2);
-            gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
->>>>>>> 6bbbb15355f5b1805c83405d91b74c9e7854dcb4
+
         }
 
         //Checks to see if a key was pressed exactly once
@@ -371,7 +362,7 @@ namespace ROOT
                 if (p2.frame > p2.WALK_FRAME_COUNT)   // Check the bounds
                     p2.frame = 1;                  // Back to 1 (since 0 is the "standing" frame)
 
-                p2.timeCounter -= p1.timePerFrame;    // Remove the time we "used"
+                p2.timeCounter -= p2.timePerFrame;    // Remove the time we "used"
             }
         }
 

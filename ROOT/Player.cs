@@ -398,8 +398,8 @@ namespace ROOT
 
         public override void Draw(SpriteBatch s)
         {
-            base.Draw(s);
-            s.Draw(this.Tex, between, Color.Black);
+            //base.Draw(s);
+            //s.Draw(this.Tex, between, Color.Black);
             switch (currentState)
             {
                 case PlayerState.FaceLeft:
