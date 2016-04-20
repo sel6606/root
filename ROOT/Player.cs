@@ -88,6 +88,7 @@ namespace ROOT
             spriteSheet = this.Tex;
             currentState = PlayerState.FaceRight;
             hasOrb = false; //player doesn't start with orb
+            setFPS();
         }
 
         public void Update(List<Tile> tiles)
@@ -256,7 +257,6 @@ namespace ROOT
                         }*/
                         break;
                 }
-
 
 
             }
@@ -466,14 +466,14 @@ namespace ROOT
 
         private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
         {
-            s.Draw(spriteSheet, new Vector2(between.X, between.Y), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 1.0f, flipSprite, 0);
+            s.Draw(spriteSheet, new Vector2(this.HitBox.X, this.HitBox.Y), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 1.0f, flipSprite, 0);
         }
 
         private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
         {
             s.Draw(
                 spriteSheet,                    // - The texture to draw
-                new Vector2(between.X, between.Y),                       // - The location to draw on the screen
+                new Vector2(this.HitBox.X, this.HitBox.Y),                       // - The location to draw on the screen
                 new Rectangle(                  // - The "source" rectangle
                     frame * MARIO_RECT_WIDTH,   //   - This rectangle specifies
                     MARIO_RECT_Y_OFFSET,        //	   where "inside" the texture

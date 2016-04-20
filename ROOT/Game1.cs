@@ -107,8 +107,6 @@ namespace ROOT
             currentState = GameState.Menu;
             currentMenuState = MenuState.Main;
             Reset();
-            p1.setFPS();
-            p2.setFPS();
 
             base.Initialize();
         }
@@ -336,8 +334,11 @@ namespace ROOT
             {
                 p1.frame += 1;                     // Adjust the frame
 
-                if (p1.frame > p1.WALK_FRAME_COUNT)   // Check the bounds
-                    p1.frame = 1;                  // Back to 1 (since 0 is the "standing" frame)
+                if (p1.frame > p1.WALK_FRAME_COUNT)
+                {  // Check the bounds
+                    p1.frame = 1;
+
+                }// Back to 1 (since 0 is the "standing" frame)
 
                 p1.timeCounter -= p1.timePerFrame;    // Remove the time we "used"
             }
