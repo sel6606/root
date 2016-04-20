@@ -319,16 +319,14 @@ namespace ROOT
         public void PlayerOneStuff(GameTime gameTime)
         //all of players 1's logic is handled here
         {
-            p1.Move();
-            p1.CheckCollision(gameStage.StageBounds);
+            p1.Update(gameStage.StageBounds);
             p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
         public void PlayerTwoStuff(GameTime gameTime)
         //all of player 2's logic is handled here
         {
-            p2.Move();
-            p2.CheckCollision(gameStage.StageBounds);
+            p2.Update(gameStage.StageBounds);
             p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
