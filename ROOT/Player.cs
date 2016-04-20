@@ -156,12 +156,12 @@ namespace ROOT
                 switch (currentState)
                 {
                     case PlayerState.FaceLeft:
-                        if (input.IsKeyDown((Keys)moveRight))
+                        if (right)
                         {
                             currentState = PlayerState.FaceRight;
                         }
 
-                        else if (input.IsKeyDown((Keys)moveLeft))
+                        else if (left)
                         {
                             currentState = PlayerState.MoveLeft;
                         }
@@ -173,12 +173,12 @@ namespace ROOT
                         break;
 
                     case PlayerState.FaceRight:
-                        if (input.IsKeyDown((Keys)moveRight))
+                        if (right)
                         {
                             currentState = PlayerState.FaceLeft;
                         }
 
-                        else if (input.IsKeyDown((Keys)moveLeft))
+                        else if (left)
                         {
                             currentState = PlayerState.MoveRight;
                         }
@@ -190,31 +190,31 @@ namespace ROOT
                         break;
 
                     case PlayerState.JumpLeft:
-                        if (input.IsKeyDown((Keys)moveRight))
+                        if (right)
                         {
                             currentState = PlayerState.FaceRight;
                         }
 
-                        else if (input.IsKeyDown((Keys)moveLeft))
+                        else if (left)
                         {
                             currentState = PlayerState.FaceRight;
                         }
                         break;
 
                     case PlayerState.JumpRight:
-                        if (input.IsKeyDown((Keys)moveRight))
+                        if (right)
                         {
                             currentState = PlayerState.FaceRight;
                         }
 
-                        else if (input.IsKeyDown((Keys)moveLeft))
+                        else if (left)
                         {
                             currentState = PlayerState.FaceRight;
                         }
                         break;
 
                     case PlayerState.MoveLeft:
-                        if (input.IsKeyUp((Keys)moveLeft))
+                        if (!left)
                         {
                             currentState = PlayerState.FaceLeft;
                         }
@@ -226,7 +226,7 @@ namespace ROOT
                         break;
 
                     case PlayerState.MoveRight:
-                        if (input.IsKeyUp((Keys)moveRight))
+                        if (!right)
                         {
                             currentState = PlayerState.FaceRight;
                         }
@@ -235,18 +235,6 @@ namespace ROOT
                         {
                             currentState = PlayerState.JumpRight;
                         }*/
-                        break;
-
-                    case PlayerState.PowerUp:
-                        if (input.IsKeyDown((Keys)moveRight))
-                        {
-                            currentState = PlayerState.FaceRight;
-                        }
-
-                        else if (input.IsKeyDown((Keys)moveLeft))
-                        {
-                            currentState = PlayerState.FaceRight;
-                        }
                         break;
                 }
 
