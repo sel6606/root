@@ -204,7 +204,7 @@ namespace ROOT
                 //Checks for walls to the left of the player 
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height && this.Right>g[i].Left))
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height && this.Right>g[i].Right))
                 {
                     //Player will stop moving left because of the wall
                     leftWall = true;
@@ -213,7 +213,7 @@ namespace ROOT
                 //Checks for walls to the right of the player
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Right)
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Left)
                 {
                     //Player will stop moving right because of the wall
                     rightWall = true;
@@ -224,6 +224,7 @@ namespace ROOT
                     jumpUp = -1;
                     currentPosition = previousPosition;
                 }
+                GetUnStuck(g[i]);
             }
 
             //Updates the x and y of the player with the current position
@@ -309,6 +310,64 @@ namespace ROOT
             if (this.HitBox.Center.Y > maxY)
             {
                 this.Y = 0;
+            }
+        }
+
+        //NOTE: need to make sure the bottom of the player is moved to a valid position
+        public void GetUnStuck(Tile t)
+        //unsticks the player if they end up inside of a tile (fun with if statements)
+        {
+            int yDist; //how far into a tile in the y-axis a player is
+            int xDist; //how far into a tile in the x-axis a player is
+
+            bool ud; //is up or down the shortest way out of a tile (true = up, false = down)
+            bool lr; //is left or right the shortest way out of a tile (true = left, false = right)
+            if ((this.Center.Y > t.Top && this.Center.Y < t.Bottom) && (this.Center.X > t.Left && this.Center.X < t.Right)) //player is in the middle of a tile
+            {
+                if(Math.Abs((this.Center.Y - t.Top)) < Math.Abs(this.Center.Y - t.Bottom)) //is the player closer to the bottom or top
+                {
+                    yDist = this.Center.Y - t.Top; //closer to top
+                    ud = true;
+                }
+                else
+                {
+                    yDist = this.Center.Y - t.Bottom; //closer to bottom
+                    ud = false;
+                }
+
+                if (Math.Abs((this.Center.X - t.Left)) < Math.Abs(this.Center.X - t.Right)) //is the player closer to the left or right
+                {
+                    xDist = this.Center.X - t.Left; //closer to left
+                    lr = true;
+                }
+                else
+                {
+                    xDist = this.Center.X - t.Right; //closer to right
+                    lr = false;
+                }
+
+                if(yDist < xDist) //if there is less vertical distance to cover
+                {
+                    if(ud)
+                    {
+                        this.Y -= (yDist + 1); //moves the player up and out of tile
+                    }
+                    else
+                    {
+                        this.Y += (yDist + 1); //moves the player down and out of tile
+                    }
+                }
+                else //if there is less horizontal distance to cover
+                {
+                    if(lr)
+                    {
+                        this.X -= (xDist + 1); //moves the player left and out of the tile
+                    }
+                    else
+                    {
+                        this.X += (xDist + 1); //moves the player right and out of the tile
+                    }
+                }
             }
         }
 
