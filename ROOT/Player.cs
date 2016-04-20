@@ -35,6 +35,7 @@ namespace ROOT
         private bool topWall;
         private bool leftWall;
         private bool rightWall;
+        private bool jumped = false;
         bool stunned; //checks if player is stunned
         private double stunTime = 3.00; //keeps track of how long a player is stunned
 
@@ -43,11 +44,28 @@ namespace ROOT
         private int gravDelay = 0;
         private Vector2 previousPosition;
         private Vector2 currentPosition;
-        private int previousGravSpeed = -2;
-        private int gravSpeed = -2;
+        private int previousGravSpeed = -3;
+        private int gravSpeed = -3;
         private Rectangle between;
         public int speed = 1;
+        private PlayerState currentState;
 
+        // Texture and drawing
+        public Texture2D spriteSheet;  // The single image with all of the animation frames
+
+        // Animation
+        public int frame;              // The current animation frame
+        public double timeCounter;     // The amount of time that has passed
+        public double fps;             // The speed of the animation
+        public double timePerFrame;    // The amount of time (in fractional seconds) per frame
+
+        // Constants for "source" rectangle (inside the image)
+        public int WALK_FRAME_COUNT = 3;         // The number of frames in the animation
+        const int MARIO_RECT_Y_OFFSET = 116;    // How far down in the image are the frames?
+        const int MARIO_RECT_HEIGHT = 72;       // The height of a single frame
+        const int MARIO_RECT_WIDTH = 44;        // The width of a single frame
+
+        private Game1 game;
 
         //Properties for hasOrb
         public bool Orb
@@ -63,15 +81,32 @@ namespace ROOT
         }
 
         //constructor, calls game object's but forces isSolid to be false
-        public Player(int x, int y, int width, int height, double time, Texture2D texture)
+        public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture)
             : base(x, y, width, height, false, texture)
         {
+            this.game = game;
+            spriteSheet = this.Tex;
+            currentState = PlayerState.FaceRight;
             hasOrb = false; //player doesn't start with orb
         }
 
-        //Updates the position of the player depending on the user input
-        public void Move()
+        public void Update(List<Tile> tiles)
         {
+            KeyboardState input = Keyboard.GetState();
+            jumped = false;
+            bool up = input.IsKeyDown((Keys)jump);
+            bool right = input.IsKeyDown((Keys)moveRight);
+            bool left = input.IsKeyDown((Keys)moveLeft);
+            for (int i=0;i < speed; i++)
+            {
+                Move(up, right, left);
+                CheckCollision(tiles);
+            }
+        }
+        //Updates the position of the player depending on the user input
+        public void Move(bool up, bool right, bool left)
+        {
+            gravSpeed = previousGravSpeed;
             //Previous position is the position at the start of the movement
             //Current position is the position at the end of movement
             previousPosition = new Vector2(this.X, this.Y);
@@ -79,60 +114,147 @@ namespace ROOT
 
             if (!stunned)
             { //If the player isn't stunned, do the movement logic
-                KeyboardState input = Keyboard.GetState();
-                if (input.IsKeyDown((Keys)jump))
+                if (up)
                 { //If the jump key is pressed
                     Jump();
                 }
-                if (input.IsKeyDown((Keys)moveRight))
+                if (right)
                 { //If the "right" key is pressed
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
-                        currentPosition.X += speed;
-                        this.X += speed;
+                        currentPosition.X += 1;
+                        this.X += 1;
                     }
                 }
-                if (input.IsKeyDown((Keys)moveLeft))
+                if (left)
                 { //If the "left" key is pressed
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
-                        currentPosition.X -= speed;
-                        this.X -= speed;
+                        currentPosition.X -= 1;
+                        this.X -= 1;
                     }
                 }
-                
-                if (!ground)
-                { //If the player is in the air
-                  //Run the gravity logic
-                    
-                    currentPosition.Y = currentPosition.Y - jumpUp;
-                    this.Y = this.Y - jumpUp;
-                    
-                    //makes the arc work properly
-                    if (gravDelay > 0)
-                    {
-                        gravDelay = gravDelay - 1;
+                if (!jumped)
+                {
+                    if (!ground)
+                    { //If the player is in the air
+                      //Run the gravity logic
+
+                        currentPosition.Y = currentPosition.Y - jumpUp;
+                        this.Y = this.Y - jumpUp;
+
+                        //makes the arc work properly
+                        if (gravDelay > 0)
+                        {
+                            gravDelay = gravDelay - 1;
+                        }
+                        else
+                        {
+                            //edit this to change negative acceleration
+                            if (jumpUp > gravSpeed)
+                            {
+                                jumpUp = jumpUp - 1;
+                            }
+                        }
+
                     }
                     else
                     {
-                        //edit this to change negative acceleration
-                        if (jumpUp > gravSpeed)
+                        //makes them jump while on the ground
+                        if (jumpUp > 0)
                         {
-                            jumpUp = jumpUp - 1;
+                            currentPosition.Y = currentPosition.Y - jumpUp;
+                            this.Y = this.Y - jumpUp;
                         }
                     }
-
+                    jumped = true;
                 }
-                else
+
+                switch (currentState)
                 {
-                    //makes them jump while on the ground
-                    if (jumpUp > 0)
-                    {
-                        currentPosition.Y = currentPosition.Y - jumpUp;
-                        this.Y = this.Y - jumpUp;
-                    }
+                    case PlayerState.FaceLeft:
+                        if (right)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+
+                        else if (left)
+                        {
+                            currentState = PlayerState.MoveLeft;
+                        }
+
+                        /*else if (input.IsKeyDown((Keys)jump))
+                        {
+                            currentState = PlayerState.JumpLeft;
+                        }*/
+                        break;
+
+                    case PlayerState.FaceRight:
+                        if (right)
+                        {
+                            currentState = PlayerState.MoveRight;
+                        }
+
+                        else if (left)
+                        {
+                            currentState = PlayerState.FaceLeft;
+                        }
+
+                        /*else if (input.IsKeyDown((Keys)jump))
+                        {
+                            currentState = PlayerState.JumpRight;
+                        }*/
+                        break;
+
+                    case PlayerState.JumpLeft:
+                        if (right)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+
+                        else if (left)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+                        break;
+
+                    case PlayerState.JumpRight:
+                        if (right)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+
+                        else if (left)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+                        break;
+
+                    case PlayerState.MoveLeft:
+                        if (!left)
+                        {
+                            currentState = PlayerState.FaceLeft;
+                        }
+
+                        /*else if (input.IsKeyDown((Keys)jump))
+                        {
+                            currentState = PlayerState.JumpLeft;
+                        }*/
+                        break;
+
+                    case PlayerState.MoveRight:
+                        if (!right)
+                        {
+                            currentState = PlayerState.FaceRight;
+                        }
+
+                        /*else if (input.IsKeyDown((Keys)jump))
+                        {
+                            currentState = PlayerState.JumpRight;
+                        }*/
+                        break;
                 }
 
 
@@ -147,7 +269,7 @@ namespace ROOT
             { //If the player is on the ground
                 if (!topWall)
                 { //If the player is not colliding with a wall above them
-                    jumpUp = 8;
+                    jumpUp = 12;
                     gravDelay = 3;
                 }
 
@@ -157,7 +279,6 @@ namespace ROOT
         //Checks if the player is colliding with anything in the given list of tiles
         public void CheckCollision(List<Tile> g)
         {
-            gravSpeed = previousGravSpeed;
             //Initially sets all collisions to false
             ground = false;
             topWall = false;
@@ -204,22 +325,23 @@ namespace ROOT
                 //Checks for walls to the left of the player 
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height && this.Right>g[i].Left))
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height) && this.Right>g[i].Right)
                 {
                     //Player will stop moving left because of the wall
+
                     leftWall = true;
                 }
 
                 //Checks for walls to the right of the player
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Right)
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Left)
                 {
                     //Player will stop moving right because of the wall
                     rightWall = true;
                 }
-                if (between.Intersects(g[i].HitBox) && !ground)
-                {
+                if (between.Intersects(g[i].HitBox) && !ground && rBound >= g[i].X && lBound <= g[i].X + g[i].Width)
+                { //Note to self: Change the <= to < might fix. Needs more testing
                     gravSpeed = -1;
                     jumpUp = -1;
                     currentPosition = previousPosition;
@@ -276,8 +398,38 @@ namespace ROOT
 
         public override void Draw(SpriteBatch s)
         {
-            base.Draw(s);
-            s.Draw(this.Tex, between, Color.Black);
+            //base.Draw(s);
+            //s.Draw(this.Tex, between, Color.Black);
+            switch (currentState)
+            {
+                case PlayerState.FaceLeft:
+                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.FaceRight:
+                    DrawStanding(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.JumpLeft:
+                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.JumpRight:
+                    DrawStanding(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.MoveLeft:
+                    DrawWalking(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.MoveRight:
+                    DrawWalking(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.PowerUp:
+                    s.Draw(this.Tex, between, Color.Black);
+                    break;
+            }
         }
 
         public void SetControls(Keys r, Keys l, Keys j, Keys u)
@@ -312,5 +464,33 @@ namespace ROOT
             }
         }
 
+        private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
+        {
+            s.Draw(spriteSheet, new Vector2(between.X, between.Y), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 1.0f, flipSprite, 0);
+        }
+
+        private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
+        {
+            s.Draw(
+                spriteSheet,                    // - The texture to draw
+                new Vector2(between.X, between.Y),                       // - The location to draw on the screen
+                new Rectangle(                  // - The "source" rectangle
+                    frame * MARIO_RECT_WIDTH,   //   - This rectangle specifies
+                    MARIO_RECT_Y_OFFSET,        //	   where "inside" the texture
+                    MARIO_RECT_WIDTH,           //     to get pixels (We don't want to
+                    MARIO_RECT_HEIGHT),         //     draw the whole thing)
+                Color.White,                    // - The color
+                0,                              // - Rotation (none currently)
+                Vector2.Zero,                   // - Origin inside the image (top left)
+                1.0f,                           // - Scale (100% - no change)
+                flipSprite,                     // - Can be used to flip the image
+                0);                             // - Layer depth (unused)
+        }
+
+        public void setFPS()
+        {
+            fps = 10.0;
+            timePerFrame = 1.0 / fps;
+        }
     }
 }
