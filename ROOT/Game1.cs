@@ -40,7 +40,7 @@ namespace ROOT
         private PowMan powerManager;
         private double timer1;
         private double timer2;
-        private bool hasOrbP1;
+        private bool hasOrbsP1;
         private bool hasOrbP2;
         private Player p1;
         private Player p2;
@@ -357,7 +357,7 @@ namespace ROOT
                 if (p2.frame > p2.WALK_FRAME_COUNT)   // Check the bounds
                     p2.frame = 1;                  // Back to 1 (since 0 is the "standing" frame)
 
-                p2.timeCounter -= p1.timePerFrame;    // Remove the time we "used"
+                p2.timeCounter -= p2.timePerFrame;    // Remove the time we "used"
             }
         }
 
