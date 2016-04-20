@@ -278,8 +278,8 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            timer1 = 120;
-            timer2 = 120;
+            timer1 = 1200;
+            timer2 = 1200;
             p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(100, 75, 25, 25, orbTexture);
@@ -321,16 +321,14 @@ namespace ROOT
         public void PlayerOneStuff(GameTime gameTime)
         //all of players 1's logic is handled here
         {
-            p1.Move();
-            p1.CheckCollision(gameStage.StageBounds);
+            p1.Update(gameStage.StageBounds);
             p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
         public void PlayerTwoStuff(GameTime gameTime)
         //all of player 2's logic is handled here
         {
-            p2.Move();
-            p2.CheckCollision(gameStage.StageBounds);
+            p2.Update(gameStage.StageBounds);
             p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
