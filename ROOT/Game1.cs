@@ -40,7 +40,7 @@ namespace ROOT
         private PowMan powerManager;
         private double timer1;
         private double timer2;
-        private bool hasOrbP1;
+        private bool hasOrbsP1;
         private bool hasOrbP2;
         private Player p1;
         private Player p2;
@@ -50,6 +50,7 @@ namespace ROOT
         private Texture2D menuTexture;
         private Texture2D cancelTexture;
         private Texture2D orbTexture;
+        private Texture2D playerTexture;
         //Width of each button
         private int buttonWidth;
         //Height of each button
@@ -78,6 +79,8 @@ namespace ROOT
         private KeyboardState kbState;
         private KeyboardState previousKbState;
         private int playerSize = 25;
+        private int playerWidth = 44;
+        private int playerHeight = 72;
         private bool NEEDSCONDITION = false;
 
 
@@ -105,7 +108,6 @@ namespace ROOT
             currentMenuState = MenuState.Main;
             Reset();
 
-
             base.Initialize();
         }
 
@@ -121,9 +123,12 @@ namespace ROOT
             //Texture for buttons on the menus
             menuTexture = Content.Load<Texture2D>("m2Menu");
 
+            playerTexture = Content.Load<Texture2D>("Mario");
+
+
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
+            gameStage.ReadStage("stagetest2.txt", p1, p2, orb);
             menuManager = new MenuMan(this, menuTexture);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
@@ -278,16 +283,21 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
+
+
+
+            gameStage = new Stage(spriteBatch, brickTexture);
+            gameStage.ReadStage("milestone3.txt", p1, p2, orb);
             timer1 = 1200;
             timer2 = 1200;
-            p1 = new Player(0, 0, playerSize, playerSize, timer1, menuTexture);
+            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
-            orb = new Orb(100, 75, 25, 25, orbTexture);
-            p2 = new Player(0, 0, playerSize, playerSize, timer2, menuTexture);
+            orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
+            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             powerManager = new PowMan(p1, p2);
-            gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest.txt", p1, p2, orb);
+            
+
         }
 
         //Checks to see if a key was pressed exactly once
@@ -321,17 +331,40 @@ namespace ROOT
         public void PlayerOneStuff(GameTime gameTime)
         //all of players 1's logic is handled here
         {
-            p1.Move();
-            p1.CheckCollision(gameStage.StageBounds);
+            p1.Update(gameStage.StageBounds);
             p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+            p1.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            if (p1.timeCounter >= p1.timePerFrame)
+            {
+                p1.frame += 1;                     // Adjust the frame
+
+                if (p1.frame > p1.WALK_FRAME_COUNT)
+                {  // Check the bounds
+                    p1.frame = 1;
+
+                }// Back to 1 (since 0 is the "standing" frame)
+
+                p1.timeCounter -= p1.timePerFrame;    // Remove the time we "used"
+            }
         }
 
         public void PlayerTwoStuff(GameTime gameTime)
         //all of player 2's logic is handled here
         {
-            p2.Move();
-            p2.CheckCollision(gameStage.StageBounds);
+            p2.Update(gameStage.StageBounds);
             p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+            p2.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            if (p2.timeCounter >= p2.timePerFrame)
+            {
+                p2.frame += 1;                     // Adjust the frame
+
+                if (p2.frame > p2.WALK_FRAME_COUNT)   // Check the bounds
+                    p2.frame = 1;                  // Back to 1 (since 0 is the "standing" frame)
+
+                p2.timeCounter -= p2.timePerFrame;    // Remove the time we "used"
+            }
         }
 
     }
