@@ -31,14 +31,14 @@ namespace ROOT
         //activates the power up.
         public override void Effect()
         {
-            user.speed = 2;
+            user.Speed = user.BaseSpeed*2;
         }
 
 
         //ends the effect.
         public override void EndEffect()
         {
-            user.speed = 1;
+            user.Speed = user.BaseSpeed;
         }
     }
 }

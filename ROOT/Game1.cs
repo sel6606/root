@@ -298,8 +298,6 @@ namespace ROOT
             timer1 = 1200;
             timer2 = 1200;
             p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture,PlayerIndex.One);
-            //Uncomment below code to use with Xbox controller
-            //p1.XBox = true;
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
             p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture,PlayerIndex.Two);

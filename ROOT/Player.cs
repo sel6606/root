@@ -49,7 +49,8 @@ namespace ROOT
         private int previousGravSpeed = -3;
         private int gravSpeed = -3;
         private Rectangle between;
-        public int speed = 1;
+        private int speed = 2;
+        private int baseSpeed = 2;
         private PlayerState currentState;
 
         // Texture and drawing
@@ -68,6 +69,17 @@ namespace ROOT
         const int MARIO_RECT_WIDTH = 44;        // The width of a single frame
 
         private Game1 game;
+
+        public int BaseSpeed
+        {
+            get { return baseSpeed; }
+        }
+
+        public int Speed
+        {
+            get { return speed; }
+            set { speed = value; }
+        }
 
         public PlayerIndex PlayerNumber
         {
@@ -102,6 +114,7 @@ namespace ROOT
             currentState = PlayerState.FaceRight;
             hasOrb = false; //player doesn't start with orb
             playerNumber = playerNum;
+            xBox = GamePad.GetState(playerNumber).IsConnected;
             setFPS();
         }
 
