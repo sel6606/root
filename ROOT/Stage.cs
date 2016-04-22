@@ -127,21 +127,22 @@ namespace ROOT
                             p1startY = ypos;
                             playCount++;
                         }
-                        else
+                        else if(playCount == 1)
                         {
                             p2startX = xpos;
                             p2startY = ypos;
+                            playCount++;
                         }
                         xpos = xpos + 50;
                     }
 
                     //changes the orbs starting position
-                    //else if(subHolder[y] == "o")
-                    // {
-                    //   orbstartX = xpos;
-                    //   orbstartY = ypos;
-                    //   xpos = xpos + 50;
-                    //}
+                    else if(subHolder[y] == "o")
+                     {
+                       orbstartX = xpos;
+                       orbstartY = ypos;
+                       xpos = xpos + 50;
+                    }
                     else
                     {
                         xpos = xpos + 50;
