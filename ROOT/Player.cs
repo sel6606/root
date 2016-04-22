@@ -35,6 +35,7 @@ namespace ROOT
         private bool topWall;
         private bool leftWall;
         private bool rightWall;
+        private bool jumped = false;
         bool stunned; //checks if player is stunned
         private double stunTime = 3.00; //keeps track of how long a player is stunned
 
@@ -43,8 +44,8 @@ namespace ROOT
         private int gravDelay = 0;
         private Vector2 previousPosition;
         private Vector2 currentPosition;
-        private int previousGravSpeed = -2;
-        private int gravSpeed = -2;
+        private int previousGravSpeed = -3;
+        private int gravSpeed = -3;
         private Rectangle between;
         public int speed = 1;
 
@@ -69,9 +70,23 @@ namespace ROOT
             hasOrb = false; //player doesn't start with orb
         }
 
-        //Updates the position of the player depending on the user input
-        public void Move()
+        public void Update(List<Tile> tiles)
         {
+            KeyboardState input = Keyboard.GetState();
+            jumped = false;
+            bool up = input.IsKeyDown((Keys)jump);
+            bool right = input.IsKeyDown((Keys)moveRight);
+            bool left = input.IsKeyDown((Keys)moveLeft);
+            for(int i=0;i < speed; i++)
+            {
+                Move(up, right, left);
+                CheckCollision(tiles);
+            }
+        }
+        //Updates the position of the player depending on the user input
+        public void Move(bool up, bool right, bool left)
+        {
+            gravSpeed = previousGravSpeed;
             //Previous position is the position at the start of the movement
             //Current position is the position at the end of movement
             previousPosition = new Vector2(this.X, this.Y);
@@ -79,60 +94,62 @@ namespace ROOT
 
             if (!stunned)
             { //If the player isn't stunned, do the movement logic
-                KeyboardState input = Keyboard.GetState();
-                if (input.IsKeyDown((Keys)jump))
+                if (up)
                 { //If the jump key is pressed
                     Jump();
                 }
-                if (input.IsKeyDown((Keys)moveRight))
+                if (right)
                 { //If the "right" key is pressed
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
-                        currentPosition.X += speed;
-                        this.X += speed;
+                        currentPosition.X += 1;
+                        this.X += 1;
                     }
                 }
-                if (input.IsKeyDown((Keys)moveLeft))
+                if (left)
                 { //If the "left" key is pressed
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
-                        currentPosition.X -= speed;
-                        this.X -= speed;
+                        currentPosition.X -= 1;
+                        this.X -= 1;
                     }
                 }
-                
-                if (!ground)
-                { //If the player is in the air
-                  //Run the gravity logic
-                    
-                    currentPosition.Y = currentPosition.Y - jumpUp;
-                    this.Y = this.Y - jumpUp;
-                    
-                    //makes the arc work properly
-                    if (gravDelay > 0)
-                    {
-                        gravDelay = gravDelay - 1;
+                if (!jumped)
+                {
+                    if (!ground)
+                    { //If the player is in the air
+                      //Run the gravity logic
+
+                        currentPosition.Y = currentPosition.Y - jumpUp;
+                        this.Y = this.Y - jumpUp;
+
+                        //makes the arc work properly
+                        if (gravDelay > 0)
+                        {
+                            gravDelay = gravDelay - 1;
+                        }
+                        else
+                        {
+                            //edit this to change negative acceleration
+                            if (jumpUp > gravSpeed)
+                            {
+                                jumpUp = jumpUp - 1;
+                            }
+                        }
+
                     }
                     else
                     {
-                        //edit this to change negative acceleration
-                        if (jumpUp > gravSpeed)
+                        //makes them jump while on the ground
+                        if (jumpUp > 0)
                         {
-                            jumpUp = jumpUp - 1;
+                            currentPosition.Y = currentPosition.Y - jumpUp;
+                            this.Y = this.Y - jumpUp;
                         }
                     }
-
-                }
-                else
-                {
-                    //makes them jump while on the ground
-                    if (jumpUp > 0)
-                    {
-                        currentPosition.Y = currentPosition.Y - jumpUp;
-                        this.Y = this.Y - jumpUp;
-                    }
+                    jumped = true;
                 }
 
 
@@ -147,7 +164,7 @@ namespace ROOT
             { //If the player is on the ground
                 if (!topWall)
                 { //If the player is not colliding with a wall above them
-                    jumpUp = 8;
+                    jumpUp = 12;
                     gravDelay = 3;
                 }
 
@@ -157,7 +174,6 @@ namespace ROOT
         //Checks if the player is colliding with anything in the given list of tiles
         public void CheckCollision(List<Tile> g)
         {
-            gravSpeed = previousGravSpeed;
             //Initially sets all collisions to false
             ground = false;
             topWall = false;
@@ -204,9 +220,10 @@ namespace ROOT
                 //Checks for walls to the left of the player 
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height && this.Right>g[i].Right))
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height) && this.Right>g[i].Right)
                 {
                     //Player will stop moving left because of the wall
+
                     leftWall = true;
                 }
 
@@ -218,8 +235,8 @@ namespace ROOT
                     //Player will stop moving right because of the wall
                     rightWall = true;
                 }
-                if (between.Intersects(g[i].HitBox) && !ground)
-                {
+                if (between.Intersects(g[i].HitBox) && !ground && rBound >= g[i].X && lBound <= g[i].X + g[i].Width)
+                { //Note to self: Change the <= to < might fix. Needs more testing
                     gravSpeed = -1;
                     jumpUp = -1;
                     currentPosition = previousPosition;
