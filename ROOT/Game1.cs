@@ -180,9 +180,9 @@ namespace ROOT
                 case GameState.Game:
                     powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
                     //If either player wins, change state to game over
-                    PlayerOneStuff(gameTime);
+                    PlayerOneStuff();
 
-                    PlayerTwoStuff(gameTime);
+                    PlayerTwoStuff();
 
                     p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -318,14 +318,14 @@ namespace ROOT
 
         }
 
-        public void PlayerOneStuff(GameTime gameTime)
+        public void PlayerOneStuff()
         //all of players 1's logic is handled here
         {
             p1.Update(gameStage.StageBounds);
             p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
-        public void PlayerTwoStuff(GameTime gameTime)
+        public void PlayerTwoStuff()
         //all of player 2's logic is handled here
         {
             p2.Update(gameStage.StageBounds);
