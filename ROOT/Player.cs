@@ -346,7 +346,6 @@ namespace ROOT
                     jumpUp = -1;
                     currentPosition = previousPosition;
                 }
-                GetUnStuck(g[i]);
             }
 
             //Updates the x and y of the player with the current position
