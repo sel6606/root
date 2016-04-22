@@ -466,14 +466,14 @@ namespace ROOT
 
         private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
         {
-            s.Draw(spriteSheet, new Vector2(this.HitBox.X, this.HitBox.Y), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 1.0f, flipSprite, 0);
+            s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 1.0f, flipSprite, 0);
         }
 
         private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
         {
             s.Draw(
                 spriteSheet,                    // - The texture to draw
-                new Vector2(this.HitBox.X, this.HitBox.Y),                       // - The location to draw on the screen
+                new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
                 new Rectangle(                  // - The "source" rectangle
                     frame * MARIO_RECT_WIDTH,   //   - This rectangle specifies
                     MARIO_RECT_Y_OFFSET,        //	   where "inside" the texture
