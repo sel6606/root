@@ -466,7 +466,7 @@ namespace ROOT
 
         private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
         {
-            s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 1.0f, flipSprite, 0);
+            s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 0.9f, flipSprite, 0);
         }
 
         private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
@@ -482,7 +482,7 @@ namespace ROOT
                 Color.White,                    // - The color
                 0,                              // - Rotation (none currently)
                 Vector2.Zero,                   // - Origin inside the image (top left)
-                1.0f,                           // - Scale (100% - no change)
+                0.9f,                           // - Scale (100% - no change)
                 flipSprite,                     // - Can be used to flip the image
                 0);                             // - Layer depth (unused)
         }
