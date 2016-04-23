@@ -168,9 +168,3 @@
 /processorParam:Quality=Best
 /build:click.wav
 
-#begin walking.mp3
-/importer:Mp3Importer
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:walking.mp3
-

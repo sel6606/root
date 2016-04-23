@@ -70,12 +70,7 @@ namespace ROOT
         const int MARIO_RECT_WIDTH = 44;        // The width of a single frame
 
         private Game1 game;
-        private SoundEffect walking;
 
-        public SoundEffect Walking
-        {
-            set { walking = value; }
-        }
         public int BaseSpeed
         {
             get { return baseSpeed; }
@@ -173,10 +168,7 @@ namespace ROOT
                 }
                 if (right)
                 { //If the "right" key is pressed
-                    if (ground)
-                    {
-                        walking.CreateInstance().Play();
-                    }
+                    
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
@@ -186,10 +178,7 @@ namespace ROOT
                 }
                 if (left)
                 { //If the "left" key is pressed
-                    if (ground)
-                    {
-                        walking.CreateInstance().Play();
-                    }
+                    
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position

@@ -130,8 +130,6 @@ namespace ROOT
 
             //Sound effects
             soundEffects.Add(Content.Load<SoundEffect>("click"));
-            soundEffects.Add(Content.Load<SoundEffect>("walking"));
-
 
             //Texture for buttons on the menus
             startTexture = Content.Load<Texture2D>("MenuStart");
@@ -194,8 +192,6 @@ namespace ROOT
                     { //If the player pressed start, start the game 
                         currentState = GameState.Game;
                         Reset();
-                        p1.Walking = soundEffects[1];
-                        p2.Walking = soundEffects[1];
                     }
                     else if (currentMenuState == MenuState.Quit)
                     { //If the player pressed quit, exit the game
