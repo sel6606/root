@@ -40,8 +40,6 @@ namespace ROOT
         private PowMan powerManager;
         private double timer1;
         private double timer2;
-        private bool hasOrbP1;
-        private bool hasOrbP2;
         private Player p1;
         private Player p2;
         private Stage gameStage;
@@ -78,7 +76,6 @@ namespace ROOT
         private KeyboardState kbState;
         private KeyboardState previousKbState;
         private int playerSize = 25;
-        private bool NEEDSCONDITION = false;
 
 
         GraphicsDeviceManager graphics;
@@ -180,9 +177,9 @@ namespace ROOT
                 case GameState.Game:
                     powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
                     //If either player wins, change state to game over
-                    PlayerOneStuff(gameTime);
+                    PlayerOneStuff();
 
-                    PlayerTwoStuff(gameTime);
+                    PlayerTwoStuff();
 
                     p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds);
 
@@ -316,14 +313,14 @@ namespace ROOT
 
         }
 
-        public void PlayerOneStuff(GameTime gameTime)
+        public void PlayerOneStuff()
         //all of players 1's logic is handled here
         {
             p1.Update(gameStage.StageBounds);
             p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
         }
 
-        public void PlayerTwoStuff(GameTime gameTime)
+        public void PlayerTwoStuff()
         //all of player 2's logic is handled here
         {
             p2.Update(gameStage.StageBounds);

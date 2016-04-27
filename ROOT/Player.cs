@@ -445,7 +445,7 @@ namespace ROOT
             }
             if (this.HitBox.Center.Y < 0)
             {
-                this.Y = maxY - this.Height / 2; //top of the screen seems to act as some sort of solid wall for some reason
+                this.Y = maxY - this.Height / 2; 
             }
             if (this.HitBox.Center.Y > maxY)
             {
