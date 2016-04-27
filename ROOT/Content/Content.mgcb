@@ -162,3 +162,9 @@
 /processorParam:TextureFormat=Color
 /build:sprint.png
 
+#begin click.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:click.wav
+

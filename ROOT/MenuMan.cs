@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace ROOT
 {
@@ -19,6 +20,7 @@ namespace ROOT
         private Button back;
         private MouseState mState;
         private MouseState previousMState;
+        private SoundEffect clickSound;
 
         //Width of each button
         private int buttonWidth;
@@ -48,7 +50,7 @@ namespace ROOT
         }
 
         //Constructor for MenuMan
-        public MenuMan(Game1 game, Texture2D startTexture, Texture2D instructionsTexture, Texture2D quitTexture, Texture2D backTexture)
+        public MenuMan(Game1 game, Texture2D startTexture, Texture2D instructionsTexture, Texture2D quitTexture, Texture2D backTexture, SoundEffect click)
         {
             buttonWidth = 300;
             buttonHeight = 100;
@@ -59,6 +61,7 @@ namespace ROOT
             instructionsButton = instructionsTexture;
             quitButton = quitTexture;
             backButton = backTexture;
+            clickSound = click;
 
             //First button on main menu screen
             start = new Button(startButton, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
@@ -106,20 +109,24 @@ namespace ROOT
                 case MenuState.Instructions: //If the menu is on the instructions screen
                     if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
+                        clickSound.CreateInstance().Play();
                         currentState = MenuState.Main;
                     }
                     break;
                 case MenuState.Main: //If you are at the main menu
                     if (instructions.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
+                        clickSound.CreateInstance().Play();
                         currentState = MenuState.Instructions;
                     }
                     else if (start.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
+                        clickSound.CreateInstance().Play();
                         currentState = MenuState.Start;
                     }
                     else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
+                        clickSound.CreateInstance().Play();
                         currentState = MenuState.Quit;
                     }
                     break;

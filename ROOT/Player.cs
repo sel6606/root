@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -35,6 +36,8 @@ namespace ROOT
         private bool topWall;
         private bool leftWall;
         private bool rightWall;
+        private bool xBox = false;
+        private PlayerIndex playerNumber;
         private bool jumped = false;
         bool stunned; //checks if player is stunned
         private double stunTime = 3.00; //keeps track of how long a player is stunned
@@ -47,7 +50,8 @@ namespace ROOT
         private int previousGravSpeed = -3;
         private int gravSpeed = -3;
         private Rectangle between;
-        public int speed = 1;
+        private int speed = 2;
+        private int baseSpeed = 2;
         private PlayerState currentState;
 
         // Texture and drawing
@@ -67,6 +71,28 @@ namespace ROOT
 
         private Game1 game;
 
+        public int BaseSpeed
+        {
+            get { return baseSpeed; }
+        }
+
+        public int Speed
+        {
+            get { return speed; }
+            set { speed = value; }
+        }
+
+        public PlayerIndex PlayerNumber
+        {
+            get { return playerNumber; }
+            set { playerNumber = value; }
+        }
+
+        public bool XBox
+        {
+            get { return xBox; }
+            set { xBox = value; }
+        }
         //Properties for hasOrb
         public bool Orb
         {
@@ -81,23 +107,44 @@ namespace ROOT
         }
 
         //constructor, calls game object's but forces isSolid to be false
-        public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture)
+        public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture, PlayerIndex playerNum)
             : base(x, y, width, height, false, texture)
         {
             this.game = game;
             spriteSheet = this.Tex;
             currentState = PlayerState.FaceRight;
             hasOrb = false; //player doesn't start with orb
+            playerNumber = playerNum;
+            xBox = GamePad.GetState(playerNumber).IsConnected;
             setFPS();
         }
 
         public void Update(List<Tile> tiles)
         {
             KeyboardState input = Keyboard.GetState();
+            bool up = false;
+            bool right = false;
+            bool left = false;
+
             jumped = false;
-            bool up = input.IsKeyDown((Keys)jump);
-            bool right = input.IsKeyDown((Keys)moveRight);
-            bool left = input.IsKeyDown((Keys)moveLeft);
+            if (!xBox)
+            {
+                up = input.IsKeyDown((Keys)jump);
+                right = input.IsKeyDown((Keys)moveRight);
+                left = input.IsKeyDown((Keys)moveLeft);
+            }else if (xBox)
+            {
+                GamePadState gamePad = GamePad.GetState(playerNumber);
+                up = gamePad.IsButtonDown(Buttons.A);
+                if(gamePad.ThumbSticks.Left.X < 0)
+                {
+                    left = true;
+                }
+                if(gamePad.ThumbSticks.Left.X > 0)
+                {
+                    right = true;
+                }
+            }
             for (int i=0;i < speed; i++)
             {
                 Move(up, right, left);
@@ -121,6 +168,7 @@ namespace ROOT
                 }
                 if (right)
                 { //If the "right" key is pressed
+                    
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
@@ -130,6 +178,7 @@ namespace ROOT
                 }
                 if (left)
                 { //If the "left" key is pressed
+                    
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
