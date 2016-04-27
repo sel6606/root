@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace ROOT
 {
@@ -19,6 +20,7 @@ namespace ROOT
         private Button back;
         private MouseState mState;
         private MouseState previousMState;
+        private SoundEffect clickSound;
 
         //Width of each button
         private int buttonWidth;
@@ -28,16 +30,19 @@ namespace ROOT
         private int halfScreen;
 
 
-        //Texture of the menu stuff
-        Texture2D menuTex;
+        //Textures of the buttons
+        Texture2D startButton;
+        Texture2D instructionsButton;
+        Texture2D quitButton;
+        Texture2D backButton;
 
         SpriteFont menuFont;
 
         //Sets the menu stuff texture
-        public Texture2D MenuTex
+        /*public Texture2D MenuTex
         {
             set { menuTex = value; }
-        }
+        }*/
 
         public SpriteFont MenuFont
         {
@@ -45,22 +50,27 @@ namespace ROOT
         }
 
         //Constructor for MenuMan
-        public MenuMan(Game1 game, Texture2D menuTexture)
+        public MenuMan(Game1 game, Texture2D startTexture, Texture2D instructionsTexture, Texture2D quitTexture, Texture2D backTexture, SoundEffect click)
         {
             buttonWidth = 300;
             buttonHeight = 100;
             //Sets halfScreen equal to half of the screen minus half the width of each button
             //so the center of the button will be in the center of the screen
             halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
-            menuTex = menuTexture;
+            startButton = startTexture;
+            instructionsButton = instructionsTexture;
+            quitButton = quitTexture;
+            backButton = backTexture;
+            clickSound = click;
+
             //First button on main menu screen
-            start = new Button(menuTex, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
+            start = new Button(startButton, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
             //Second button on main menu screen            
-            instructions = new Button(menuTex, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));
+            instructions = new Button(instructionsButton, new Rectangle(halfScreen, 200, buttonWidth, buttonHeight));
             //Third button on main menu screen      
-            quit = new Button(menuTex, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
+            quit = new Button(quitButton, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
             //Only button on instructions menu              
-            back = new Button(menuTex, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
+            back = new Button(backTexture, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -99,20 +109,24 @@ namespace ROOT
                 case MenuState.Instructions: //If the menu is on the instructions screen
                     if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
+                        clickSound.CreateInstance().Play();
                         currentState = MenuState.Main;
                     }
                     break;
                 case MenuState.Main: //If you are at the main menu
                     if (instructions.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
+                        clickSound.CreateInstance().Play();
                         currentState = MenuState.Instructions;
                     }
                     else if (start.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
+                        clickSound.CreateInstance().Play();
                         currentState = MenuState.Start;
                     }
                     else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
+                        clickSound.CreateInstance().Play();
                         currentState = MenuState.Quit;
                     }
                     break;

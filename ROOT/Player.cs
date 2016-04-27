@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -35,6 +36,8 @@ namespace ROOT
         private bool topWall;
         private bool leftWall;
         private bool rightWall;
+        private bool xBox = false;
+        private PlayerIndex playerNumber;
         private bool jumped = false;
         bool stunned; //checks if player is stunned
         private double stunTime = 3.00; //keeps track of how long a player is stunned
@@ -47,10 +50,49 @@ namespace ROOT
         private int previousGravSpeed = -3;
         private int gravSpeed = -3;
         private Rectangle between;
-        public int speed = 1;
-        private PlayerState currentState = PlayerState.FaceRight;
+        private int speed = 2;
+        private int baseSpeed = 2;
+        private PlayerState currentState;
 
+        // Texture and drawing
+        public Texture2D spriteSheet;  // The single image with all of the animation frames
 
+        // Animation
+        public int frame;              // The current animation frame
+        public double timeCounter;     // The amount of time that has passed
+        public double fps;             // The speed of the animation
+        public double timePerFrame;    // The amount of time (in fractional seconds) per frame
+
+        // Constants for "source" rectangle (inside the image)
+        public int WALK_FRAME_COUNT = 3;         // The number of frames in the animation
+        const int MARIO_RECT_Y_OFFSET = 116;    // How far down in the image are the frames?
+        const int MARIO_RECT_HEIGHT = 72;       // The height of a single frame
+        const int MARIO_RECT_WIDTH = 44;        // The width of a single frame
+
+        private Game1 game;
+
+        public int BaseSpeed
+        {
+            get { return baseSpeed; }
+        }
+
+        public int Speed
+        {
+            get { return speed; }
+            set { speed = value; }
+        }
+
+        public PlayerIndex PlayerNumber
+        {
+            get { return playerNumber; }
+            set { playerNumber = value; }
+        }
+
+        public bool XBox
+        {
+            get { return xBox; }
+            set { xBox = value; }
+        }
         //Properties for hasOrb
         public bool Orb
         {
@@ -65,20 +107,45 @@ namespace ROOT
         }
 
         //constructor, calls game object's but forces isSolid to be false
-        public Player(int x, int y, int width, int height, double time, Texture2D texture)
+        public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture, PlayerIndex playerNum)
             : base(x, y, width, height, false, texture)
         {
+            this.game = game;
+            spriteSheet = this.Tex;
+            currentState = PlayerState.FaceRight;
             hasOrb = false; //player doesn't start with orb
+            playerNumber = playerNum;
+            xBox = GamePad.GetState(playerNumber).IsConnected;
+            setFPS();
         }
 
         public void Update(List<Tile> tiles)
         {
             KeyboardState input = Keyboard.GetState();
+            bool up = false;
+            bool right = false;
+            bool left = false;
+
             jumped = false;
-            bool up = input.IsKeyDown((Keys)jump);
-            bool right = input.IsKeyDown((Keys)moveRight);
-            bool left = input.IsKeyDown((Keys)moveLeft);
-            for(int i=0;i < speed; i++)
+            if (!xBox)
+            {
+                up = input.IsKeyDown((Keys)jump);
+                right = input.IsKeyDown((Keys)moveRight);
+                left = input.IsKeyDown((Keys)moveLeft);
+            }else if (xBox)
+            {
+                GamePadState gamePad = GamePad.GetState(playerNumber);
+                up = gamePad.IsButtonDown(Buttons.A);
+                if(gamePad.ThumbSticks.Left.X < 0)
+                {
+                    left = true;
+                }
+                if(gamePad.ThumbSticks.Left.X > 0)
+                {
+                    right = true;
+                }
+            }
+            for (int i=0;i < speed; i++)
             {
                 Move(up, right, left);
                 CheckCollision(tiles);
@@ -101,6 +168,7 @@ namespace ROOT
                 }
                 if (right)
                 { //If the "right" key is pressed
+                    
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
@@ -110,6 +178,7 @@ namespace ROOT
                 }
                 if (left)
                 { //If the "left" key is pressed
+                    
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
@@ -175,12 +244,12 @@ namespace ROOT
                     case PlayerState.FaceRight:
                         if (right)
                         {
-                            currentState = PlayerState.FaceLeft;
+                            currentState = PlayerState.MoveRight;
                         }
 
                         else if (left)
                         {
-                            currentState = PlayerState.MoveRight;
+                            currentState = PlayerState.FaceLeft;
                         }
 
                         /*else if (input.IsKeyDown((Keys)jump))
@@ -237,7 +306,6 @@ namespace ROOT
                         }*/
                         break;
                 }
-
 
 
             }
@@ -400,11 +468,11 @@ namespace ROOT
                     break;
 
                 case PlayerState.MoveLeft:
-                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                    DrawWalking(SpriteEffects.FlipHorizontally, s);
                     break;
 
                 case PlayerState.MoveRight:
-                    DrawStanding(SpriteEffects.None, s);
+                    DrawWalking(SpriteEffects.None, s);
                     break;
 
                 case PlayerState.PowerUp:
@@ -455,7 +523,31 @@ namespace ROOT
 
         private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
         {
-            s.Draw(this.Tex, new Vector2(between.X, between.Y), new Rectangle(0, 0, 10, 10), Color.White, 0, Vector2.Zero, 1.0f, flipSprite, 0);
+            s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 0.9f, flipSprite, 0);
+        }
+
+        private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
+        {
+            s.Draw(
+                spriteSheet,                    // - The texture to draw
+                new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                new Rectangle(                  // - The "source" rectangle
+                    frame * MARIO_RECT_WIDTH,   //   - This rectangle specifies
+                    MARIO_RECT_Y_OFFSET,        //	   where "inside" the texture
+                    MARIO_RECT_WIDTH,           //     to get pixels (We don't want to
+                    MARIO_RECT_HEIGHT),         //     draw the whole thing)
+                Color.White,                    // - The color
+                0,                              // - Rotation (none currently)
+                Vector2.Zero,                   // - Origin inside the image (top left)
+                0.9f,                           // - Scale (100% - no change)
+                flipSprite,                     // - Can be used to flip the image
+                0);                             // - Layer depth (unused)
+        }
+
+        public void setFPS()
+        {
+            fps = 10.0;
+            timePerFrame = 1.0 / fps;
         }
     }
 }
