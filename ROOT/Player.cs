@@ -30,6 +30,28 @@ namespace ROOT
         public int jump;
         public int use;
 
+        private bool selectRight;
+        private bool selectLeft;
+        private bool selectDown;
+        private bool selectUp;
+
+        public bool SelectRight
+        {
+            get { return selectRight; }
+        }
+        public bool SelectLeft
+        {
+            get { return selectLeft; }
+        }
+        public bool SelectDown
+        {
+            get { return selectDown; }
+        }
+        public bool SelectUp
+        {
+            get { return selectUp; }
+        }
+
         //Fields for collision logic
         private bool hasOrb;
         private bool ground;
@@ -116,7 +138,54 @@ namespace ROOT
             hasOrb = false; //player doesn't start with orb
             playerNumber = playerNum;
             xBox = GamePad.GetState(playerNumber).IsConnected;
+            selectLeft = false;
+            selectRight = false;
+            selectUp = false;
+            selectDown = false;
             setFPS();
+        }
+
+        public void UpdateSelect()
+        {
+            KeyboardState input = Keyboard.GetState();
+            bool up = false;
+            bool right = false;
+            bool left = false;
+            bool down = false;
+
+            if (!xBox)
+            {
+                up = input.IsKeyDown((Keys)jump);
+                right = input.IsKeyDown((Keys)moveRight);
+                left = input.IsKeyDown((Keys)moveLeft);
+                down = input.IsKeyDown((Keys)use);
+            }
+            else if (xBox)
+            {
+                GamePadState gamePad = GamePad.GetState(playerNumber);
+                if (gamePad.ThumbSticks.Left.Y < 0)
+                {
+                    down = true;
+                }
+                if(gamePad.ThumbSticks.Left.Y > 0)
+                {
+                    up = true;
+                }
+                if (gamePad.ThumbSticks.Left.X < 0)
+                {
+                    left = true;
+                }
+                if (gamePad.ThumbSticks.Left.X > 0)
+                {
+                    right = true;
+                }
+            }
+
+            selectLeft = left;
+            selectRight = right;
+            selectUp = up;
+            selectDown = down;
+
         }
 
         public void Update(List<Tile> tiles)

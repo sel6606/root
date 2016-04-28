@@ -19,7 +19,8 @@ namespace ROOT
         Quit,
         Controls,
         Instructions,
-        Options
+        Options,
+        Selection
     }
 
     public class Game1 : Game
