@@ -215,13 +215,7 @@ namespace ROOT
                 case GameState.Game:
                     powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
                     //If either player wins, change state to game over
-                    PlayerOneStuff(gameTime);
-
-                    PlayerTwoStuff(gameTime);
-
-                    PlayerThreeStuff(gameTime);
-
-                    PlayerFourStuff(gameTime);
+                    PlayerStuff(gameTime); //most player logic is handled here
 
                     PlayerCollisions(gameTime); //all player collision logic
 
@@ -382,9 +376,10 @@ namespace ROOT
 
         }
 
-        public void PlayerOneStuff(GameTime gameTime)
-        //all of players 1's logic is handled here
+        public void PlayerStuff(GameTime gameTime)
+        //all player logic is processed here
         {
+            //player 1
             p1.Update(gameStage.StageBounds);
             p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -401,11 +396,8 @@ namespace ROOT
 
                 p1.timeCounter -= p1.timePerFrame;    // Remove the time we "used"
             }
-        }
 
-        public void PlayerTwoStuff(GameTime gameTime)
-        //all of player 2's logic is handled here
-        {
+            //player 2
             p2.Update(gameStage.StageBounds);
             p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -419,11 +411,8 @@ namespace ROOT
 
                 p2.timeCounter -= p2.timePerFrame;    // Remove the time we "used"
             }
-        }
 
-        public void PlayerThreeStuff(GameTime gameTime)
-        //all of players 1's logic is handled here
-        {
+            //player 3
             p3.Update(gameStage.StageBounds);
             p3.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -440,11 +429,8 @@ namespace ROOT
 
                 p3.timeCounter -= p3.timePerFrame;    // Remove the time we "used"
             }
-        }
 
-        public void PlayerFourStuff(GameTime gameTime)
-        //all of players 1's logic is handled here
-        {
+            //player 4 
             p4.Update(gameStage.StageBounds);
             p4.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -462,6 +448,8 @@ namespace ROOT
                 p4.timeCounter -= p4.timePerFrame;    // Remove the time we "used"
             }
         }
+
+       
 
         public void PlayerCollisions(GameTime gameTime)
         //handles all of the player collision logic in one spot
