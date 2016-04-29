@@ -18,6 +18,11 @@ namespace ROOT
         private Button start;
         private Button quit;
         private Button back;
+
+        //Use these variables for the character selection
+        private Button play;
+        private Button options;
+
         private MouseState mState;
         private MouseState previousMState;
         private SoundEffect clickSound;
@@ -78,11 +83,9 @@ namespace ROOT
             switch (currentState)
             {
                 case MenuState.Instructions: //Displays instructions screen
-
                     back.Draw(sb);
                     break;
                 case MenuState.Main:  //Displays main menu screen
-
                     start.Draw(sb);
                     instructions.Draw(sb);
                     quit.Draw(sb);
@@ -122,6 +125,8 @@ namespace ROOT
                     else if (start.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         clickSound.CreateInstance().Play();
+
+                        //Change this once selection screen is implemented
                         currentState = MenuState.Start;
                     }
                     else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
@@ -130,7 +135,23 @@ namespace ROOT
                         currentState = MenuState.Quit;
                     }
                     break;
+                case MenuState.Selection:
+                    if(play.MouseHovering(mState.X,mState.Y) && SingleMouseClick())
+                    {
+                        clickSound.CreateInstance().Play();
+                        currentState = MenuState.Start;
+                    }else if (options.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
+                    {
+                        clickSound.CreateInstance().Play();
+                        currentState = MenuState.Options;
+                    }
+                    break;
                 case MenuState.Options: //Unused for now
+                    if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
+                    {
+                        clickSound.CreateInstance().Play();
+                        currentState = MenuState.Selection;
+                    }
                     break;
                 case MenuState.Controls: //Unused for now
                     break;
@@ -164,6 +185,52 @@ namespace ROOT
             else
             {
                 return false;
+            }
+
+        }
+
+        //Method for the selection screen that takes the number of players, and the players themselves
+        //Players 3 and 4 are optional parameters that don't have to be passed in
+        public void SelectionState(int playerNum, Player p1, Player p2, Player p3 = null, Player p4 = null)
+        {
+            switch (playerNum)
+            {
+                case 2:
+                    UpdateSelected(p1);
+                    UpdateSelected(p2);
+                    break;
+                case 3:
+                    UpdateSelected(p1);
+                    UpdateSelected(p2);
+                    UpdateSelected(p3);
+                    break;
+                case 4:
+                    UpdateSelected(p1);
+                    UpdateSelected(p2);
+                    UpdateSelected(p3);
+                    UpdateSelected(p4);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //Helper method for SelectionState
+        private void UpdateSelected(Player player)
+        {
+            player.UpdateSelect();
+            if (player.SelectLeft)
+            {
+                //Do something
+            }else if (player.SelectRight)
+            {
+                //Do something
+            }else if (player.SelectUp)
+            {
+                //Do something
+            }else if (player.SelectDown)
+            {
+                //Do something
             }
 
         }
