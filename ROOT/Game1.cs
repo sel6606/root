@@ -72,6 +72,7 @@ namespace ROOT
         private Texture2D cancelTexture;
         private Texture2D orbTexture;
         private Texture2D playerTexture;
+        private Texture2D instructionScreen;
         //Width of each button
         private int buttonWidth;
         //Height of each button
@@ -163,14 +164,14 @@ namespace ROOT
             backTexture = Content.Load<Texture2D>("MenuBack");
             restartTexture = Content.Load<Texture2D>("MenuRestart");
             menuTexture = Content.Load<Texture2D>("MenuMenu");
-
+            instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
             playerTexture = Content.Load<Texture2D>("Mario");
 
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("stagetest2.txt", orb);
-            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture,soundEffects[0]);
+            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture, instructionScreen, soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
@@ -321,6 +322,7 @@ namespace ROOT
                     p2.Draw(spriteBatch);
                     p3.Draw(spriteBatch);
                     p4.Draw(spriteBatch);
+                   
                     uiManager.Draw(spriteBatch);
                     if(!p1.Orb && !p2.Orb && !p3.Orb && !p4.Orb)
                     {
@@ -357,7 +359,7 @@ namespace ROOT
             p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
             p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four,3);
             p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
-            powerManager = new PowMan(p1, p2, p3, p4);
+            powerManager = new PowMan(p1, p2, p3, p4, spriteBatch, GraphicsDevice);
         }
 
         //Checks to see if a key was pressed exactly once

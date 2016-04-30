@@ -13,7 +13,7 @@ namespace ROOT
     class Player : GameObject
     {
         //Enum for playerState
-        enum PlayerState //keeps track of what player is doing
+        public enum PlayerState //keeps track of what player is doing
         {
             FaceRight,
             FaceLeft,
@@ -80,6 +80,8 @@ namespace ROOT
         private int speed = 2;
         private int baseSpeed = 2;
         private PlayerState currentState;
+
+        public PlayerState CurentState { get { return currentState; } }
 
         // Texture and drawing
         public Texture2D spriteSheet;  // The single image with all of the animation frames
@@ -566,14 +568,6 @@ namespace ROOT
             moveLeft = (int)l;
             jump = (int)j;
             use = (int)u;
-        }
-
-        public void SetPadControls(GamePadButtons r, GamePadButtons l, GamePadButtons j, GamePadButtons u)
-        //pre: Gamepad button values for right, left, jump, and using powerups
-        //post: sets the player's control mapping to a gamepad
-        {
-            
-
         }
 
         public void ScreenWrap(int maxX, int maxY)

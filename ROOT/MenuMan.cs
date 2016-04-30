@@ -48,6 +48,7 @@ namespace ROOT
         Texture2D instructionsButton;
         Texture2D quitButton;
         Texture2D backButton;
+        Texture2D badInstructions;
 
         SpriteFont menuFont;
 
@@ -63,7 +64,7 @@ namespace ROOT
         }
 
         //Constructor for MenuMan
-        public MenuMan(Game1 game, Texture2D startTexture, Texture2D instructionsTexture, Texture2D quitTexture, Texture2D backTexture, SoundEffect click)
+        public MenuMan(Game1 game, Texture2D startTexture, Texture2D instructionsTexture, Texture2D quitTexture, Texture2D backTexture, Texture2D instructionScreen, SoundEffect click)
         {
             buttonWidth = 300;
             buttonHeight = 100;
@@ -79,6 +80,7 @@ namespace ROOT
             quitButton = quitTexture;
             backButton = backTexture;
             clickSound = click;
+            badInstructions = instructionScreen;
 
             //First button on main menu screen
             start = new Button(startButton, new Rectangle(halfScreen, 50, buttonWidth, buttonHeight));
@@ -99,6 +101,7 @@ namespace ROOT
             switch (currentState)
             {
                 case MenuState.Instructions: //Displays instructions screen
+                    sb.Draw(badInstructions, new Rectangle(0, 0, 800, 480), Color.White);
                     back.Draw(sb);
                     break;
                 case MenuState.Main:  //Displays main menu screen

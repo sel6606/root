@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
@@ -16,6 +20,21 @@ namespace ROOT
 
         //whether tha powerup is in use
         protected bool isActive;
+
+        public bool IsActive { get { return isActive; } }
+
+        private Rectangle rec;
+
+        public Rectangle Rec { get { return rec; } }
+
+        private int x;
+
+        public int X { get { return x; } }
+
+        private Texture2D tex;
+
+        public Texture2D Tex { get { return tex; } }
+
 
         //whether the powerup can be used
         protected bool isReady;
@@ -54,7 +73,7 @@ namespace ROOT
 
 
         //updates the timer.
-        public void Update(double elapsedTime)
+        public virtual void Update(double elapsedTime)
         {
             if (!isReady && !isActive)
             {
