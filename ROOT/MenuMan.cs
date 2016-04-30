@@ -145,7 +145,8 @@ namespace ROOT
                     portrait5.Draw(sb);
                     portrait6.Draw(sb);
                     break;
-                case MenuState.Options: //Unused for now
+                case MenuState.Options:
+                    back.Draw(sb);
                     break;
                 case MenuState.Controls: //Unused for now
                     break;
