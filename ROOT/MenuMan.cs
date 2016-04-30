@@ -26,6 +26,12 @@ namespace ROOT
         private MouseState mState;
         private MouseState previousMState;
         private SoundEffect clickSound;
+        private CharPortrait portrait1;
+        private CharPortrait portrait2;
+        private CharPortrait portrait3;
+        private CharPortrait portrait4;
+        private CharPortrait portrait5;
+        private CharPortrait portrait6;
 
         //Width of each button
         private int buttonWidth;
@@ -41,6 +47,12 @@ namespace ROOT
         private int selectButtonHeight;
 
         private int selectHalfScreen;
+
+        private int portraitWidth;
+
+        private int portraitHeight;
+
+        private int portraitHalfScreen;
 
 
         //Textures of the buttons
@@ -70,11 +82,14 @@ namespace ROOT
             buttonHeight = 100;
             selectButtonWidth = 200;
             selectButtonHeight = 66;
+            portraitWidth = 66;
+            portraitHeight = 66;
             //Sets halfScreen equal to half of the screen minus half the width of each button
             //so the center of the button will be in the center of the screen
             halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             fullScreen = (game.GraphicsDevice.Viewport.Width);
             selectHalfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (selectButtonWidth / 2);
+            portraitHalfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (portraitWidth / 2);
             startButton = startTexture;
             instructionsButton = instructionsTexture;
             quitButton = quitTexture;
@@ -94,6 +109,13 @@ namespace ROOT
             play = new Button(backTexture, new Rectangle(selectHalfScreen, (game.GraphicsDevice.Viewport.Height - (selectButtonHeight + 10)), selectButtonWidth, selectButtonHeight));
             //Options button on character select screen
             options = new Button(backTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
+            //First Character portrait
+            portrait1 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 197, portraitWidth, portraitHeight), true);
+            portrait2 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
+            portrait3 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
+            portrait4 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 280, portraitWidth, portraitHeight), true);
+            portrait5 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
+            portrait6 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -116,6 +138,7 @@ namespace ROOT
                     sb.Draw(backButton, new Rectangle(10, 250, 200, 220), Color.White);
                     sb.Draw(backButton, new Rectangle(fullScreen - 210, 10, 200, 220), Color.White);
                     sb.Draw(backButton, new Rectangle(fullScreen - 210, 250, 200, 220), Color.White);
+                    portrait1.Draw(sb);
                     break;
                 case MenuState.Options: //Unused for now
                     break;
