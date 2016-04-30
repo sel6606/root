@@ -311,6 +311,7 @@ namespace ROOT
                     p2.Draw(spriteBatch);
                     p3.Draw(spriteBatch);
                     p4.Draw(spriteBatch);
+                   
                     uiManager.Draw(spriteBatch);
                     if(!p1.Orb && !p2.Orb && !p3.Orb && !p4.Orb)
                     {
@@ -347,7 +348,7 @@ namespace ROOT
             p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
             p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four,3);
             p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
-            powerManager = new PowMan(p1, p2, p3, p4);
+            powerManager = new PowMan(p1, p2, p3, p4, spriteBatch, GraphicsDevice);
         }
 
         //Checks to see if a key was pressed exactly once

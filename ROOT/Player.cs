@@ -13,7 +13,7 @@ namespace ROOT
     class Player : GameObject
     {
         //Enum for playerState
-        enum PlayerState //keeps track of what player is doing
+        public enum PlayerState //keeps track of what player is doing
         {
             FaceRight,
             FaceLeft,
@@ -88,6 +88,8 @@ namespace ROOT
         private int speed = 2;
         private int baseSpeed = 2;
         private PlayerState currentState;
+
+        public PlayerState CurentState { get { return currentState; } }
 
         // Texture and drawing
         public Texture2D spriteSheet;  // The single image with all of the animation frames
