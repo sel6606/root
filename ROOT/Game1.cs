@@ -328,6 +328,7 @@ namespace ROOT
                     {
                         orb.Draw(spriteBatch);
                     }
+                    powerManager.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:    //Draws the game over screen, drawing a restart button and a menu button
                     restart.Draw(spriteBatch);

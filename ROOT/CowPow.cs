@@ -116,7 +116,13 @@ namespace ROOT
             user.Speed = user.BaseSpeed;
         }
 
-       
+        public override void Draw(SpriteBatch sb)
+        {
+            sb.Draw(tex, rec, Color.White);
+            base.Draw(sb);
+        }
+
+
     }
 
 }

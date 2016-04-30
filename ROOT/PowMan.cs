@@ -215,5 +215,25 @@ namespace ROOT
             powerP3.Update(elapsedTime);
             powerP4.Update(elapsedTime);
         }
+
+        public void Draw(SpriteBatch sb)
+        {
+            if (powerP1.IsActive)
+            {
+                powerP1.Draw(sb);
+            }
+            if(powerP2.IsActive)
+            {
+                powerP2.Draw(sb);
+            }
+            if(powerP3.IsActive)
+            {
+                powerP3.Draw(sb);
+            }
+            if(powerP4.IsActive)
+            {
+                powerP4.Draw(sb);
+            }
+        }
     }
 }
