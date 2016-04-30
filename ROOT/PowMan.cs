@@ -204,6 +204,8 @@ namespace ROOT
 
             powerP1.Update(elapsedTime);
             powerP2.Update(elapsedTime);
+            powerP3.Update(elapsedTime);
+            powerP4.Update(elapsedTime);
         }
     }
 }
