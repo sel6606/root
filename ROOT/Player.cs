@@ -24,15 +24,7 @@ namespace ROOT
             PowerUp
         }
 
-        //Enum for player character
-        public enum PlayerType //Decides what sprite to draw and what powerup to do.
-        {
-            GentleMan,
-            Knight,
-            Cowboy,
-            Caveman
 
-        }
         private PlayerType thisType;
 
         public PlayerType ThisType { get { return thisType; } }

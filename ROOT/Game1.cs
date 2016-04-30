@@ -23,6 +23,18 @@ namespace ROOT
         Selection
     }
 
+    //Enum for the different characters
+    //Enum for player character
+    public enum PlayerType //Decides what sprite to draw and what powerup to do.
+    {
+        GentleMan,
+        Knight,
+        Cowboy,
+        Caveman
+
+    }
+
+
     public class Game1 : Game
     {
 
@@ -44,8 +56,6 @@ namespace ROOT
         private double timer2;
         private double timer3;
         private double timer4;
-        private bool hasOrbsP1;
-        private bool hasOrbP2;
         private Player p1;
         private Player p2;
         private Player p3;
@@ -159,7 +169,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest2.txt", p1, p2, p3, p4, orb);
+            gameStage.ReadStage("stagetest2.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture,soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
@@ -333,7 +343,7 @@ namespace ROOT
         public void Reset()
         {
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("milestone3.txt", p1, p2, p3, p4, orb);
+            gameStage.ReadStage("milestone3.txt", orb);
             timer1 = 1200;
             timer2 = 1200;
             timer3 = 1200;
@@ -457,17 +467,25 @@ namespace ROOT
         public void PlayerCollisions(GameTime gameTime)
         //handles all of the player collision logic in one spot
         {
-            //checks if each player is colliding with player 1
-            p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds);
-            p1.CheckPlayerCollision(p1, p3, gameTime.ElapsedGameTime.TotalSeconds);
-            p1.CheckPlayerCollision(p1, p4, gameTime.ElapsedGameTime.TotalSeconds);
-
-            //checks if players 3 or 4 are colliding with player 2
-            p2.CheckPlayerCollision(p2, p3, gameTime.ElapsedGameTime.TotalSeconds);
-            p2.CheckPlayerCollision(p2, p4, gameTime.ElapsedGameTime.TotalSeconds);
-
-            //checks if player 3 is colliding with player 4
-            p3.CheckPlayerCollision(p3, p4, gameTime.ElapsedGameTime.TotalSeconds);
+            if(p3 == null && p4 == null) //only 2 players
+            {
+                p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p2
+            }
+            else if(p3 != null && p4 == null) //3 players
+            {
+                p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p2
+                p1.CheckPlayerCollision(p1, p3, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p3
+                p2.CheckPlayerCollision(p2, p3, gameTime.ElapsedGameTime.TotalSeconds); //p2 and p3
+            }
+            else
+            {
+                p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p2
+                p1.CheckPlayerCollision(p1, p3, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p3
+                p2.CheckPlayerCollision(p2, p3, gameTime.ElapsedGameTime.TotalSeconds); //p2 and p3
+                p1.CheckPlayerCollision(p1, p4, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p4
+                p2.CheckPlayerCollision(p2, p4, gameTime.ElapsedGameTime.TotalSeconds); //p2 and p4
+                p3.CheckPlayerCollision(p3, p4, gameTime.ElapsedGameTime.TotalSeconds); //p3 and p4
+            }
         }
 
     }

@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="Button.cs" />
     <Compile Include="CavePow.cs" />
+    <Compile Include="CharPortrait.cs" />
     <Compile Include="CowPow.cs" />
     <Compile Include="KnightPow.cs" />
     <Compile Include="Game1.cs" />
