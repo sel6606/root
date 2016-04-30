@@ -10,22 +10,25 @@ namespace ROOT
     {
         private Player player1;
         private Player player2;
+        private Player player3;
+        private Player player4;
 
         //Variables for testing purposes
         private DefaultPower powerP1;
         private DefaultPower powerP2;
+        private DefaultPower powerP3;
+        private DefaultPower powerP4;
 
-
-        //** Have a method that takes a player, and a characterType enum
-        //Use that to initialize the players powers **//
-        
-
-        public PowMan(Player p1, Player p2)
+        public PowMan(Player p1, Player p2, Player p3, Player p4)
         {
             player1 = p1;
             player2 = p2;
+            player3 = p3;
+            player4 = p4;
             powerP1 = new DefaultPower(player1);
             powerP2 = new DefaultPower(player2);
+            powerP3 = new DefaultPower(player3);
+            powerP4 = new DefaultPower(player4);
         }
 
 

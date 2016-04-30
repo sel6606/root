@@ -30,6 +30,12 @@ namespace ROOT
             s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer1), new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 50, 10), Color.White);
             s.DrawString(UIFont, "      |      ", new Vector2((game.GraphicsDevice.Viewport.Width / 2), 10), Color.White);
             s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer2), new Vector2((game.GraphicsDevice.Viewport.Width / 2) + 50, 10), Color.White);
+
+            //player 3 and 4 timers
+            s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer3), new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 50, 30), Color.White);
+            s.DrawString(UIFont, "      |      ", new Vector2((game.GraphicsDevice.Viewport.Width / 2), 10), Color.White);
+            s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer4), new Vector2((game.GraphicsDevice.Viewport.Width / 2) + 50, 30), Color.White);
+
             stop.Draw(s);
             s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.White);
             s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.White);

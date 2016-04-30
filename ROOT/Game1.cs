@@ -19,7 +19,8 @@ namespace ROOT
         Quit,
         Controls,
         Instructions,
-        Options
+        Options,
+        Selection
     }
 
     //Enum for the different characters
@@ -50,10 +51,14 @@ namespace ROOT
         private PowMan powerManager;
         private double timer1;
         private double timer2;
+        private double timer3;
+        private double timer4;
         private bool hasOrbsP1;
         private bool hasOrbP2;
         private Player p1;
         private Player p2;
+        private Player p3;
+        private Player p4;
         private Stage gameStage;
         private Orb orb;
         private Texture2D brickTexture;
@@ -88,6 +93,16 @@ namespace ROOT
         public double Timer2
         {
             get { return timer2; }
+        }
+
+        public double Timer3
+        {
+            get { return timer3; }
+        }
+
+        public double Timer4
+        {
+            get { return timer4; }
         }
 
         //Variables for testing purposes
@@ -153,7 +168,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest2.txt", p1, p2, orb);
+            gameStage.ReadStage("stagetest2.txt", p1, p2, p3, p4, orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture,soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
@@ -210,11 +225,9 @@ namespace ROOT
                 case GameState.Game:
                     powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
                     //If either player wins, change state to game over
-                    PlayerOneStuff(gameTime);
+                    PlayerStuff(gameTime); //most player logic is handled here
 
-                    PlayerTwoStuff(gameTime);
-
-                    p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds);
+                    PlayerCollisions(gameTime); //all player collision logic
 
                     //checking for orb collision
                     if (p1.HitBox.Intersects(orb.HitBox) && orb.Active)
@@ -225,8 +238,16 @@ namespace ROOT
                     {
                         p2.Orb = true;
                     }
+                    else if(p3.HitBox.Intersects(orb.HitBox) && orb.Active)
+                    {
+                        p3.Orb = true;
+                    }
+                    else if(p4.HitBox.Intersects(orb.HitBox) && orb.Active)
+                    {
+                        p4.Orb = true;
+                    }
 
-                    if(p1.Orb || p2.Orb)
+                    if(p1.Orb || p2.Orb || p3.Orb || p4.Orb)
                     {
                         orb.Active = false; //orb is not drawn if either player has it
                     }
@@ -238,9 +259,17 @@ namespace ROOT
                     {
                         timer2 -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
+                    else if(p3.Orb)
+                    {
+                        timer3 -= gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else if(p4.Orb)
+                    {
+                        timer4 -= gameTime.ElapsedGameTime.TotalSeconds;
+                    }
 
 
-                    if (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))
+                    if (timer1 <= 0 || timer2 <= 0 || timer3 <=0 || timer4 <= 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
                     }
@@ -289,8 +318,10 @@ namespace ROOT
                     gameStage.Draw();
                     p1.Draw(spriteBatch); //player should change color to show they have the orb
                     p2.Draw(spriteBatch);
+                    p3.Draw(spriteBatch);
+                    p4.Draw(spriteBatch);
                     uiManager.Draw(spriteBatch);
-                    if(!p1.Orb && !p2.Orb)
+                    if(!p1.Orb && !p2.Orb && !p3.Orb && !p4.Orb)
                     {
                         orb.Draw(spriteBatch);
                     }
@@ -310,17 +341,21 @@ namespace ROOT
         public void Reset()
         {
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("milestone3.txt", p1, p2, orb);
+            gameStage.ReadStage("milestone3.txt", p1, p2, p3, p4, orb);
             timer1 = 1200;
             timer2 = 1200;
+            timer3 = 1200;
+            timer4 = 1200;
             p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture,PlayerIndex.One);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
             p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture,PlayerIndex.Two);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
-            powerManager = new PowMan(p1, p2);
-            
-
+            powerManager = new PowMan(p1, p2, p3, p4);
+            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, playerTexture, PlayerIndex.Three);
+            p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
+            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four);
+            p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
         }
 
         //Checks to see if a key was pressed exactly once
@@ -351,9 +386,10 @@ namespace ROOT
 
         }
 
-        public void PlayerOneStuff(GameTime gameTime)
-        //all of players 1's logic is handled here
+        public void PlayerStuff(GameTime gameTime)
+        //all player logic is processed here
         {
+            //player 1
             p1.Update(gameStage.StageBounds);
             p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -370,11 +406,8 @@ namespace ROOT
 
                 p1.timeCounter -= p1.timePerFrame;    // Remove the time we "used"
             }
-        }
 
-        public void PlayerTwoStuff(GameTime gameTime)
-        //all of player 2's logic is handled here
-        {
+            //player 2
             p2.Update(gameStage.StageBounds);
             p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -388,6 +421,60 @@ namespace ROOT
 
                 p2.timeCounter -= p2.timePerFrame;    // Remove the time we "used"
             }
+
+            //player 3
+            p3.Update(gameStage.StageBounds);
+            p3.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+            p3.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            if (p3.timeCounter >= p3.timePerFrame)
+            {
+                p3.frame += 1;                     // Adjust the frame
+
+                if (p3.frame > p3.WALK_FRAME_COUNT)
+                {  // Check the bounds
+                    p3.frame = 1;
+
+                }// Back to 1 (since 0 is the "standing" frame)
+
+                p3.timeCounter -= p3.timePerFrame;    // Remove the time we "used"
+            }
+
+            //player 4 
+            p4.Update(gameStage.StageBounds);
+            p4.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+            p4.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            if (p4.timeCounter >= p4.timePerFrame)
+            {
+                p4.frame += 1;                     // Adjust the frame
+
+                if (p4.frame > p4.WALK_FRAME_COUNT)
+                {  // Check the bounds
+                    p4.frame = 1;
+
+                }// Back to 1 (since 0 is the "standing" frame)
+
+                p4.timeCounter -= p4.timePerFrame;    // Remove the time we "used"
+            }
+        }
+
+       
+
+        public void PlayerCollisions(GameTime gameTime)
+        //handles all of the player collision logic in one spot
+        {
+            //checks if each player is colliding with player 1
+            p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds);
+            p1.CheckPlayerCollision(p1, p3, gameTime.ElapsedGameTime.TotalSeconds);
+            p1.CheckPlayerCollision(p1, p4, gameTime.ElapsedGameTime.TotalSeconds);
+
+            //checks if players 3 or 4 are colliding with player 2
+            p2.CheckPlayerCollision(p2, p3, gameTime.ElapsedGameTime.TotalSeconds);
+            p2.CheckPlayerCollision(p2, p4, gameTime.ElapsedGameTime.TotalSeconds);
+
+            //checks if player 3 is colliding with player 4
+            p3.CheckPlayerCollision(p3, p4, gameTime.ElapsedGameTime.TotalSeconds);
         }
 
     }
