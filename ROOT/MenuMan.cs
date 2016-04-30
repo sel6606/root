@@ -34,6 +34,8 @@ namespace ROOT
         //Finds half of the screen's width to help center the buttons   
         private int halfScreen;
 
+        private int fullScreen;
+
         private int selectButtonWidth;
 
         private int selectButtonHeight;
@@ -70,6 +72,7 @@ namespace ROOT
             //Sets halfScreen equal to half of the screen minus half the width of each button
             //so the center of the button will be in the center of the screen
             halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
+            fullScreen = (game.GraphicsDevice.Viewport.Width);
             selectHalfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (selectButtonWidth / 2);
             startButton = startTexture;
             instructionsButton = instructionsTexture;
@@ -108,6 +111,8 @@ namespace ROOT
                     options.Draw(sb);
                     sb.Draw(backButton, new Rectangle(10, 10, 200, 220), Color.White);
                     sb.Draw(backButton, new Rectangle(10, 250, 200, 220), Color.White);
+                    sb.Draw(backButton, new Rectangle(fullScreen - 210, 10, 200, 220), Color.White);
+                    sb.Draw(backButton, new Rectangle(fullScreen - 210, 250, 200, 220), Color.White);
                     break;
                 case MenuState.Options: //Unused for now
                     break;

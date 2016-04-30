@@ -335,16 +335,17 @@ namespace ROOT
             timer2 = 1200;
             timer3 = 1200;
             timer4 = 1200;
-            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture,PlayerIndex.One);
+            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture,PlayerIndex.One, 0);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
-            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture,PlayerIndex.Two);
+            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture,PlayerIndex.Two,1);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
-            powerManager = new PowMan(p1, p2, p3, p4);
-            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, playerTexture, PlayerIndex.Three);
+            
+            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, playerTexture, PlayerIndex.Three,2);
             p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
-            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four);
+            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four,3);
             p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
+            powerManager = new PowMan(p1, p2, p3, p4);
         }
 
         //Checks to see if a key was pressed exactly once

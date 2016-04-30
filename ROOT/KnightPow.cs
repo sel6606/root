@@ -5,10 +5,13 @@ using System.Text;
 
 namespace ROOT
 {
-    class DefaultPower : Powerup
+    class KnightPow : Powerup
     {
         //The player using the power up
         private Player user;
+
+        //List of all players.
+        private List<Player> PlayList;
 
         //the powerups cooldown time
         private double cooldownTime=15;
@@ -18,9 +21,10 @@ namespace ROOT
 
 
         //constructor for powerup, takes in the player who uses the power up.
-        public DefaultPower(Player player)
+        public KnightPow(Player player, List<Player> plaList)
         {
             user = player;
+            PlayList = plaList;
             this.isActive = false;
             this.isReady = true;
             this.coolDuration = cooldownTime ;
