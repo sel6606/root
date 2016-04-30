@@ -32,10 +32,6 @@ namespace ROOT
         private CharPortrait portrait5;
         private CharPortrait portrait6;
         private List<CharPortrait> portraits;
-        private int currentP1;
-        private int currentP2;
-        private int currentP3;
-        private int currentP4;
 
         //Width of each button
         private int buttonWidth;
@@ -66,6 +62,13 @@ namespace ROOT
         Texture2D backButton;
         Texture2D badInstructions;
 
+        //Selection screen textures
+        Texture2D caveInfo;
+        Texture2D gInfo;
+        Texture2D kInfo;
+        Texture2D cowInfo;
+        List<Texture2D> info;
+
         SpriteFont menuFont;
 
         //Sets the menu stuff texture
@@ -80,7 +83,10 @@ namespace ROOT
         }
 
         //Constructor for MenuMan
-        public MenuMan(Game1 game, Texture2D startTexture, Texture2D instructionsTexture, Texture2D quitTexture, Texture2D backTexture, Texture2D instructionScreen, SoundEffect click)
+        public MenuMan(Game1 game, Texture2D startTexture, 
+            Texture2D instructionsTexture, Texture2D quitTexture, 
+            Texture2D backTexture, Texture2D instructionScreen, Texture2D cavemanInfo,
+            Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo, SoundEffect click)
         {
             buttonWidth = 300;
             buttonHeight = 100;
@@ -88,6 +94,10 @@ namespace ROOT
             selectButtonHeight = 66;
             portraitWidth = 66;
             portraitHeight = 66;
+            cowInfo = cowboyInfo;
+            kInfo = knightInfo;
+            gInfo = gentlemanInfo;
+            caveInfo = cavemanInfo;
             //Sets halfScreen equal to half of the screen minus half the width of each button
             //so the center of the button will be in the center of the screen
             halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
@@ -123,6 +133,7 @@ namespace ROOT
             SetNeighbors();
             portrait1.IsSelected = new List<bool> { true, true, true, true };
             portraits = new List<CharPortrait>();
+            info = new List<Texture2D> { cavemanInfo, cavemanInfo, cavemanInfo, cavemanInfo };
             portraits.Add(portrait1);
             portraits.Add(portrait2);
             portraits.Add(portrait3);
@@ -137,31 +148,37 @@ namespace ROOT
             portrait1.Vertical = portrait4;
             portrait1.Left = portrait3;
             portrait1.Right = portrait2;
+            portrait1.Type = PlayerType.Caveman;
 
             //Portrait 2
             portrait2.Vertical = portrait5;
             portrait2.Left = portrait1;
             portrait2.Right = portrait3;
+            portrait2.Type = PlayerType.Cowboy;
 
             //Portrait 3
             portrait3.Vertical = portrait6;
             portrait3.Left = portrait2;
             portrait3.Right = portrait1;
+            portrait3.Type = PlayerType.Knight;
 
             //Portrait 4
             portrait4.Vertical = portrait1;
             portrait4.Left = portrait6;
             portrait4.Right = portrait5;
+            portrait4.Type = PlayerType.GentleMan;
 
             //Portrait 5
             portrait5.Vertical = portrait2;
             portrait5.Left = portrait4;
             portrait5.Right = portrait6;
+            portrait5.Type = PlayerType.Caveman;
 
             //Portrait 6
             portrait6.Vertical = portrait3;
             portrait6.Left = portrait5;
             portrait6.Right = portrait4;
+            portrait6.Type = PlayerType.Caveman;
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -180,10 +197,10 @@ namespace ROOT
                 case MenuState.Selection:
                     play.Draw(sb);
                     options.Draw(sb);
-                    sb.Draw(backButton, new Rectangle(10, 10, 200, 220), Color.White);
-                    sb.Draw(backButton, new Rectangle(10, 250, 200, 220), Color.White);
-                    sb.Draw(backButton, new Rectangle(fullScreen - 210, 10, 200, 220), Color.White);
-                    sb.Draw(backButton, new Rectangle(fullScreen - 210, 250, 200, 220), Color.White);
+                    sb.Draw(info[0], new Rectangle(10, 10, 200, 220), Color.White);
+                    sb.Draw(info[1], new Rectangle(10, 250, 200, 220), Color.White);
+                    sb.Draw(info[2], new Rectangle(fullScreen - 210, 10, 200, 220), Color.White);
+                    sb.Draw(info[3], new Rectangle(fullScreen - 210, 250, 200, 220), Color.White);
                     portrait1.Draw(sb);
                     portrait2.Draw(sb);
                     portrait3.Draw(sb);
@@ -346,6 +363,24 @@ namespace ROOT
                 current.IsSelected[playerNumber - 1] = false;
                 current = current.Vertical;
                 current.IsSelected[playerNumber - 1] = true;
+            }
+
+            switch (current.Type)
+            {
+                case PlayerType.Caveman:
+                    info[playerNumber - 1] = caveInfo;
+                    break;
+                case PlayerType.Cowboy:
+                    info[playerNumber - 1] = cowInfo;
+                    break;
+                case PlayerType.GentleMan:
+                    info[playerNumber - 1] = gInfo;
+                    break;
+                case PlayerType.Knight:
+                    info[playerNumber - 1] = kInfo;
+                    break;
+                default:
+                    break;
             }           
         }
 
