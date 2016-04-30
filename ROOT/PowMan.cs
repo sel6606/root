@@ -15,6 +15,11 @@ namespace ROOT
         private DefaultPower powerP1;
         private DefaultPower powerP2;
 
+
+        //** Have a method that takes a player, and a characterType enum
+        //Use that to initialize the players powers **//
+        
+
         public PowMan(Player p1, Player p2)
         {
             player1 = p1;

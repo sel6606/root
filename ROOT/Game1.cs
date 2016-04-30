@@ -22,6 +22,15 @@ namespace ROOT
         Options
     }
 
+    //Enum for the different characters
+    public enum CharacterTypes
+    {
+        Test1,
+        Test2,
+        Test3
+    }
+
+
     public class Game1 : Game
     {
 
