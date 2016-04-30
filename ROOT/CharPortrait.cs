@@ -11,6 +11,7 @@ namespace ROOT
     {
         private PlayerType type;
         private CharPortrait vertical;
+        private int boxNum;
         private CharPortrait left;
         private CharPortrait right;
         private List<Rectangle> selectors;
@@ -18,6 +19,16 @@ namespace ROOT
         private Rectangle position;
         Texture2D texture;
 
+        public List<bool> IsSelected
+        {
+            get { return isSelected;}
+            set { isSelected = value; }
+        }
+        public int BoxNum
+        {
+            get { return boxNum; }
+        }
+        
         public PlayerType Type
         {
             get { return type; }
@@ -48,8 +59,9 @@ namespace ROOT
             set { position = value; }
         }
 
-        public CharPortrait(Texture2D texture, Rectangle position, bool top)
+        public CharPortrait(Texture2D texture, Rectangle position, bool top, int number)
         {
+            boxNum = number;
             this.position = position;
             this.texture = texture;
             selectors = new List<Rectangle>();

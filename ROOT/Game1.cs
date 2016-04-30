@@ -214,6 +214,11 @@ namespace ROOT
             {
                 case GameState.Menu: //If the game is on the menu
                     currentMenuState = menuManager.NextState(currentMenuState, mState, previousMState);
+                    if (currentMenuState == MenuState.Selection)
+                    {
+                        menuManager.SelectionState(4, p1, p2, p3, p4);
+                    }
+
                     if (currentMenuState == MenuState.Start)
                     { //If the player pressed start, start the game 
                         currentState = GameState.Game;

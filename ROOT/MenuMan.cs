@@ -11,7 +11,6 @@ namespace ROOT
 {
     class MenuMan
     {
-        private bool NEEDSCONDITION = false;
         private KeyboardState kbState;
         private KeyboardState previousKbState;
         private Button instructions;
@@ -32,6 +31,11 @@ namespace ROOT
         private CharPortrait portrait4;
         private CharPortrait portrait5;
         private CharPortrait portrait6;
+        private List<CharPortrait> portraits;
+        private int currentP1;
+        private int currentP2;
+        private int currentP3;
+        private int currentP4;
 
         //Width of each button
         private int buttonWidth;
@@ -110,12 +114,21 @@ namespace ROOT
             //Options button on character select screen
             options = new Button(backTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
             //First Character portrait
-            portrait1 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
-            portrait2 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
-            portrait3 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
-            portrait4 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false);
-            portrait5 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false);
-            portrait6 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false);
+            portrait1 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,1);
+            portrait2 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,2);
+            portrait3 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,3);
+            portrait4 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false,4);
+            portrait5 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false,5);
+            portrait6 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false,6);
+            SetNeighbors();
+            portrait1.IsSelected = new List<bool> { true, true, true, true };
+            portraits = new List<CharPortrait>();
+            portraits.Add(portrait1);
+            portraits.Add(portrait2);
+            portraits.Add(portrait3);
+            portraits.Add(portrait4);
+            portraits.Add(portrait5);
+            portraits.Add(portrait6);
         }
 
         public void SetNeighbors()
@@ -146,7 +159,7 @@ namespace ROOT
             portrait5.Right = portrait6;
 
             //Portrait 6
-            portrait6.Vertical = portrait1;
+            portrait6.Vertical = portrait3;
             portrait6.Left = portrait5;
             portrait6.Right = portrait4;
         }
@@ -284,19 +297,19 @@ namespace ROOT
             switch (playerNum)
             {
                 case 2:
-                    UpdateSelected(p1);
-                    UpdateSelected(p2);
+                    UpdateSelected(p1, 1);
+                    UpdateSelected(p2, 2);
                     break;
                 case 3:
-                    UpdateSelected(p1);
-                    UpdateSelected(p2);
-                    UpdateSelected(p3);
+                    UpdateSelected(p1, 1);
+                    UpdateSelected(p2, 2);
+                    UpdateSelected(p3, 3);
                     break;
                 case 4:
-                    UpdateSelected(p1);
-                    UpdateSelected(p2);
-                    UpdateSelected(p3);
-                    UpdateSelected(p4);
+                    UpdateSelected(p1, 1);
+                    UpdateSelected(p2, 2);
+                    UpdateSelected(p3, 3);
+                    UpdateSelected(p4, 4);
                     break;
                 default:
                     break;
@@ -304,23 +317,35 @@ namespace ROOT
         }
 
         //Helper method for SelectionState
-        private void UpdateSelected(Player player)
+        private void UpdateSelected(Player player, int playerNumber)
         {
+            CharPortrait current=null;
             player.UpdateSelect();
+            for (int i = 0; i < portraits.Count; i++)
+            {
+                if (portraits[i].IsSelected[playerNumber - 1])
+                {
+                    current = portraits[i];
+                }
+            }
             if (player.SelectLeft)
             {
-                //Do something
+                current.IsSelected[playerNumber - 1] = false;
+                current = current.Left;
+                current.IsSelected[playerNumber - 1 ] = true;
+
             }else if (player.SelectRight)
             {
-                //Do something
-            }else if (player.SelectUp)
-            {
-                //Do something
-            }else if (player.SelectDown)
-            {
-                //Do something
+                current.IsSelected[playerNumber - 1] = false;
+                current = current.Right;
+                current.IsSelected[playerNumber - 1] = true;
             }
-
+            else if (player.SelectUp || player.SelectDown)
+            {
+                current.IsSelected[playerNumber - 1] = false;
+                current = current.Vertical;
+                current.IsSelected[playerNumber - 1] = true;
+            }           
         }
 
     }
