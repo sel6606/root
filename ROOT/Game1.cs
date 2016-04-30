@@ -170,7 +170,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest2.txt", orb);
+            gameStage.ReadStage("milestone3.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture, instructionScreen, soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
