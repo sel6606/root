@@ -118,6 +118,39 @@ namespace ROOT
             portrait6 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
         }
 
+        public void SetNeighbors()
+        {
+            //Portrait 1
+            portrait1.Vertical = portrait4;
+            portrait1.Left = portrait3;
+            portrait1.Right = portrait2;
+
+            //Portrait 2
+            portrait2.Vertical = portrait5;
+            portrait2.Left = portrait1;
+            portrait2.Right = portrait3;
+
+            //Portrait 3
+            portrait3.Vertical = portrait6;
+            portrait3.Left = portrait2;
+            portrait3.Right = portrait1;
+
+            //Portrait 4
+            portrait4.Vertical = portrait1;
+            portrait4.Left = portrait6;
+            portrait4.Right = portrait5;
+
+            //Portrait 5
+            portrait5.Vertical = portrait2;
+            portrait5.Left = portrait4;
+            portrait5.Right = portrait6;
+
+            //Portrait 6
+            portrait6.Vertical = portrait1;
+            portrait6.Left = portrait5;
+            portrait6.Right = portrait4;
+        }
+
         public void Draw(MenuState currentState, SpriteBatch sb)
         {
             switch (currentState)

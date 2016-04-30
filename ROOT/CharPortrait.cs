@@ -10,8 +10,7 @@ namespace ROOT
     class CharPortrait
     {
         private PlayerType type;
-        private CharPortrait above;
-        private CharPortrait below;
+        private CharPortrait vertical;
         private CharPortrait left;
         private CharPortrait right;
         private List<Rectangle> selectors;
@@ -25,16 +24,10 @@ namespace ROOT
             set { type = value; }
         }
 
-        public CharPortrait Above
+        public CharPortrait Vertical
         {
-            get { return above; }
-            set { above = value; }
-        }
-
-        public CharPortrait Below
-        {
-            get { return below; }
-            set { below = value; }
+            get { return vertical; }
+            set { vertical = value; }
         }
 
         public CharPortrait Left
