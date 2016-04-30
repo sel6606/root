@@ -78,7 +78,7 @@ namespace ROOT
         /// <summary>
         /// Reads in a stage from a textfile, parameter is String of file location
         /// </summary>
-        public void ReadStage(String fileName, Player p1, Player p2, Player p3, Player p4, Orb orb)
+        public void ReadStage(String fileName, Orb orb)
         {
             //sets the initial y position for the platforms
             int ypos = 0;

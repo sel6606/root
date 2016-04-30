@@ -48,6 +48,7 @@ namespace ROOT
                 activeTimer = activeDuration;
                 isReady = false;
                 cooldownTimer = coolDuration;
+                Effect();
             }
         }
 
@@ -61,7 +62,7 @@ namespace ROOT
             }
             else if (isActive)
             {
-                Effect();
+                
                 activeTimer -= elapsedTime;
                 if (activeTimer <= 0)
                 {
