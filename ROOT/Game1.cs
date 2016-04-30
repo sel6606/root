@@ -24,11 +24,14 @@ namespace ROOT
     }
 
     //Enum for the different characters
-    public enum CharacterTypes
+    //Enum for player character
+    public enum PlayerType //Decides what sprite to draw and what powerup to do.
     {
-        Test1,
-        Test2,
-        Test3
+        GentleMan,
+        Knight,
+        Cowboy,
+        Caveman
+
     }
 
 
