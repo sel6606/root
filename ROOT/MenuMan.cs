@@ -34,6 +34,12 @@ namespace ROOT
         //Finds half of the screen's width to help center the buttons   
         private int halfScreen;
 
+        private int selectButtonWidth;
+
+        private int selectButtonHeight;
+
+        private int selectHalfScreen;
+
 
         //Textures of the buttons
         Texture2D startButton;
@@ -59,9 +65,12 @@ namespace ROOT
         {
             buttonWidth = 300;
             buttonHeight = 100;
+            selectButtonWidth = 200;
+            selectButtonHeight = 66;
             //Sets halfScreen equal to half of the screen minus half the width of each button
             //so the center of the button will be in the center of the screen
             halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
+            selectHalfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (selectButtonWidth / 2);
             startButton = startTexture;
             instructionsButton = instructionsTexture;
             quitButton = quitTexture;
@@ -76,6 +85,10 @@ namespace ROOT
             quit = new Button(quitButton, new Rectangle(halfScreen, 350, buttonWidth, buttonHeight));
             //Only button on instructions menu              
             back = new Button(backTexture, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
+            //Play button on character select screen
+            play = new Button(backTexture, new Rectangle(selectHalfScreen, (game.GraphicsDevice.Viewport.Height - (selectButtonHeight + 10)), selectButtonWidth, selectButtonHeight));
+            //Options button on character select screen
+            options = new Button(backTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -89,6 +102,12 @@ namespace ROOT
                     start.Draw(sb);
                     instructions.Draw(sb);
                     quit.Draw(sb);
+                    break;
+                case MenuState.Selection:
+                    play.Draw(sb);
+                    options.Draw(sb);
+                    sb.Draw(backButton, new Rectangle(10, 10, 200, 220), Color.White);
+                    sb.Draw(backButton, new Rectangle(10, 250, 200, 220), Color.White);
                     break;
                 case MenuState.Options: //Unused for now
                     break;
@@ -127,7 +146,7 @@ namespace ROOT
                         clickSound.CreateInstance().Play();
 
                         //Change this once selection screen is implemented
-                        currentState = MenuState.Start;
+                        currentState = MenuState.Selection;
                     }
                     else if (quit.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
