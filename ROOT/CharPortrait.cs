@@ -16,6 +16,8 @@ namespace ROOT
         private CharPortrait right;
         private List<Rectangle> selectors;
         private List<bool> isSelected;
+        private Rectangle position;
+        Texture2D texture;
 
         public PlayerType Type
         {
@@ -47,9 +49,17 @@ namespace ROOT
             set { right = value; }
         }
 
+        public Rectangle Position
+        {
+            get { return position; }
+            set { position = value; }
+        }
+
         public CharPortrait(Texture2D texture, Rectangle position, bool top)
         {
-
+            this.position = position;
+            this.texture = texture;
+            selectors = new List<Rectangle>();
             int width = position.Width / 4;
             int bottom = position.Y + position.Height + 10;
             if (top)
@@ -70,5 +80,16 @@ namespace ROOT
             isSelected = new List<bool>() { false, false, false, false }; 
             }
 
+        public void Draw(SpriteBatch sb)
+        {
+            sb.Draw(texture, position, Color.White);
+            for (int i = 0; i < selectors.Count; i++)
+            {
+                if (isSelected[i])
+                {
+                    sb.Draw(texture, selectors[i], Color.White);
+                }
+            }
+        }
     }
 }
