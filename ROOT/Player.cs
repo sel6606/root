@@ -24,6 +24,19 @@ namespace ROOT
             PowerUp
         }
 
+        //Enum for player character
+        public enum PlayerType //Decides what sprite to draw and what powerup to do.
+        {
+            GentleMan,
+            Knight,
+            Cowboy,
+            Caveman
+
+        }
+        private PlayerType thisType;
+
+        public PlayerType ThisType { get { return thisType; } }
+
         //Fields for player controls
         public int moveRight;
         public int moveLeft;
@@ -129,7 +142,7 @@ namespace ROOT
         }
 
         //constructor, calls game object's but forces isSolid to be false
-        public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture, PlayerIndex playerNum)
+        public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture, PlayerIndex playerNum, int type)
             : base(x, y, width, height, false, texture)
         {
             this.game = game;
@@ -143,6 +156,9 @@ namespace ROOT
             selectUp = false;
             selectDown = false;
             setFPS();
+            thisType = (PlayerType)type;
+
+           
         }
 
         public void UpdateSelect()
