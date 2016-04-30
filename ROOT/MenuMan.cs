@@ -110,12 +110,12 @@ namespace ROOT
             //Options button on character select screen
             options = new Button(backTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
             //First Character portrait
-            portrait1 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 197, portraitWidth, portraitHeight), true);
-            portrait2 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
-            portrait3 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
-            portrait4 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 280, portraitWidth, portraitHeight), true);
-            portrait5 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
-            portrait6 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240, portraitWidth, portraitHeight), true);
+            portrait1 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
+            portrait2 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
+            portrait3 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
+            portrait4 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false);
+            portrait5 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false);
+            portrait6 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false);
         }
 
         public void SetNeighbors()
@@ -172,6 +172,11 @@ namespace ROOT
                     sb.Draw(backButton, new Rectangle(fullScreen - 210, 10, 200, 220), Color.White);
                     sb.Draw(backButton, new Rectangle(fullScreen - 210, 250, 200, 220), Color.White);
                     portrait1.Draw(sb);
+                    portrait2.Draw(sb);
+                    portrait3.Draw(sb);
+                    portrait4.Draw(sb);
+                    portrait5.Draw(sb);
+                    portrait6.Draw(sb);
                     break;
                 case MenuState.Options: //Unused for now
                     break;
