@@ -576,14 +576,6 @@ namespace ROOT
             use = (int)u;
         }
 
-        public void SetPadControls(GamePadButtons r, GamePadButtons l, GamePadButtons j, GamePadButtons u)
-        //pre: Gamepad button values for right, left, jump, and using powerups
-        //post: sets the player's control mapping to a gamepad
-        {
-            
-
-        }
-
         public void ScreenWrap(int maxX, int maxY)
         //pre: the max X and Y coordinates of the screen
         //post: wraps the player around the screen if they go out of bounds

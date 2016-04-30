@@ -60,6 +60,7 @@ namespace ROOT
         private Texture2D cancelTexture;
         private Texture2D orbTexture;
         private Texture2D playerTexture;
+        private Texture2D instructionScreen;
         //Width of each button
         private int buttonWidth;
         //Height of each button
@@ -151,14 +152,14 @@ namespace ROOT
             backTexture = Content.Load<Texture2D>("MenuBack");
             restartTexture = Content.Load<Texture2D>("MenuRestart");
             menuTexture = Content.Load<Texture2D>("MenuMenu");
-
+            instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
             playerTexture = Content.Load<Texture2D>("Mario");
 
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("stagetest2.txt", orb);
-            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture,soundEffects[0]);
+            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture, instructionScreen, soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
