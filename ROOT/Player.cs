@@ -13,7 +13,7 @@ namespace ROOT
     class Player : GameObject
     {
         //Enum for playerState
-        enum PlayerState //keeps track of what player is doing
+        public enum PlayerState //keeps track of what player is doing
         {
             FaceRight,
             FaceLeft,
@@ -24,15 +24,7 @@ namespace ROOT
             PowerUp
         }
 
-        //Enum for player character
-        public enum PlayerType //Decides what sprite to draw and what powerup to do.
-        {
-            GentleMan,
-            Knight,
-            Cowboy,
-            Caveman
 
-        }
         private PlayerType thisType;
 
         public PlayerType ThisType { get { return thisType; } }
@@ -88,6 +80,8 @@ namespace ROOT
         private int speed = 2;
         private int baseSpeed = 2;
         private PlayerState currentState;
+
+        public PlayerState CurentState { get { return currentState; } }
 
         // Texture and drawing
         public Texture2D spriteSheet;  // The single image with all of the animation frames

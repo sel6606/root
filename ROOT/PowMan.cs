@@ -3,11 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
     class PowMan
     {
+        SpriteBatch sp;
         private Player player1;
         private Player player2;
         private Player player3;
@@ -21,12 +26,13 @@ namespace ROOT
         private Powerup powerP3;
         private Powerup powerP4;
         
-        public PowMan(Player p1, Player p2, Player p3, Player p4)
+        public PowMan(Player p1, Player p2, Player p3, Player p4, SpriteBatch s, GraphicsDevice g)
         {
             player1 = p1;
             player2 = p2;
             player3 = p3;
             player4 = p4;
+            sp = s;
             playIndex.Add(player1);
             playIndex.Add(player2);
             playIndex.Add(player3);
@@ -54,76 +60,76 @@ namespace ROOT
                 {
                     if(y == 0)
                     {
-                        powerP1 = new GentlePow(play, playIndex);
+                        powerP1 = new GentlePow(play, playIndex,s,g);
                     }
                     if(y == 1)
                     {
-                        powerP1 = new KnightPow(play, playIndex);
+                        powerP1 = new KnightPow(play, playIndex,s);
                     }
                     if (y == 2)
                     {
-                        powerP1 = new CowPow(play, playIndex);
+                        powerP1 = new CowPow(play, playIndex,s,g);
                     }
                     if (y == 3)
                     {
-                        powerP1 = new CavePow(play, playIndex);
+                        powerP1 = new CavePow(play, playIndex,s);
                     }
                 }
                 else if (x == 1)
                 {
                     if (y == 0)
                     {
-                        powerP2 = new GentlePow(play, playIndex);
+                        powerP2 = new GentlePow(play, playIndex,s,g);
                     }
                     if (y == 1)
                     {
-                        powerP2 = new KnightPow(play, playIndex);
+                        powerP2 = new KnightPow(play, playIndex,s);
                     }
                     if (y == 2)
                     {
-                        powerP2 = new CowPow(play, playIndex);
+                        powerP2 = new CowPow(play, playIndex,s,g);
                     }
                     if (y == 3)
                     {
-                        powerP2 = new CavePow(play, playIndex);
+                        powerP2 = new CavePow(play, playIndex,s);
                     }
                 }
                 else if (x == 2)
                 {
                     if (y == 0)
                     {
-                        powerP3 = new GentlePow(play, playIndex);
+                        powerP3 = new GentlePow(play, playIndex,s,g);
                     }
                     if (y == 1)
                     {
-                        powerP3 = new KnightPow(play, playIndex);
+                        powerP3 = new KnightPow(play, playIndex,s);
                     }
                     if (y == 2)
                     {
-                        powerP3 = new CowPow(play, playIndex);
+                        powerP3 = new CowPow(play, playIndex,s,g);
                     }
                     if (y == 3)
                     {
-                        powerP3 = new CavePow(play, playIndex);
+                        powerP3 = new CavePow(play, playIndex,s);
                     }
                 }
                 else if (x == 3)
                 {
                     if (y == 0)
                     {
-                        powerP4 = new GentlePow(play, playIndex);
+                        powerP4 = new GentlePow(play, playIndex,s,g);
                     }
                     if (y == 1)
                     {
-                        powerP4 = new KnightPow(play, playIndex);
+                        powerP4 = new KnightPow(play, playIndex,s);
                     }
                     if (y == 2)
                     {
-                        powerP4 = new CowPow(play, playIndex);
+                        powerP4 = new CowPow(play, playIndex,s,g);
                     }
                     if (y == 3)
                     {
-                        powerP4 = new CavePow(play, playIndex);
+                        powerP4 = new CavePow(play, playIndex,s);
                     }
                 }
                 x++;
@@ -131,6 +137,8 @@ namespace ROOT
             }
 
         }
+
+        
 
 
         //updates all powerups.

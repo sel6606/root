@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
@@ -9,6 +13,8 @@ namespace ROOT
     {
         //The player using the power up
         private Player user;
+
+        private SpriteBatch sp;
 
         //List of all players.
         private List<Player> PlayList;
@@ -22,7 +28,7 @@ namespace ROOT
 
 
         //constructor for powerup, takes in the player who uses the power up.
-        public CavePow(Player player, List<Player> plaList)
+        public CavePow(Player player, List<Player> plaList, SpriteBatch s)
         {
             user = player;
             PlayList = plaList;
@@ -30,6 +36,7 @@ namespace ROOT
             this.isReady = true;
             this.coolDuration = cooldownTime;
             this.activeDuration = activeTime;
+            sp = s;
         }
 
 
