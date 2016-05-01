@@ -169,7 +169,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("stagetest2.txt", orb);
+            gameStage.ReadStage("Milestone4.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture,soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
@@ -343,7 +343,7 @@ namespace ROOT
         public void Reset()
         {
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("milestone3.txt", orb);
+            gameStage.ReadStage("milestone4.txt", orb);
             timer1 = 1200;
             timer2 = 1200;
             timer3 = 1200;

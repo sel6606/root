@@ -23,6 +23,8 @@ namespace ROOT
 
         public Rectangle Rec { get { return rec; } }
 
+        private Rectangle rec2;
+
         private int x;
 
         Texture2D tex;
@@ -63,7 +65,7 @@ namespace ROOT
                 
                 if (x == 0 || x == 2 || x == 4)
                 {
-                    Rectangle rec2 = new Rectangle(rec.X, rec.Y, rec.X + 10, rec.Y);
+                     rec2 = new Rectangle(rec.X, rec.Y, rec.X + 10, rec.Y);
                     foreach(Player play in PlayList)
                     {
                         if (rec2.Contains(play.HitBox))
