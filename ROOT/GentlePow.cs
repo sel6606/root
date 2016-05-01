@@ -92,5 +92,13 @@ namespace ROOT
                 Kpow.EndEffect();
             }
         }
+
+        public override void Draw(SpriteBatch sb)
+        {
+            if (x == 2)
+            {
+                cow.Draw(sb);
+            }
+        }
     }
 }

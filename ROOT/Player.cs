@@ -80,6 +80,7 @@ namespace ROOT
         private int speed = 2;
         private int baseSpeed = 2;
         private PlayerState currentState;
+        private KeyboardState previousKbState;
 
         public PlayerState CurentState { get { return currentState; } }
 
@@ -150,6 +151,7 @@ namespace ROOT
             selectUp = false;
             selectDown = false;
             setFPS();
+            previousKbState = Keyboard.GetState();
             thisType = (PlayerType)type;
 
            
@@ -165,10 +167,10 @@ namespace ROOT
 
             if (!xBox)
             {
-                up = input.IsKeyDown((Keys)jump);
-                right = input.IsKeyDown((Keys)moveRight);
-                left = input.IsKeyDown((Keys)moveLeft);
-                down = input.IsKeyDown((Keys)use);
+                up = input.IsKeyDown((Keys)jump) && previousKbState.IsKeyUp((Keys)jump);
+                right = input.IsKeyDown((Keys)moveRight) && previousKbState.IsKeyUp((Keys)moveRight);
+                left = input.IsKeyDown((Keys)moveLeft) && previousKbState.IsKeyUp((Keys)moveLeft);
+                down = input.IsKeyDown((Keys)use) && previousKbState.IsKeyUp((Keys)use);
             }
             else if (xBox)
             {
@@ -191,6 +193,7 @@ namespace ROOT
                 }
             }
 
+            previousKbState = input;
             selectLeft = left;
             selectRight = right;
             selectUp = up;

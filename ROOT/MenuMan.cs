@@ -11,7 +11,6 @@ namespace ROOT
 {
     class MenuMan
     {
-        private bool NEEDSCONDITION = false;
         private KeyboardState kbState;
         private KeyboardState previousKbState;
         private Button instructions;
@@ -32,6 +31,7 @@ namespace ROOT
         private CharPortrait portrait4;
         private CharPortrait portrait5;
         private CharPortrait portrait6;
+        private List<CharPortrait> portraits;
 
         //Width of each button
         private int buttonWidth;
@@ -62,6 +62,13 @@ namespace ROOT
         Texture2D backButton;
         Texture2D badInstructions;
 
+        //Selection screen textures
+        Texture2D caveInfo;
+        Texture2D gInfo;
+        Texture2D kInfo;
+        Texture2D cowInfo;
+        List<Texture2D> info;
+
         SpriteFont menuFont;
 
         //Sets the menu stuff texture
@@ -76,7 +83,11 @@ namespace ROOT
         }
 
         //Constructor for MenuMan
-        public MenuMan(Game1 game, Texture2D startTexture, Texture2D instructionsTexture, Texture2D quitTexture, Texture2D backTexture, Texture2D instructionScreen, SoundEffect click)
+        public MenuMan(Game1 game, Texture2D startTexture, 
+            Texture2D instructionsTexture, Texture2D quitTexture, 
+            Texture2D backTexture, Texture2D instructionScreen, Texture2D cavemanInfo,
+            Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo,
+            List<Texture2D> portraitTexture, Texture2D select, SoundEffect click)
         {
             buttonWidth = 300;
             buttonHeight = 100;
@@ -84,6 +95,10 @@ namespace ROOT
             selectButtonHeight = 66;
             portraitWidth = 66;
             portraitHeight = 66;
+            cowInfo = cowboyInfo;
+            kInfo = knightInfo;
+            gInfo = gentlemanInfo;
+            caveInfo = cavemanInfo;
             //Sets halfScreen equal to half of the screen minus half the width of each button
             //so the center of the button will be in the center of the screen
             halfScreen = (game.GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
@@ -110,12 +125,61 @@ namespace ROOT
             //Options button on character select screen
             options = new Button(backTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
             //First Character portrait
-            portrait1 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
-            portrait2 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
-            portrait3 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true);
-            portrait4 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false);
-            portrait5 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false);
-            portrait6 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false);
+            portrait1 = new CharPortrait(portraitTexture[0], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,1);
+            portrait2 = new CharPortrait(portraitTexture[1], select, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,2);
+            portrait3 = new CharPortrait(portraitTexture[2], select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,3);
+            portrait4 = new CharPortrait(portraitTexture[3], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false,4);
+            portrait5 = new CharPortrait(startButton, select, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false,5);
+            portrait6 = new CharPortrait(startButton, select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false,6);
+            SetNeighbors();
+            portrait1.IsSelected = new List<bool> { true, true, true, true };
+            portraits = new List<CharPortrait>();
+            info = new List<Texture2D> { cavemanInfo, cavemanInfo, cavemanInfo, cavemanInfo };
+            portraits.Add(portrait1);
+            portraits.Add(portrait2);
+            portraits.Add(portrait3);
+            portraits.Add(portrait4);
+            portraits.Add(portrait5);
+            portraits.Add(portrait6);
+        }
+
+        public void SetNeighbors()
+        {
+            //Portrait 1
+            portrait1.Vertical = portrait4;
+            portrait1.Left = portrait3;
+            portrait1.Right = portrait2;
+            portrait1.Type = PlayerType.Caveman;
+
+            //Portrait 2
+            portrait2.Vertical = portrait5;
+            portrait2.Left = portrait1;
+            portrait2.Right = portrait3;
+            portrait2.Type = PlayerType.Cowboy;
+
+            //Portrait 3
+            portrait3.Vertical = portrait6;
+            portrait3.Left = portrait2;
+            portrait3.Right = portrait1;
+            portrait3.Type = PlayerType.Knight;
+
+            //Portrait 4
+            portrait4.Vertical = portrait1;
+            portrait4.Left = portrait6;
+            portrait4.Right = portrait5;
+            portrait4.Type = PlayerType.GentleMan;
+
+            //Portrait 5
+            portrait5.Vertical = portrait2;
+            portrait5.Left = portrait4;
+            portrait5.Right = portrait6;
+            portrait5.Type = PlayerType.Caveman;
+
+            //Portrait 6
+            portrait6.Vertical = portrait3;
+            portrait6.Left = portrait5;
+            portrait6.Right = portrait4;
+            portrait6.Type = PlayerType.Caveman;
         }
 
         public void Draw(MenuState currentState, SpriteBatch sb)
@@ -134,10 +198,10 @@ namespace ROOT
                 case MenuState.Selection:
                     play.Draw(sb);
                     options.Draw(sb);
-                    sb.Draw(backButton, new Rectangle(10, 10, 200, 220), Color.White);
-                    sb.Draw(backButton, new Rectangle(10, 250, 200, 220), Color.White);
-                    sb.Draw(backButton, new Rectangle(fullScreen - 210, 10, 200, 220), Color.White);
-                    sb.Draw(backButton, new Rectangle(fullScreen - 210, 250, 200, 220), Color.White);
+                    sb.Draw(info[0], new Rectangle(10, 10, 200, 220), Color.White);
+                    sb.Draw(info[1], new Rectangle(10, 250, 200, 220), Color.White);
+                    sb.Draw(info[2], new Rectangle(fullScreen - 210, 10, 200, 220), Color.White);
+                    sb.Draw(info[3], new Rectangle(fullScreen - 210, 250, 200, 220), Color.White);
                     portrait1.Draw(sb);
                     portrait2.Draw(sb);
                     portrait3.Draw(sb);
@@ -145,7 +209,8 @@ namespace ROOT
                     portrait5.Draw(sb);
                     portrait6.Draw(sb);
                     break;
-                case MenuState.Options: //Unused for now
+                case MenuState.Options:
+                    back.Draw(sb);
                     break;
                 case MenuState.Controls: //Unused for now
                     break;
@@ -251,19 +316,19 @@ namespace ROOT
             switch (playerNum)
             {
                 case 2:
-                    UpdateSelected(p1);
-                    UpdateSelected(p2);
+                    UpdateSelected(p1, 1);
+                    UpdateSelected(p2, 2);
                     break;
                 case 3:
-                    UpdateSelected(p1);
-                    UpdateSelected(p2);
-                    UpdateSelected(p3);
+                    UpdateSelected(p1, 1);
+                    UpdateSelected(p2, 2);
+                    UpdateSelected(p3, 3);
                     break;
                 case 4:
-                    UpdateSelected(p1);
-                    UpdateSelected(p2);
-                    UpdateSelected(p3);
-                    UpdateSelected(p4);
+                    UpdateSelected(p1, 1);
+                    UpdateSelected(p2, 2);
+                    UpdateSelected(p3, 3);
+                    UpdateSelected(p4, 4);
                     break;
                 default:
                     break;
@@ -271,23 +336,53 @@ namespace ROOT
         }
 
         //Helper method for SelectionState
-        private void UpdateSelected(Player player)
+        private void UpdateSelected(Player player, int playerNumber)
         {
+            CharPortrait current=null;
             player.UpdateSelect();
+            for (int i = 0; i < portraits.Count; i++)
+            {
+                if (portraits[i].IsSelected[playerNumber - 1])
+                {
+                    current = portraits[i];
+                }
+            }
             if (player.SelectLeft)
             {
-                //Do something
+                current.IsSelected[playerNumber - 1] = false;
+                current = current.Left;
+                current.IsSelected[playerNumber - 1 ] = true;
+
             }else if (player.SelectRight)
             {
-                //Do something
-            }else if (player.SelectUp)
+                current.IsSelected[playerNumber - 1] = false;
+                current = current.Right;
+                current.IsSelected[playerNumber - 1] = true;
+            }
+            else if (player.SelectUp || player.SelectDown)
             {
-                //Do something
-            }else if (player.SelectDown)
-            {
-                //Do something
+                current.IsSelected[playerNumber - 1] = false;
+                current = current.Vertical;
+                current.IsSelected[playerNumber - 1] = true;
             }
 
+            switch (current.Type)
+            {
+                case PlayerType.Caveman:
+                    info[playerNumber - 1] = caveInfo;
+                    break;
+                case PlayerType.Cowboy:
+                    info[playerNumber - 1] = cowInfo;
+                    break;
+                case PlayerType.GentleMan:
+                    info[playerNumber - 1] = gInfo;
+                    break;
+                case PlayerType.Knight:
+                    info[playerNumber - 1] = kInfo;
+                    break;
+                default:
+                    break;
+            }           
         }
 
     }

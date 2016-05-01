@@ -73,6 +73,12 @@ namespace ROOT
         private Texture2D orbTexture;
         private Texture2D playerTexture;
         private Texture2D instructionScreen;
+        private Texture2D cowboyInfo;
+        private Texture2D knightInfo;
+        private Texture2D cavemanInfo;
+        private Texture2D gentlemanInfo;
+        private Texture2D select;
+
         //Width of each button
         private int buttonWidth;
         //Height of each button
@@ -166,12 +172,26 @@ namespace ROOT
             menuTexture = Content.Load<Texture2D>("MenuMenu");
             instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
             playerTexture = Content.Load<Texture2D>("Mario");
+            select = Content.Load<Texture2D>("select");
 
+            gentlemanInfo = Content.Load<Texture2D>("gentleman_info");
+            cavemanInfo = Content.Load<Texture2D>("caveman_info");
+            cowboyInfo = Content.Load<Texture2D>("cowboy_info");
+            knightInfo = Content.Load<Texture2D>("knight_info");
+
+
+            List<Texture2D> portraits = new List<Texture2D>();
+            portraits.Add(Content.Load<Texture2D>("cmPortrait"));
+            portraits.Add(Content.Load<Texture2D>("cbPortrait"));
+            portraits.Add(Content.Load<Texture2D>("kPortrait"));
+            portraits.Add(Content.Load<Texture2D>("gPortrait"));
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("milestone3.txt", orb);
-            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture, instructionScreen, soundEffects[0]);
+            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
+                backTexture, instructionScreen, cavemanInfo, cowboyInfo,
+                knightInfo, gentlemanInfo, portraits, select, soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
@@ -214,6 +234,11 @@ namespace ROOT
             {
                 case GameState.Menu: //If the game is on the menu
                     currentMenuState = menuManager.NextState(currentMenuState, mState, previousMState);
+                    if (currentMenuState == MenuState.Selection)
+                    {
+                        menuManager.SelectionState(4, p1, p2, p3, p4);
+                    }
+
                     if (currentMenuState == MenuState.Start)
                     { //If the player pressed start, start the game 
                         currentState = GameState.Game;
@@ -236,20 +261,20 @@ namespace ROOT
                     {
                         p1.Orb = true;
                     }
-                    else if(p2.HitBox.Intersects(orb.HitBox) && orb.Active)
+                    else if (p2.HitBox.Intersects(orb.HitBox) && orb.Active)
                     {
                         p2.Orb = true;
                     }
-                    else if(p3.HitBox.Intersects(orb.HitBox) && orb.Active)
+                    else if (p3.HitBox.Intersects(orb.HitBox) && orb.Active)
                     {
                         p3.Orb = true;
                     }
-                    else if(p4.HitBox.Intersects(orb.HitBox) && orb.Active)
+                    else if (p4.HitBox.Intersects(orb.HitBox) && orb.Active)
                     {
                         p4.Orb = true;
                     }
 
-                    if(p1.Orb || p2.Orb || p3.Orb || p4.Orb)
+                    if (p1.Orb || p2.Orb || p3.Orb || p4.Orb)
                     {
                         orb.Active = false; //orb is not drawn if either player has it
                     }
@@ -261,17 +286,17 @@ namespace ROOT
                     {
                         timer2 -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
-                    else if(p3.Orb)
+                    else if (p3.Orb)
                     {
                         timer3 -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
-                    else if(p4.Orb)
+                    else if (p4.Orb)
                     {
                         timer4 -= gameTime.ElapsedGameTime.TotalSeconds;
                     }
 
 
-                    if (timer1 <= 0 || timer2 <= 0 || timer3 <=0 || timer4 <= 0 || SingleKeyPress(Keys.O))
+                    if (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || timer4 <= 0 || SingleKeyPress(Keys.O))
                     {
                         currentState = GameState.GameOver;
                     }
@@ -322,9 +347,9 @@ namespace ROOT
                     p2.Draw(spriteBatch);
                     p3.Draw(spriteBatch);
                     p4.Draw(spriteBatch);
-                   
+
                     uiManager.Draw(spriteBatch);
-                    if(!p1.Orb && !p2.Orb && !p3.Orb && !p4.Orb)
+                    if (!p1.Orb && !p2.Orb && !p3.Orb && !p4.Orb)
                     {
                         orb.Draw(spriteBatch);
                     }
@@ -350,15 +375,15 @@ namespace ROOT
             timer2 = 1200;
             timer3 = 1200;
             timer4 = 1200;
-            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture,PlayerIndex.One, 0);
+            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY - 50, 40, 30, timer1, playerTexture, PlayerIndex.One, 0);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
-            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture,PlayerIndex.Two,1);
+            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY - 50, 40, 30, timer2, playerTexture, PlayerIndex.Two, 1);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
-            
-            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, playerTexture, PlayerIndex.Three,2);
+
+            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, playerTexture, PlayerIndex.Three, 2);
             p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
-            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four,3);
+            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four, 3);
             p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
             powerManager = new PowMan(p1, p2, p3, p4, spriteBatch, GraphicsDevice);
         }
@@ -464,16 +489,16 @@ namespace ROOT
             }
         }
 
-       
+
 
         public void PlayerCollisions(GameTime gameTime)
         //handles all of the player collision logic in one spot
         {
-            if(p3 == null && p4 == null) //only 2 players
+            if (p3 == null && p4 == null) //only 2 players
             {
                 p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p2
             }
-            else if(p3 != null && p4 == null) //3 players
+            else if (p3 != null && p4 == null) //3 players
             {
                 p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p2
                 p1.CheckPlayerCollision(p1, p3, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p3
