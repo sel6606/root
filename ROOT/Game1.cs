@@ -77,6 +77,8 @@ namespace ROOT
         private Texture2D knightInfo;
         private Texture2D cavemanInfo;
         private Texture2D gentlemanInfo;
+        private Texture2D select;
+
         //Width of each button
         private int buttonWidth;
         //Height of each button
@@ -170,6 +172,7 @@ namespace ROOT
             menuTexture = Content.Load<Texture2D>("MenuMenu");
             instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
             playerTexture = Content.Load<Texture2D>("Mario");
+            select = Content.Load<Texture2D>("select");
 
             gentlemanInfo = Content.Load<Texture2D>("gentleman_info");
             cavemanInfo = Content.Load<Texture2D>("caveman_info");
@@ -177,12 +180,18 @@ namespace ROOT
             knightInfo = Content.Load<Texture2D>("knight_info");
 
 
+            List<Texture2D> portraits = new List<Texture2D>();
+            portraits.Add(Content.Load<Texture2D>("cmPortrait"));
+            portraits.Add(Content.Load<Texture2D>("cbPortrait"));
+            portraits.Add(Content.Load<Texture2D>("kPortrait"));
+            portraits.Add(Content.Load<Texture2D>("gPortrait"));
+
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("milestone3.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
                 backTexture, instructionScreen, cavemanInfo, cowboyInfo,
-                knightInfo, gentlemanInfo, soundEffects[0]);
+                knightInfo, gentlemanInfo, portraits, select, soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");

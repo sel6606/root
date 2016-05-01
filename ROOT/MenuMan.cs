@@ -86,7 +86,8 @@ namespace ROOT
         public MenuMan(Game1 game, Texture2D startTexture, 
             Texture2D instructionsTexture, Texture2D quitTexture, 
             Texture2D backTexture, Texture2D instructionScreen, Texture2D cavemanInfo,
-            Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo, SoundEffect click)
+            Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo,
+            List<Texture2D> portraitTexture, Texture2D select, SoundEffect click)
         {
             buttonWidth = 300;
             buttonHeight = 100;
@@ -124,12 +125,12 @@ namespace ROOT
             //Options button on character select screen
             options = new Button(backTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
             //First Character portrait
-            portrait1 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,1);
-            portrait2 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,2);
-            portrait3 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,3);
-            portrait4 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false,4);
-            portrait5 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false,5);
-            portrait6 = new CharPortrait(startButton, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false,6);
+            portrait1 = new CharPortrait(portraitTexture[0], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,1);
+            portrait2 = new CharPortrait(portraitTexture[1], select, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,2);
+            portrait3 = new CharPortrait(portraitTexture[2], select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,3);
+            portrait4 = new CharPortrait(portraitTexture[3], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false,4);
+            portrait5 = new CharPortrait(startButton, select, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false,5);
+            portrait6 = new CharPortrait(startButton, select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false,6);
             SetNeighbors();
             portrait1.IsSelected = new List<bool> { true, true, true, true };
             portraits = new List<CharPortrait>();
