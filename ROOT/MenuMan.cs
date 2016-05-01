@@ -33,6 +33,8 @@ namespace ROOT
         private CharPortrait portrait6;
         private List<CharPortrait> portraits;
 
+        private List<PlayerType> types;
+
         //Width of each button
         private int buttonWidth;
         //Height of each button    
@@ -77,6 +79,10 @@ namespace ROOT
             set { menuTex = value; }
         }*/
 
+        public List<PlayerType> Types
+        {
+            get { return types; }
+        }
         public SpriteFont MenuFont
         {
             set { menuFont = value; }
@@ -89,6 +95,7 @@ namespace ROOT
             Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo,
             List<Texture2D> portraitTexture, Texture2D select, SoundEffect click)
         {
+            types = new List<PlayerType> { PlayerType.Caveman, PlayerType.Caveman, PlayerType.Caveman, PlayerType.Caveman };
             buttonWidth = 300;
             buttonHeight = 100;
             selectButtonWidth = 200;
@@ -382,7 +389,8 @@ namespace ROOT
                     break;
                 default:
                     break;
-            }           
+            }
+            types[playerNumber - 1] = current.Type;           
         }
 
     }
