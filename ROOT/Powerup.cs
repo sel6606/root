@@ -93,6 +93,11 @@ namespace ROOT
 
         }
 
+        public virtual void Draw(SpriteBatch sb)
+        {
+            
+        }
+
 
         //abstract methods for the power ups effects
         public abstract void Effect();

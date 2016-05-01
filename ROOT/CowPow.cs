@@ -21,9 +21,9 @@ namespace ROOT
         //Rectangle for the projectile
         private Rectangle rec;
 
-        public Rectangle Rec { get { return rec; } }
-
         private Rectangle rec2;
+
+        public Rectangle Rec { get { return rec; } }
 
         private int x;
 
@@ -65,20 +65,26 @@ namespace ROOT
                 
                 if (x == 0 || x == 2 || x == 4)
                 {
-                     rec2 = new Rectangle(rec.X, rec.Y, rec.X + 10, rec.Y);
+                    rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
                     foreach(Player play in PlayList)
                     {
-                        if (rec2.Contains(play.HitBox))
+                        if (rec2.Intersects(play.HitBox))
                         {
+
+
+                            if (!play.Stunned)
+                            {
+                                play.Stunned = true;
+                            }
                             play.Stun(elapsedTime);
                         }
                     }
-                    rec.X = rec.X + 10;
+                    rec.X = rec.X + 4;
                     
                 }
                 else if (x == 1 || x == 3 || x == 5)
                 {
-                    Rectangle rec2 = new Rectangle(rec.X, rec.Y, rec.X - 10, rec.Y);
+                    rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
                     foreach (Player play in PlayList)
                     {
                         if (rec2.Intersects(play.HitBox))
@@ -90,7 +96,7 @@ namespace ROOT
                             play.Stun(elapsedTime);
                         }
                     }
-                    rec.X = rec.X - 10;
+                    rec.X = rec.X - 4;
                 }
                 
                 activeTimer -= elapsedTime;
@@ -118,7 +124,13 @@ namespace ROOT
             user.Speed = user.BaseSpeed;
         }
 
-       
+        public override void Draw(SpriteBatch sb)
+        {
+            sb.Draw(tex, rec, Color.White);
+            base.Draw(sb);
+        }
+
+
     }
 
 }
