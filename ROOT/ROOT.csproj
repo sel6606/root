@@ -39,9 +39,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Button.cs" />
-    <Compile Include="DefaultPower.cs" />
+    <Compile Include="CavePow.cs" />
+    <Compile Include="CharPortrait.cs" />
+    <Compile Include="CowPow.cs" />
+    <Compile Include="KnightPow.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="GentlePow.cs" />
     <Compile Include="MenuMan.cs" />
     <Compile Include="Orb.cs" />
     <Compile Include="Player.cs" />
