@@ -17,10 +17,14 @@ namespace ROOT
         {
             FaceRight,
             FaceLeft,
-            MoveRight,
-            MoveLeft,
-            JumpRight,
-            JumpLeft,
+            Idle,
+            Walk,
+            Move,
+            Jump,
+            //MoveRight,
+            //MoveLeft,
+            //JumpRight,
+            //JumpLeft,
             PowerUp
         }
 
@@ -66,6 +70,7 @@ namespace ROOT
 
         //Input variables
         private PlayerState currentState;
+        private PlayerState currentDirectionState;
         private KeyboardState previousKbState;
 
 
@@ -159,7 +164,8 @@ namespace ROOT
         {
             this.game = game;
             spriteSheet = this.Tex;
-            currentState = PlayerState.FaceRight;
+            currentState = PlayerState.Idle;
+            currentDirectionState = PlayerState.FaceRight;
             hasOrb = false; //player doesn't start with orb
             playerNumber = playerNum;
             xBox = GamePad.GetState(playerNumber).IsConnected;
@@ -322,87 +328,45 @@ namespace ROOT
                     jumped = true;
                 }
 
+
+                //Determines the direction the player is facing
+                if (right)
+                {
+                    currentDirectionState = PlayerState.FaceRight;
+                }
+                if(left)
+                {
+                    currentDirectionState = PlayerState.FaceLeft;
+                }
+                
+
+                //Determines if the the player is idle, jumping, or moving
                 switch (currentState)
                 {
-                    case PlayerState.FaceLeft:
-                        if (right)
+                    case PlayerState.Idle:
+                        if (right || left)
                         {
-                            currentState = PlayerState.FaceRight;
+                            currentState = PlayerState.Move;
                         }
-
-                        else if (left)
-                        {
-                            currentState = PlayerState.MoveLeft;
-                        }
-
                         else if (up)
                         {
-                            currentState = PlayerState.JumpLeft;
+                            currentState = PlayerState.Jump;
                         }
                         break;
-
-                    case PlayerState.FaceRight:
-                        if (right)
+                    case PlayerState.Jump:
+                        if (right || left)
                         {
-                            currentState = PlayerState.MoveRight;
-                        }
-
-                        else if (left)
-                        {
-                            currentState = PlayerState.FaceLeft;
-                        }
-
-                        else if (up)
-                        {
-                            currentState = PlayerState.JumpRight;
+                            currentState = PlayerState.Move;
                         }
                         break;
-
-                    case PlayerState.JumpLeft:
-                        if (right)
+                    case PlayerState.Move:
+                        if (!left && !right)
                         {
-                            currentState = PlayerState.FaceRight;
+                            currentState = PlayerState.Idle;
                         }
-
-                        else if (left)
+                        if (up)
                         {
-                            currentState = PlayerState.FaceRight;
-                        }
-                        break;
-
-                    case PlayerState.JumpRight:
-                        if (right)
-                        {
-                            currentState = PlayerState.FaceRight;
-                        }
-
-                        else if (left)
-                        {
-                            currentState = PlayerState.FaceRight;
-                        }
-                        break;
-
-                    case PlayerState.MoveLeft:
-                        if (!left)
-                        {
-                            currentState = PlayerState.FaceLeft;
-                        }
-
-                        else if (up)
-                        {
-                            currentState = PlayerState.JumpLeft;
-                        }
-                        break;
-
-                    case PlayerState.MoveRight:
-                        if (!right)
-                        {
-                            currentState = PlayerState.FaceRight;
-                        }
-
-                        else if (up)
-                        {
-                            currentState = PlayerState.JumpRight;
+                            currentState = PlayerState.Jump;
                         }
                         break;
                 }
@@ -679,46 +643,37 @@ namespace ROOT
         {
             //base.Draw(s);
             //s.Draw(this.Tex, between, Color.Black);
+            SpriteEffects flip;
+
+            //Sets the direction the player is facing
+            if (currentDirectionState == PlayerState.FaceLeft)
+            {
+                flip = SpriteEffects.FlipHorizontally;
+            }
+            else
+            {
+                flip = SpriteEffects.None;
+            }
+
+            //Draws the player either idle, moving, or jumping
             switch (currentState)
             {
-                case PlayerState.FaceLeft:
-                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                case PlayerState.Idle:
+                    DrawStanding(flip, s);
                     break;
-
-                case PlayerState.FaceRight:
-                    DrawStanding(SpriteEffects.None, s);
+                case PlayerState.Jump:
+                    DrawJumping(flip, s);
                     break;
-
-                case PlayerState.JumpLeft:
-                    DrawJumping(SpriteEffects.FlipHorizontally, s);
-                    break;
-
-                case PlayerState.JumpRight:
-                    DrawJumping(SpriteEffects.None, s);
-                    break;
-
-                case PlayerState.MoveLeft:
+                case PlayerState.Move:
                     if (ground)
                     {
-                        DrawWalking(SpriteEffects.FlipHorizontally, s);
+                        DrawWalking(flip, s);
                     }
                     else
                     {
-                        DrawJumping(SpriteEffects.FlipHorizontally, s);
+                        DrawJumping(flip, s);
                     }
                     break;
-
-                case PlayerState.MoveRight:
-                    if (ground)
-                    {
-                        DrawWalking(SpriteEffects.None, s);
-                    }
-                    else
-                    {
-                        DrawJumping(SpriteEffects.None, s);
-                    }
-                    break;
-
                 case PlayerState.PowerUp:
                     s.Draw(this.Tex, between, Color.Black);
                     break;
