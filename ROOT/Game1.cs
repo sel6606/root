@@ -70,16 +70,20 @@ namespace ROOT
         private Texture2D quitTexture;
         private Texture2D backTexture;
         private Texture2D restartTexture;
+        private Texture2D optionsTexture;
         private Texture2D menuTexture;
         private Texture2D cancelTexture;
         private Texture2D orbTexture;
-        private Texture2D playerTexture;
         private Texture2D instructionScreen;
         private Texture2D cowboyInfo;
         private Texture2D knightInfo;
         private Texture2D cavemanInfo;
         private Texture2D gentlemanInfo;
         private Texture2D select;
+        private Texture2D gSheet;
+        private Texture2D kSheet;
+        private Texture2D cmSheet;
+        private Texture2D cbSheet;
         #endregion
 
         //Width of each button
@@ -129,6 +133,7 @@ namespace ROOT
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         List<SoundEffect> soundEffects;
+        List<Texture2D> spritesheets;
 
         public Game1()
         {
@@ -171,9 +176,9 @@ namespace ROOT
             quitTexture = Content.Load<Texture2D>("MenuQuit");
             backTexture = Content.Load<Texture2D>("MenuBack");
             restartTexture = Content.Load<Texture2D>("MenuRestart");
+            optionsTexture = Content.Load<Texture2D>("MenuOptions");
             menuTexture = Content.Load<Texture2D>("MenuMenu");
             instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
-            playerTexture = Content.Load<Texture2D>("Mario");
             select = Content.Load<Texture2D>("select");
 
             gentlemanInfo = Content.Load<Texture2D>("gentleman_info");
@@ -181,18 +186,27 @@ namespace ROOT
             cowboyInfo = Content.Load<Texture2D>("cowboy_info");
             knightInfo = Content.Load<Texture2D>("knight_info");
 
+            gSheet = Content.Load<Texture2D>("gSheet");
+            cmSheet = Content.Load<Texture2D>("cmSheet");
+            cbSheet = Content.Load<Texture2D>("cbSheet");
+            kSheet = Content.Load<Texture2D>("kSheet");
+
+            spritesheets = new List<Texture2D> { gSheet, kSheet, cbSheet, cmSheet };
+
 
             List<Texture2D> portraits = new List<Texture2D>();
             portraits.Add(Content.Load<Texture2D>("cmPortrait"));
             portraits.Add(Content.Load<Texture2D>("cbPortrait"));
             portraits.Add(Content.Load<Texture2D>("kPortrait"));
             portraits.Add(Content.Load<Texture2D>("gPortrait"));
+            portraits.Add(Content.Load<Texture2D>("placeholder"));
+            portraits.Add(Content.Load<Texture2D>("placeholder2"));
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("milestone3.txt", orb);
+            gameStage.ReadStage("Milestone4.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
-                backTexture, instructionScreen, cavemanInfo, cowboyInfo,
+                backTexture, optionsTexture, instructionScreen, cavemanInfo, cowboyInfo,
                 knightInfo, gentlemanInfo, portraits, select, soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
@@ -373,20 +387,20 @@ namespace ROOT
         public void Reset()
         {
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("milestone3.txt", orb);
+            gameStage.ReadStage("Milestone4.txt", orb);
             timer1 = 1200;
             timer2 = 1200;
             timer3 = 1200;
             timer4 = 1200;
-            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY - 50, 40, 30, timer1, playerTexture, PlayerIndex.One, (int)menuManager.Types[0]);
+            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY - 50, 40, 30, timer1, spritesheets[(int)menuManager.Types[0]], PlayerIndex.One, (int)menuManager.Types[0]);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
-            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY - 50, 40, 30, timer2, playerTexture, PlayerIndex.Two, (int)menuManager.Types[1]);
+            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY - 50, 40, 30, timer2, spritesheets[(int)menuManager.Types[1]], PlayerIndex.Two, (int)menuManager.Types[1]);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
 
-            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, playerTexture, PlayerIndex.Three, (int)menuManager.Types[2]);
+            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
             p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
-            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four, (int)menuManager.Types[3]);
+            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, spritesheets[(int)menuManager.Types[3]], PlayerIndex.Four, (int)menuManager.Types[3]);
             p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
             powerManager = new PowMan(p1, p2, p3, p4, spriteBatch, GraphicsDevice);
         }
@@ -433,7 +447,7 @@ namespace ROOT
 
                 if (p1.frame > p1.WALK_FRAME_COUNT)
                 {  // Check the bounds
-                    p1.frame = 1;
+                    p1.frame = 0;
 
                 }// Back to 1 (since 0 is the "standing" frame)
 
@@ -450,7 +464,7 @@ namespace ROOT
                 p2.frame += 1;                     // Adjust the frame
 
                 if (p2.frame > p2.WALK_FRAME_COUNT)   // Check the bounds
-                    p2.frame = 1;                  // Back to 1 (since 0 is the "standing" frame)
+                    p2.frame = 0;                  // Back to 1 (since 0 is the "standing" frame)
 
                 p2.timeCounter -= p2.timePerFrame;    // Remove the time we "used"
             }
@@ -466,7 +480,7 @@ namespace ROOT
 
                 if (p3.frame > p3.WALK_FRAME_COUNT)
                 {  // Check the bounds
-                    p3.frame = 1;
+                    p3.frame = 0;
 
                 }// Back to 1 (since 0 is the "standing" frame)
 
@@ -484,7 +498,7 @@ namespace ROOT
 
                 if (p4.frame > p4.WALK_FRAME_COUNT)
                 {  // Check the bounds
-                    p4.frame = 1;
+                    p4.frame = 0;
 
                 }// Back to 1 (since 0 is the "standing" frame)
 
