@@ -24,10 +24,9 @@ namespace ROOT
             PowerUp
         }
 
-
+        #region Fields
+        //The player class
         private PlayerType thisType;
-
-        public PlayerType ThisType { get { return thisType; } }
 
         //Fields for player controls
         public int moveRight;
@@ -40,36 +39,21 @@ namespace ROOT
         private bool selectDown;
         private bool selectUp;
 
-        public bool SelectRight
-        {
-            get { return selectRight; }
-        }
-        public bool SelectLeft
-        {
-            get { return selectLeft; }
-        }
-        public bool SelectDown
-        {
-            get { return selectDown; }
-        }
-        public bool SelectUp
-        {
-            get { return selectUp; }
-        }
-
+       
         //Fields for collision logic
         private bool hasOrb;
         private bool ground;
         private bool topWall;
         private bool leftWall;
         private bool rightWall;
-        private bool xBox = false;
-        private PlayerIndex playerNumber;
+       
         private bool jumped = false;
         bool stunned; //checks if player is stunned
         private double stunTime = 3.00; //keeps track of how long a player is stunned
 
         //Fields for position and movement logic
+        private bool xBox = false;
+        private PlayerIndex playerNumber;
         private int jumpUp = -1;
         private int gravDelay = 0;
         private Vector2 previousPosition;
@@ -79,10 +63,12 @@ namespace ROOT
         private Rectangle between;
         private int speed = 2;
         private int baseSpeed = 2;
+
+        //Input variables
         private PlayerState currentState;
         private KeyboardState previousKbState;
 
-        public PlayerState CurentState { get { return currentState; } }
+       
 
         // Texture and drawing
         public Texture2D spriteSheet;  // The single image with all of the animation frames
@@ -100,6 +86,35 @@ namespace ROOT
         const int MARIO_RECT_WIDTH = 44;        // The width of a single frame
 
         private Game1 game;
+
+        #endregion
+        #region Properties
+        public PlayerState CurentState
+        {
+            get { return currentState; }
+        }
+
+        public PlayerType ThisType
+        {
+            get { return thisType; }
+        }
+
+        public bool SelectRight
+        {
+            get { return selectRight; }
+        }
+        public bool SelectLeft
+        {
+            get { return selectLeft; }
+        }
+        public bool SelectDown
+        {
+            get { return selectDown; }
+        }
+        public bool SelectUp
+        {
+            get { return selectUp; }
+        }
 
         public int BaseSpeed
         {
@@ -135,6 +150,8 @@ namespace ROOT
             get { return stunned; }
             set { stunned = value; }
         }
+
+        #endregion
 
         //constructor, calls game object's but forces isSolid to be false
         public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture, PlayerIndex playerNum, int type)
@@ -527,41 +544,7 @@ namespace ROOT
             }
         }
 
-        public override void Draw(SpriteBatch s)
-        {
-            //base.Draw(s);
-            //s.Draw(this.Tex, between, Color.Black);
-            switch (currentState)
-            {
-                case PlayerState.FaceLeft:
-                    DrawStanding(SpriteEffects.FlipHorizontally, s);
-                    break;
 
-                case PlayerState.FaceRight:
-                    DrawStanding(SpriteEffects.None, s);
-                    break;
-
-                case PlayerState.JumpLeft:
-                    DrawStanding(SpriteEffects.FlipHorizontally, s);
-                    break;
-
-                case PlayerState.JumpRight:
-                    DrawStanding(SpriteEffects.None, s);
-                    break;
-
-                case PlayerState.MoveLeft:
-                    DrawWalking(SpriteEffects.FlipHorizontally, s);
-                    break;
-
-                case PlayerState.MoveRight:
-                    DrawWalking(SpriteEffects.None, s);
-                    break;
-
-                case PlayerState.PowerUp:
-                    s.Draw(this.Tex, between, Color.Black);
-                    break;
-            }
-        }
 
         public void SetControls(Keys r, Keys l, Keys j, Keys u)
         //pre: Keys values to correspond to: moving right, left, jumping, and using powerups
@@ -622,6 +605,42 @@ namespace ROOT
         {
             fps = 10.0;
             timePerFrame = 1.0 / fps;
+        }
+
+        public override void Draw(SpriteBatch s)
+        {
+            //base.Draw(s);
+            //s.Draw(this.Tex, between, Color.Black);
+            switch (currentState)
+            {
+                case PlayerState.FaceLeft:
+                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.FaceRight:
+                    DrawStanding(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.JumpLeft:
+                    DrawStanding(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.JumpRight:
+                    DrawStanding(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.MoveLeft:
+                    DrawWalking(SpriteEffects.FlipHorizontally, s);
+                    break;
+
+                case PlayerState.MoveRight:
+                    DrawWalking(SpriteEffects.None, s);
+                    break;
+
+                case PlayerState.PowerUp:
+                    s.Draw(this.Tex, between, Color.Black);
+                    break;
+            }
         }
     }
 }

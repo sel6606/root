@@ -62,6 +62,8 @@ namespace ROOT
         private Player p4;
         private Stage gameStage;
         private Orb orb;
+
+        #region Textures
         private Texture2D brickTexture;
         private Texture2D startTexture;
         private Texture2D instructionsTexture;
@@ -78,6 +80,7 @@ namespace ROOT
         private Texture2D cavemanInfo;
         private Texture2D gentlemanInfo;
         private Texture2D select;
+        #endregion
 
         //Width of each button
         private int buttonWidth;
@@ -87,6 +90,7 @@ namespace ROOT
         private int halfScreen;
         //Distance of buttons from the bottom of the screen (used for the restart and menu buttons on the game over screen
         private int bottomDistance;
+
         private MouseState mState;
         private MouseState previousMState;
         private Button restart;
@@ -146,8 +150,6 @@ namespace ROOT
             IsMouseVisible = true;
             currentState = GameState.Menu;
             currentMenuState = MenuState.Main;
-            Reset();
-
             base.Initialize();
         }
 
@@ -207,6 +209,7 @@ namespace ROOT
             restart = new Button(restartTexture, new Rectangle(halfScreen - ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
             //Sets the location of the menu button
             menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
+            Reset();
         }
 
         /// <summary>
@@ -375,15 +378,15 @@ namespace ROOT
             timer2 = 1200;
             timer3 = 1200;
             timer4 = 1200;
-            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY - 50, 40, 30, timer1, playerTexture, PlayerIndex.One, 0);
+            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY - 50, 40, 30, timer1, playerTexture, PlayerIndex.One, (int)menuManager.Types[0]);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
-            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY - 50, 40, 30, timer2, playerTexture, PlayerIndex.Two, 1);
+            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY - 50, 40, 30, timer2, playerTexture, PlayerIndex.Two, (int)menuManager.Types[1]);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
 
-            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, playerTexture, PlayerIndex.Three, 2);
+            p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, playerTexture, PlayerIndex.Three, (int)menuManager.Types[2]);
             p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
-            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four, 3);
+            p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, playerTexture, PlayerIndex.Four, (int)menuManager.Types[3]);
             p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
             powerManager = new PowMan(p1, p2, p3, p4, spriteBatch, GraphicsDevice);
         }

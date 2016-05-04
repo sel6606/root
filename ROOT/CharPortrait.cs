@@ -22,6 +22,7 @@ namespace ROOT
         Texture2D texture;
         Texture2D texture2;
 
+        #region Properties
         public List<bool> IsSelected
         {
             get { return isSelected; }
@@ -61,6 +62,8 @@ namespace ROOT
             get { return position; }
             set { position = value; }
         }
+
+        #endregion
 
         public CharPortrait(Texture2D texture, Texture2D texture2, Rectangle position, bool top, int number)
         {
