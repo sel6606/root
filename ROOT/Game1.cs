@@ -70,6 +70,7 @@ namespace ROOT
         private Texture2D quitTexture;
         private Texture2D backTexture;
         private Texture2D restartTexture;
+        private Texture2D optionsTexture;
         private Texture2D menuTexture;
         private Texture2D cancelTexture;
         private Texture2D orbTexture;
@@ -175,6 +176,7 @@ namespace ROOT
             quitTexture = Content.Load<Texture2D>("MenuQuit");
             backTexture = Content.Load<Texture2D>("MenuBack");
             restartTexture = Content.Load<Texture2D>("MenuRestart");
+            optionsTexture = Content.Load<Texture2D>("MenuOptions");
             menuTexture = Content.Load<Texture2D>("MenuMenu");
             instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
             select = Content.Load<Texture2D>("select");
@@ -204,7 +206,7 @@ namespace ROOT
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("milestone3.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
-                backTexture, instructionScreen, cavemanInfo, cowboyInfo,
+                backTexture, optionsTexture, instructionScreen, cavemanInfo, cowboyInfo,
                 knightInfo, gentlemanInfo, portraits, select, soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");

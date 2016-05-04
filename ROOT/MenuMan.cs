@@ -91,7 +91,7 @@ namespace ROOT
         //Constructor for MenuMan
         public MenuMan(Game1 game, Texture2D startTexture, 
             Texture2D instructionsTexture, Texture2D quitTexture, 
-            Texture2D backTexture, Texture2D instructionScreen, Texture2D cavemanInfo,
+            Texture2D backTexture, Texture2D optionsTexture, Texture2D instructionScreen, Texture2D cavemanInfo,
             Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo,
             List<Texture2D> portraitTexture, Texture2D select, SoundEffect click)
         {
@@ -128,9 +128,9 @@ namespace ROOT
             //Only button on instructions menu              
             back = new Button(backTexture, new Rectangle(halfScreen, (game.GraphicsDevice.Viewport.Height - (buttonHeight + 50)), buttonWidth, buttonHeight));
             //Play button on character select screen
-            play = new Button(backTexture, new Rectangle(selectHalfScreen, (game.GraphicsDevice.Viewport.Height - (selectButtonHeight + 10)), selectButtonWidth, selectButtonHeight));
+            play = new Button(startTexture, new Rectangle(selectHalfScreen, (game.GraphicsDevice.Viewport.Height - (selectButtonHeight + 10)), selectButtonWidth, selectButtonHeight));
             //Options button on character select screen
-            options = new Button(backTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
+            options = new Button(optionsTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
             //First Character portrait
             portrait1 = new CharPortrait(portraitTexture[0], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,1);
             portrait2 = new CharPortrait(portraitTexture[1], select, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,2);
