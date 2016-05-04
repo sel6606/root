@@ -73,7 +73,6 @@ namespace ROOT
         private Texture2D menuTexture;
         private Texture2D cancelTexture;
         private Texture2D orbTexture;
-        private Texture2D playerTexture;
         private Texture2D instructionScreen;
         private Texture2D cowboyInfo;
         private Texture2D knightInfo;
@@ -178,7 +177,6 @@ namespace ROOT
             restartTexture = Content.Load<Texture2D>("MenuRestart");
             menuTexture = Content.Load<Texture2D>("MenuMenu");
             instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
-            playerTexture = Content.Load<Texture2D>("Mario");
             select = Content.Load<Texture2D>("select");
 
             gentlemanInfo = Content.Load<Texture2D>("gentleman_info");
