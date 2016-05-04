@@ -199,6 +199,8 @@ namespace ROOT
             portraits.Add(Content.Load<Texture2D>("cbPortrait"));
             portraits.Add(Content.Load<Texture2D>("kPortrait"));
             portraits.Add(Content.Load<Texture2D>("gPortrait"));
+            portraits.Add(Content.Load<Texture2D>("placeholder"));
+            portraits.Add(Content.Load<Texture2D>("placeholder2"));
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);

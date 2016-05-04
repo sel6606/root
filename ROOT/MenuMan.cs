@@ -136,8 +136,8 @@ namespace ROOT
             portrait2 = new CharPortrait(portraitTexture[1], select, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,2);
             portrait3 = new CharPortrait(portraitTexture[2], select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,3);
             portrait4 = new CharPortrait(portraitTexture[3], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false,4);
-            portrait5 = new CharPortrait(startButton, select, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false,5);
-            portrait6 = new CharPortrait(startButton, select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false,6);
+            portrait5 = new CharPortrait(portraitTexture[4], select, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false,5);
+            portrait6 = new CharPortrait(portraitTexture[5], select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false,6);
             SetNeighbors();
             portrait1.IsSelected = new List<bool> { true, true, true, true };
             portraits = new List<CharPortrait>();
