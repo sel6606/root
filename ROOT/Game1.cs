@@ -204,7 +204,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("milestone3.txt", orb);
+            gameStage.ReadStage("Milestone4.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
                 backTexture, optionsTexture, instructionScreen, cavemanInfo, cowboyInfo,
                 knightInfo, gentlemanInfo, portraits, select, soundEffects[0]);
@@ -387,7 +387,7 @@ namespace ROOT
         public void Reset()
         {
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("milestone3.txt", orb);
+            gameStage.ReadStage("Milestone4.txt", orb);
             timer1 = 1200;
             timer2 = 1200;
             timer3 = 1200;
