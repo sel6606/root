@@ -62,6 +62,8 @@ namespace ROOT
         private Player p4;
         private Stage gameStage;
         private Orb orb;
+
+        #region Textures
         private Texture2D brickTexture;
         private Texture2D startTexture;
         private Texture2D instructionsTexture;
@@ -78,6 +80,7 @@ namespace ROOT
         private Texture2D cavemanInfo;
         private Texture2D gentlemanInfo;
         private Texture2D select;
+        #endregion
 
         //Width of each button
         private int buttonWidth;
@@ -87,6 +90,7 @@ namespace ROOT
         private int halfScreen;
         //Distance of buttons from the bottom of the screen (used for the restart and menu buttons on the game over screen
         private int bottomDistance;
+
         private MouseState mState;
         private MouseState previousMState;
         private Button restart;
