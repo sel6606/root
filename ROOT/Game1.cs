@@ -121,6 +121,11 @@ namespace ROOT
             get { return timer4; }
         }
 
+        /*public Player P1
+        {
+            get { return p1; }
+        }*/
+
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
