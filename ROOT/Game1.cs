@@ -129,26 +129,6 @@ namespace ROOT
             get { return powerManager; }
         }
 
-        /*public Player P1
-        {
-            get { return p1; }
-        }
-
-        public Player P2
-        {
-            get { return p2; }
-        }
-
-        public Player P3
-        {
-            get { return p3; }
-        }
-
-        public Player P4
-        {
-            get { return p4; }
-        }*/
-
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
