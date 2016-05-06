@@ -34,7 +34,7 @@ namespace ROOT
             PlayList = plaList;
             this.isActive = false;
             this.isReady = true;
-            this.coolDuration = cooldownTime ;
+            this.coolDuration = cooldownTime;
             this.activeDuration = activeTime;
             sp = s;
         }
