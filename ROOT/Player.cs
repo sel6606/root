@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace ROOT
 {
-    class Player : GameObject
+    public class Player : GameObject
     {
         //Enum for playerState
         public enum PlayerState //keeps track of what player is doing
@@ -154,6 +154,11 @@ namespace ROOT
         {
             get { return stunned; }
             set { stunned = value; }
+        }
+
+        public PlayerState CurrentDirectionState
+        {
+            get { return currentDirectionState; }
         }
 
         #endregion

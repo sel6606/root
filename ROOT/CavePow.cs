@@ -53,6 +53,7 @@ namespace ROOT
                     play.moveLeft = y;
                 }
             }
+            isActive = true;
         }
 
 

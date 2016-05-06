@@ -125,10 +125,10 @@ namespace ROOT
             get { return timer4; }
         }
 
-        /*public Player P1
+        public PowMan PowerManager
         {
-            get { return p1; }
-        }*/
+            get { return powerManager; }
+        }
 
         //Variables for testing purposes
         private KeyboardState kbState;

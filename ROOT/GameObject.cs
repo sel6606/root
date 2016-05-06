@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ROOT
 {
-    class GameObject
+    public class GameObject
     {
         //fields common to all game objects
         private Rectangle hitBox; //size of the space object occupies

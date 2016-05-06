@@ -21,7 +21,7 @@ namespace ROOT
         private List<Player> PlayList;
 
         //the int to decide what power to use
-        private int x;
+        private int p = 2;
 
         //the powerups cooldown time
         private double cooldownTime = 15;
@@ -53,22 +53,42 @@ namespace ROOT
             Kpow = new KnightPow(user, PlayList,s);
             sp = s;
         }
-
+        public override void Activate()
+        {
+            isActive = true;
+            if (isReady)
+            {
+               // p = Rand.Next(1, 4);
+            }
+           
+            if (p == 1)
+            {
+                cave.Activate();
+            }
+            else if (p == 2)
+            {
+                cow.Activate();
+            }
+            else if (p == 3)
+            {
+                Kpow.Activate();
+            }
+        }
 
         //activates the power up.
         public override void Effect()
         {
             
-             x = Rand.Next(1, 4);
-            if(x == 1)
+
+            if(p == 1)
             {
                 cave.Effect();
             }
-            else if (x == 2)
+            else if (p == 2)
             {
                 cow.Effect();
             }
-            else if (x == 3)
+            else if (p == 3)
             {
                 Kpow.Effect();
             }
@@ -79,15 +99,16 @@ namespace ROOT
         //ends the effect.
         public override void EndEffect()
         {
-            if (x == 1)
+            isActive = false;
+            if (p == 1)
             {
                 cave.EndEffect();
             }
-            else if (x == 2)
+            else if (p == 2)
             {
                 cow.EndEffect();
             }
-            else if (x == 3)
+            else if (p == 3)
             {
                 Kpow.EndEffect();
             }
@@ -95,9 +116,24 @@ namespace ROOT
 
         public override void Draw(SpriteBatch sb)
         {
-            if (x == 2)
+            if (p == 2)
             {
                 cow.Draw(sb);
+            }
+        }
+        public override void Update(double elapsedTime)
+        {
+            if (p == 1)
+            {
+                cave.Update(elapsedTime);
+            }
+            else if (p == 2)
+            {
+                cow.Update(elapsedTime);
+            }
+            else if (p == 3)
+            {
+                Kpow.Update(elapsedTime);
             }
         }
     }

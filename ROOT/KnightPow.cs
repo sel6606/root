@@ -25,6 +25,7 @@ namespace ROOT
         //How long the power up is active
         private double activeTime=5;
 
+       
 
         //constructor for powerup, takes in the player who uses the power up.
         public KnightPow(Player player, List<Player> plaList,SpriteBatch s)
@@ -42,6 +43,7 @@ namespace ROOT
         //activates the power up.
         public override void Effect()
         {
+            isActive = true;
             user.Speed = user.BaseSpeed*2;
         }
 

@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
-    abstract class Powerup
+    public abstract class Powerup
     {
 
         //timer to check activation time
@@ -45,6 +45,11 @@ namespace ROOT
         //how long the cooldown is
         protected double coolDuration;
 
+        public bool IsReady
+        {
+            get { return isReady; }
+        }
+
 
         //does the cooldown of the power up.
         public void Cooldown(double elapsedTime)
@@ -59,7 +64,7 @@ namespace ROOT
 
 
         //starts the power up if it is avaible
-        public void Activate()
+        public virtual void Activate()
         {
             if (isReady)
             {

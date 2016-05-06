@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace ROOT
 {
-    class PowMan
+    public class PowMan
     {
         SpriteBatch sp;
         private Player player1;
@@ -160,7 +160,25 @@ namespace ROOT
 
         }
 
-        
+        public Powerup PowerP1
+        {
+            get { return powerP1; }
+        }
+
+        public Powerup PowerP2
+        {
+            get { return powerP2; }
+        }
+
+        public Powerup PowerP3
+        {
+            get { return powerP3; }
+        }
+
+        public Powerup PowerP4
+        {
+            get { return powerP4; }
+        }
 
 
         //updates all powerups.
