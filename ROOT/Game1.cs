@@ -64,6 +64,7 @@ namespace ROOT
         private Stage gameStage;
         private Orb orb;
         private int players; //keeps track of how many players are in the game
+        private List<Player> playerList;
         #endregion
 
         #region Textures
@@ -524,6 +525,7 @@ namespace ROOT
         public void Reset()
         {
             players = 4; //this is constant for testint purposes
+            playerList = new List<Player>(players);
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("Milestone4.txt", orb);
 
@@ -532,27 +534,32 @@ namespace ROOT
             p1 = new Player(this, gameStage.P1startX, gameStage.P1startY - 50, 40, 30, timer1, spritesheets[(int)menuManager.Types[0]], PlayerIndex.One, (int)menuManager.Types[0]);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             timer1 = 1200;
+            playerList.Add(p1); //adds player 1 to the list of players
 
             p2 = new Player(this, gameStage.P2startX, gameStage.P2startY - 50, 40, 30, timer2, spritesheets[(int)menuManager.Types[1]], PlayerIndex.Two, (int)menuManager.Types[1]);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             timer2 = 1200;
+            playerList.Add(p2); //adds player 2 to the list of players
             if (players == 3) //three players
             {
                 p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
                 p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
                 timer3 = 1200;
+                playerList.Add(p3); //adds player 3 to the list
             }
             else if(players == 4) //four players
             {
                 p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
                 p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
                 timer3 = 1200;
+                playerList.Add(p3); //adds player 3 to the list
 
                 p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, spritesheets[(int)menuManager.Types[3]], PlayerIndex.Four, (int)menuManager.Types[3]);
                 p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
                 timer4 = 1200;
+                playerList.Add(p4); //adds player 4 to the list
             }
-            powerManager = new PowMan(p1, p2, p3, p4, spriteBatch, GraphicsDevice);
+            powerManager = new PowMan(playerList, spriteBatch, GraphicsDevice);
         }
 
         //Checks to see if a key was pressed exactly once
