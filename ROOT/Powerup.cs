@@ -59,7 +59,7 @@ namespace ROOT
 
 
         //starts the power up if it is avaible
-        public void Activate()
+        public virtual void Activate()
         {
             if (isReady)
             {

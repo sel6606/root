@@ -156,6 +156,11 @@ namespace ROOT
             set { stunned = value; }
         }
 
+        public PlayerState CurrentDirectionState
+        {
+            get { return currentDirectionState; }
+        }
+
         #endregion
 
         //constructor, calls game object's but forces isSolid to be false
