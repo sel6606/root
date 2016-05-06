@@ -63,37 +63,43 @@ namespace ROOT
             else if (isActive)
             {
                 
-                if (x == 0 || x == 2 || x == 4)
+                if (x == 0)
                 {
                     rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
                     foreach(Player play in PlayList)
                     {
-                        if (rec2.Intersects(play.HitBox))
+                        if (play != user)
                         {
-
-
-                            if (!play.Stunned)
+                            if (rec2.Intersects(play.HitBox))
                             {
-                                play.Stunned = true;
+
+
+                                if (!play.Stunned)
+                                {
+                                    play.Stunned = true;
+                                }
+                                play.Stun(elapsedTime);
                             }
-                            play.Stun(elapsedTime);
                         }
                     }
                     rec.X = rec.X + 4;
                     
                 }
-                else if (x == 1 || x == 3 || x == 5)
+                else if (x == 1)
                 {
                     rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
                     foreach (Player play in PlayList)
                     {
-                        if (rec2.Intersects(play.HitBox))
+                        if (play != user)
                         {
-                            if (!play.Stunned)
+                            if (rec2.Intersects(play.HitBox))
                             {
-                                play.Stunned = true;
+                                if (!play.Stunned)
+                                {
+                                    play.Stunned = true;
+                                }
+                                play.Stun(elapsedTime);
                             }
-                            play.Stun(elapsedTime);
                         }
                     }
                     rec.X = rec.X - 4;
@@ -113,8 +119,9 @@ namespace ROOT
         //activates the power up.
         public override void Effect()
         {
+            isActive = true;
             rec = new Rectangle(user.X, user.Y + (user.Height / 2), 20, 20);
-            x = (int)user.CurentState;
+            x = (int)user.CurrentDirectionState;
         }
 
 
@@ -126,7 +133,7 @@ namespace ROOT
 
         public override void Draw(SpriteBatch sb)
         {
-            sb.Draw(tex, rec, Color.White);
+            sb.Draw(tex, rec2, Color.White);
             base.Draw(sb);
         }
 
