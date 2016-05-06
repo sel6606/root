@@ -39,19 +39,24 @@ namespace ROOT
 
         KnightPow Kpow;
 
+        //Game1
+        Game1 game;
+
         //constructor for powerup, takes in the player who uses the power up.
-        public GentlePow(Player player, List<Player> plaList, SpriteBatch s,GraphicsDevice g)
+        public GentlePow(Player player, List<Player> plaList, SpriteBatch s,GraphicsDevice g, Game1 game, Texture2D texture)
         {
+            this.game = game;
             user = player;
             PlayList = plaList;
             this.isActive = false;
             this.isReady = true;
             this.coolDuration = cooldownTime;
             this.activeDuration = activeTime;
-            cave = new CavePow(user, PlayList,s);
-            cow = new CowPow(user, PlayList,s,g);
-            Kpow = new KnightPow(user, PlayList,s);
+            cave = new CavePow(user, PlayList,s, game.CavePowTex);
+            cow = new CowPow(user, PlayList,s,g, game.CowPowTex);
+            Kpow = new KnightPow(user, PlayList,s, game.KnightPowTex);
             sp = s;
+            Tex = texture;
         }
         public override void Activate()
         {
