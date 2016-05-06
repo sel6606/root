@@ -254,7 +254,7 @@ namespace ROOT
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
-            uiManager = new UIMan(this, uiFont, cancelTexture, Content.Load<Texture2D>("sprint"));
+            uiManager = new UIMan(this, uiFont, cancelTexture);
             orbTexture = Content.Load<Texture2D>("orb");
 
 

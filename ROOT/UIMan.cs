@@ -15,20 +15,14 @@ namespace ROOT
         private Button stop;
         private MouseState mState;
         private MouseState previousMState;
-        private Texture2D powerupTex;
-        private Texture2D tex2;
-        private Texture2D tex3;
-        private Texture2D tex4;
+        //private Texture2D powerupTex;
 
-        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture, Texture2D powerupTexture/*, Texture2D tex2, Texture2D tex3, Texture2D tex4*/)
+        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture/*, Texture2D powerupTexture*/)
         {
             this.game = game;
             this.UIFont = UIFont;
             stop = new Button(stopTexture, new Rectangle(0, 0, 30, 30));
-            powerupTex = powerupTexture;
-            this.tex2 = tex2;
-            this.tex3 = tex3;
-            this.tex4 = tex4;
+            //powerupTex = powerupTexture;
         }
 
         public void Draw(SpriteBatch s)
