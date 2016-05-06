@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -91,11 +92,13 @@ namespace ROOT
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        List<SoundEffect> soundEffects;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            soundEffects = new List<SoundEffect>();
         }
 
         /// <summary>
@@ -125,6 +128,9 @@ namespace ROOT
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            //Sound effects
+            soundEffects.Add(Content.Load<SoundEffect>("click"));
+
             //Texture for buttons on the menus
             startTexture = Content.Load<Texture2D>("MenuStart");
             instructionsTexture = Content.Load<Texture2D>("MenuInstructions");
@@ -139,7 +145,7 @@ namespace ROOT
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("stagetest2.txt", p1, p2, orb);
-            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture);
+            menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture, backTexture,soundEffects[0]);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
@@ -231,6 +237,7 @@ namespace ROOT
                     }
                     if (uiManager.CheckExit(mState, previousMState))
                     {
+                        soundEffects[0].CreateInstance().Play();
                         currentMenuState = MenuState.Main;
                         currentState = GameState.Menu;
                     }
@@ -293,17 +300,14 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-
-
-
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("milestone3.txt", p1, p2, orb);
             timer1 = 1200;
             timer2 = 1200;
-            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture);
+            p1 = new Player(this, gameStage.P1startX, gameStage.P1startY-50, 40, 30, timer1, playerTexture,PlayerIndex.One);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
-            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture);
+            p2 = new Player(this, gameStage.P2startX, gameStage.P2startY-50, 40, 30, timer2, playerTexture,PlayerIndex.Two);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             powerManager = new PowMan(p1, p2);
             

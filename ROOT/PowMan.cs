@@ -28,14 +28,37 @@ namespace ROOT
         public void Update(double elapsedTime)
         {
             KeyboardState input = Keyboard.GetState();
-
-            if (input.IsKeyDown((Keys)player1.use))
+            if (player1.XBox)
             {
-                powerP1.Activate();
+                GamePadState gamePad1 = GamePad.GetState(player1.PlayerNumber);
+                if (gamePad1.IsButtonDown(Buttons.X))
+                {
+                    powerP1.Activate();
+                }
             }
-            if (input.IsKeyDown((Keys)player2.use))
+
+            if (player2.XBox)
             {
-                powerP2.Activate();
+                GamePadState gamePad2 = GamePad.GetState(player2.PlayerNumber);
+                if (gamePad2.IsButtonDown(Buttons.X))
+                {
+                    powerP2.Activate();
+                }
+            }
+
+            if (!player1.XBox)
+            {
+                if (input.IsKeyDown((Keys)player1.use))
+                {
+                    powerP1.Activate();
+                }
+            }
+            if (!player2.XBox)
+            {
+                if (input.IsKeyDown((Keys)player2.use))
+                {
+                    powerP2.Activate();
+                }
             }
 
             powerP1.Update(elapsedTime);
