@@ -559,7 +559,7 @@ namespace ROOT
         public void Reset()
         {
             playerNum = 3; //this is constant for testing purposes
-            playerList = new List<Player>(playerNum);
+            playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("Milestone4.txt", orb);
 
