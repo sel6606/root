@@ -25,9 +25,9 @@ namespace ROOT
             //powerupTex = powerupTexture;
         }
 
-        public void Draw(SpriteBatch s)
+        public void Draw(SpriteBatch s, int playerNum)
         {
-            if (false)
+            if (playerNum == 2)
             {
                 s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer1), new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 50, 10), Color.White);
                 s.DrawString(UIFont, "      |      ", new Vector2((game.GraphicsDevice.Viewport.Width / 2), 10), Color.White);
@@ -53,7 +53,7 @@ namespace ROOT
                 }
             }
 
-            else if (false)
+            else if (playerNum == 3)
             {
                 s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer1), new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 100, 10), Color.White);
                 s.DrawString(UIFont, "      |      ", new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 50, 10), Color.White);
@@ -91,7 +91,7 @@ namespace ROOT
                 }
             }
 
-            else if (true)
+            else if (playerNum == 4)
             {
                 s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer1), new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 150, 10), Color.White);
                 s.DrawString(UIFont, "      |      ", new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 100, 10), Color.White);
