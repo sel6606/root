@@ -63,7 +63,7 @@ namespace ROOT
         private Player p4;
         private Stage gameStage;
         private Orb orb;
-        private int players; //keeps track of how many players are in the game
+        private int playerNum; //keeps track of how many players are in the game
         private List<Player> playerList;
         #endregion
 
@@ -524,8 +524,8 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            players = 4; //this is constant for testint purposes
-            playerList = new List<Player>(players);
+            playerNum = 4; //this is constant for testint purposes
+            playerList = new List<Player>(playerNum);
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("Milestone4.txt", orb);
 
@@ -540,14 +540,14 @@ namespace ROOT
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             timer2 = 1200;
             playerList.Add(p2); //adds player 2 to the list of players
-            if (players == 3) //three players
+            if (playerNum == 3) //three players
             {
                 p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
                 p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
                 timer3 = 1200;
                 playerList.Add(p3); //adds player 3 to the list
             }
-            else if(players == 4) //four players
+            else if(playerNum == 4) //four players
             {
                 p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
                 p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
