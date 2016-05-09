@@ -53,7 +53,7 @@ namespace ROOT
 
         private bool jumped = false;
         bool stunned; //checks if player is stunned
-        private double stunTime = 3.00; //keeps track of how long a player is stunned
+        private double stunTime = 10.00; //keeps track of how long a player is stunned
 
         //Fields for position and movement logic
         private bool xBox = false;
@@ -509,7 +509,7 @@ namespace ROOT
                 if (stunTime <= 0)
                 {
                     stunned = false;
-                    stunTime = 3.00;
+                    stunTime = 10.00;
                 }
             }
         }
