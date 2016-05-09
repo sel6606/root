@@ -88,6 +88,10 @@ namespace ROOT
         private Texture2D kSheet;
         private Texture2D cmSheet;
         private Texture2D cbSheet;
+        private Texture2D cowPowTex;
+        private Texture2D cavePowTex;
+        private Texture2D gentlePowTex;
+        private Texture2D knightPowTex;
         #endregion
 
         //Width of each button
@@ -128,6 +132,30 @@ namespace ROOT
         public PowMan PowerManager
         {
             get { return powerManager; }
+        }
+
+        public Texture2D CowPowTex
+        {
+            get { return cowPowTex; }
+            set { cowPowTex = value; }
+        }
+
+        public Texture2D CavePowTex
+        {
+            get { return cavePowTex; }
+            set { cavePowTex = value; }
+        }
+
+        public Texture2D GentlePowTex
+        {
+            get { return gentlePowTex; }
+            set { gentlePowTex = value; }
+        }
+
+        public Texture2D KnightPowTex
+        {
+            get { return knightPowTex; }
+            set { knightPowTex = value; }
         }
 
         //Variables for testing purposes
@@ -211,6 +239,12 @@ namespace ROOT
             portraits.Add(Content.Load<Texture2D>("placeholder"));
             portraits.Add(Content.Load<Texture2D>("placeholder2"));
 
+            //PowerUp Textures
+            knightPowTex = Content.Load<Texture2D>("sprint");
+            cavePowTex = Content.Load<Texture2D>("cavePow");
+            cowPowTex = Content.Load<Texture2D>("cowPow");
+            gentlePowTex = Content.Load<Texture2D>("gentlePow");
+
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("Milestone4.txt", orb);
@@ -220,7 +254,7 @@ namespace ROOT
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
-            uiManager = new UIMan(this, uiFont, cancelTexture, Content.Load<Texture2D>("sprint"));
+            uiManager = new UIMan(this, uiFont, cancelTexture);
             orbTexture = Content.Load<Texture2D>("orb");
 
 
@@ -262,7 +296,7 @@ namespace ROOT
                     currentMenuState = menuManager.NextState(currentMenuState, mState, previousMState);
                     if (currentMenuState == MenuState.Selection)
                     {
-                        menuManager.SelectionState(4, p1, p2, p3, p4);
+                        menuManager.SelectionState(playerNum, p1, p2, p3, p4);
                     }
 
                     if (currentMenuState == MenuState.Start)
@@ -407,15 +441,15 @@ namespace ROOT
                     #endregion
 
                     #region Timer Check
-                    if (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O)) //two players
+                    if (playerNum == 2 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //two players
                     {
                         currentState = GameState.GameOver;
                     }
-                    else if (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || SingleKeyPress(Keys.O)) //three players
+                    else if (playerNum == 3 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //three players
                     {
                         currentState = GameState.GameOver;
                     }
-                    else if (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || timer4 <= 0 || SingleKeyPress(Keys.O)) //four players
+                    else if (playerNum == 4 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //four players
                     {
                         currentState = GameState.GameOver;
                     }
@@ -484,7 +518,7 @@ namespace ROOT
                         p4.Draw(spriteBatch);
                     }
                     #endregion
-                    uiManager.Draw(spriteBatch);
+                    uiManager.Draw(spriteBatch, playerNum);
                     #region Drawing Orb
                     if (p3 == null & p4 == null) //two players
                     {
@@ -524,7 +558,7 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            playerNum = 4; //this is constant for testint purposes
+            playerNum = 3; //this is constant for testing purposes
             playerList = new List<Player>(playerNum);
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("Milestone4.txt", orb);
@@ -559,7 +593,7 @@ namespace ROOT
                 timer4 = 1200;
                 playerList.Add(p4); //adds player 4 to the list
             }
-            powerManager = new PowMan(playerList, spriteBatch, GraphicsDevice);
+            powerManager = new PowMan(playerList, spriteBatch, GraphicsDevice, this);
         }
 
         //Checks to see if a key was pressed exactly once
