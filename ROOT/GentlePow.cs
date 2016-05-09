@@ -132,14 +132,17 @@ namespace ROOT
             if (p == 1)
             {
                 cave.Update(elapsedTime);
+                isReady = cave.IsReady;
             }
             else if (p == 2)
             {
                 cow.Update(elapsedTime);
+                isReady = cow.IsReady;
             }
             else if (p == 3)
             {
                 Kpow.Update(elapsedTime);
+                isReady = Kpow.IsReady;
             }
         }
     }
