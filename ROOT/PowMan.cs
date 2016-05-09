@@ -55,7 +55,7 @@ namespace ROOT
             else
             {
                 player1 = players[0];
-                player2 = players[0];
+                player2 = players[1];
 
                 playIndex.Add(player1);
                 playIndex.Add(player2);
