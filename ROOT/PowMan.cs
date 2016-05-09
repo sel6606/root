@@ -24,9 +24,12 @@ namespace ROOT
         private Powerup powerP2;
         private Powerup powerP3;
         private Powerup powerP4;
+
+        Game1 game;
         
-        public PowMan(List<Player>players, SpriteBatch s, GraphicsDevice g)
+        public PowMan(List<Player>players, SpriteBatch s, GraphicsDevice g, Game1 game)
         {
+            this.game = game;
             if(players.Count == 4)
             {
                 player1 = players[0];
@@ -82,76 +85,76 @@ namespace ROOT
                 {
                     if(y == 0)
                     {
-                        powerP1 = new GentlePow(play, playIndex,s,g);
+                        powerP1 = new GentlePow(play, playIndex,s,g, game, game.GentlePowTex);
                     }
                     if(y == 1)
                     {
-                        powerP1 = new KnightPow(play, playIndex,s);
+                        powerP1 = new KnightPow(play, playIndex,s, game.KnightPowTex);
                     }
                     if (y == 2)
                     {
-                        powerP1 = new CowPow(play, playIndex,s,g);
+                        powerP1 = new CowPow(play, playIndex,s,g, game.CowPowTex);
                     }
                     if (y == 3)
                     {
-                        powerP1 = new CavePow(play, playIndex,s);
+                        powerP1 = new CavePow(play, playIndex,s, game.CavePowTex);
                     }
                 }
                 else if (x == 1)
                 {
                     if (y == 0)
                     {
-                        powerP2 = new GentlePow(play, playIndex,s,g);
+                        powerP2 = new GentlePow(play, playIndex,s,g, game, game.GentlePowTex);
                     }
                     if (y == 1)
                     {
-                        powerP2 = new KnightPow(play, playIndex,s);
+                        powerP2 = new KnightPow(play, playIndex,s, game.KnightPowTex);
                     }
                     if (y == 2)
                     {
-                        powerP2 = new CowPow(play, playIndex,s,g);
+                        powerP2 = new CowPow(play, playIndex,s,g, game.CowPowTex);
                     }
                     if (y == 3)
                     {
-                        powerP2 = new CavePow(play, playIndex,s);
+                        powerP2 = new CavePow(play, playIndex,s, game.CavePowTex);
                     }
                 }
                 else if (x == 2)
                 {
                     if (y == 0)
                     {
-                        powerP3 = new GentlePow(play, playIndex,s,g);
+                        powerP3 = new GentlePow(play, playIndex,s,g, game, game.GentlePowTex);
                     }
                     if (y == 1)
                     {
-                        powerP3 = new KnightPow(play, playIndex,s);
+                        powerP3 = new KnightPow(play, playIndex,s, game.KnightPowTex);
                     }
                     if (y == 2)
                     {
-                        powerP3 = new CowPow(play, playIndex,s,g);
+                        powerP3 = new CowPow(play, playIndex,s,g, game.CowPowTex);
                     }
                     if (y == 3)
                     {
-                        powerP3 = new CavePow(play, playIndex,s);
+                        powerP3 = new CavePow(play, playIndex,s, game.CavePowTex);
                     }
                 }
                 else if (x == 3)
                 {
                     if (y == 0)
                     {
-                        powerP4 = new GentlePow(play, playIndex,s,g);
+                        powerP4 = new GentlePow(play, playIndex,s,g, game, game.GentlePowTex);
                     }
                     if (y == 1)
                     {
-                        powerP4 = new KnightPow(play, playIndex,s);
+                        powerP4 = new KnightPow(play, playIndex,s, game.KnightPowTex);
                     }
                     if (y == 2)
                     {
-                        powerP4 = new CowPow(play, playIndex,s,g);
+                        powerP4 = new CowPow(play, playIndex,s,g, game.CowPowTex);
                     }
                     if (y == 3)
                     {
-                        powerP4 = new CavePow(play, playIndex,s);
+                        powerP4 = new CavePow(play, playIndex,s, game.CavePowTex);
                     }
                 }
                 x++;

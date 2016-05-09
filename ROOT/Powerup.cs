@@ -33,7 +33,12 @@ namespace ROOT
 
         private Texture2D tex;
 
-        public Texture2D Tex { get { return tex; } }
+        public Texture2D Tex
+        {
+            get { return tex; }
+
+            set { tex = value; }
+        }
 
 
         //whether the powerup can be used

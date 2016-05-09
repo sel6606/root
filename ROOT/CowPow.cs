@@ -40,7 +40,7 @@ namespace ROOT
 
 
         //constructor for powerup, takes in the player who uses the power up.
-        public CowPow(Player player, List<Player> plaList, SpriteBatch s, GraphicsDevice g)
+        public CowPow(Player player, List<Player> plaList, SpriteBatch s, GraphicsDevice g, Texture2D texture)
         {
             user = player;
             PlayList = plaList;
@@ -51,6 +51,7 @@ namespace ROOT
             sp = s;
             tex = new Texture2D(g, 1, 1);
             tex.SetData<Color>(new Color[] { Color.Chartreuse });
+            Tex = texture;
         }
 
 

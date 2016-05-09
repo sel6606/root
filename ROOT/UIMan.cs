@@ -15,14 +15,14 @@ namespace ROOT
         private Button stop;
         private MouseState mState;
         private MouseState previousMState;
-        private Texture2D powerupTex;
+        //private Texture2D powerupTex;
 
-        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture, Texture2D powerupTexture)
+        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture/*, Texture2D powerupTexture*/)
         {
             this.game = game;
             this.UIFont = UIFont;
             stop = new Button(stopTexture, new Rectangle(0, 0, 30, 30));
-            powerupTex = powerupTexture;
+            //powerupTex = powerupTexture;
         }
 
         public void Draw(SpriteBatch s)
@@ -34,22 +34,22 @@ namespace ROOT
                 s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer2), new Vector2((game.GraphicsDevice.Viewport.Width / 2) + 50, 10), Color.White);
                 if (game.PowerManager.PowerP1.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP1.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP1.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.Gray);
                 }
 
                 if (game.PowerManager.PowerP2.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP2.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP2.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.Gray);
                 }
             }
 
@@ -62,32 +62,32 @@ namespace ROOT
                 s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer3), new Vector2((game.GraphicsDevice.Viewport.Width / 2) + 100, 10), Color.White);
                 if (game.PowerManager.PowerP1.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 100, 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP1.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 100, 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 100, 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP1.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 100, 35, 30, 30), Color.Gray);
                 }
 
                 if (game.PowerManager.PowerP2.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2), 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP2.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2), 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2), 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP2.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2), 35, 30, 30), Color.Gray);
                 }
 
                 if (game.PowerManager.PowerP3.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 100, 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP3.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 100, 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 100, 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP3.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 100, 35, 30, 30), Color.Gray);
                 }
             }
 
@@ -102,42 +102,42 @@ namespace ROOT
                 s.DrawString(UIFont, String.Format("{0:0.00}", game.Timer4), new Vector2((game.GraphicsDevice.Viewport.Width / 2) + 150, 10), Color.White);
                 if (game.PowerManager.PowerP1.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 150, 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP1.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 150, 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 150, 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP1.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 150, 35, 30, 30), Color.Gray);
                 }
 
                 if (game.PowerManager.PowerP2.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP2.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP2.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) - 50, 35, 30, 30), Color.Gray);
                 }
 
                 if (game.PowerManager.PowerP3.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP3.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP3.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 50, 35, 30, 30), Color.Gray);
                 }
 
                 if (game.PowerManager.PowerP4.IsReady)
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 150, 35, 30, 30), Color.White);
+                    s.Draw(game.PowerManager.PowerP4.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 150, 35, 30, 30), Color.White);
                 }
 
                 else
                 {
-                    s.Draw(powerupTex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 150, 35, 30, 30), Color.Gray);
+                    s.Draw(game.PowerManager.PowerP4.Tex, new Rectangle((game.GraphicsDevice.Viewport.Width / 2) + 150, 35, 30, 30), Color.Gray);
                 }
             }
             
