@@ -558,11 +558,7 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-<<<<<<< HEAD
             playerNum = 2; //this is constant for testing purposes
-=======
-            playerNum = 3; //this is constant for testing purposes
->>>>>>> 8a612d0db2ed420b0c906c68397c7b9b941b6d89
             playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("Milestone4.txt", orb);
