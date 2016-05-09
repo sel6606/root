@@ -63,7 +63,7 @@ namespace ROOT
         private Player p4;
         private Stage gameStage;
         private Orb orb;
-        private int playerNum; //keeps track of how many players are in the game
+        private int playerNum=3; //keeps track of how many players are in the game
         private List<Player> playerList;
         #endregion
 
@@ -250,7 +250,7 @@ namespace ROOT
             gameStage.ReadStage("Milestone4.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
                 backTexture, optionsTexture, instructionScreen, cavemanInfo, cowboyInfo,
-                knightInfo, gentlemanInfo, portraits, select, soundEffects[0]);
+                knightInfo, gentlemanInfo, portraits, select, soundEffects[0],playerNum);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
@@ -494,7 +494,7 @@ namespace ROOT
             switch (currentState)
             {
                 case GameState.Menu:    //Draws a menu dependent on the current menu state
-                    menuManager.Draw(currentMenuState, spriteBatch);
+                    menuManager.Draw(currentMenuState,spriteBatch);
                     break;
                 case GameState.Game:    //Draws the game screen, drawing the stage, both players, and the orb
                     gameStage.Draw();
@@ -558,7 +558,7 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            playerNum = 2; //this is constant for testing purposes
+            playerNum = 3; //this is constant for testing purposes
             playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("Milestone4.txt", orb);
