@@ -455,6 +455,11 @@ namespace ROOT
                     }
                     #endregion
 
+                    foreach(Player p in playerList)
+                    {
+                        p.Stun(gameTime.ElapsedGameTime.TotalSeconds);
+                    }
+
                     if (uiManager.CheckExit(mState, previousMState))
                     {
                         soundEffects[0].CreateInstance().Play();
@@ -708,24 +713,25 @@ namespace ROOT
         public void PlayerCollisions(GameTime gameTime)
         //handles all of the player collision logic in one spot
         {
+            double time = gameTime.ElapsedGameTime.TotalSeconds;
             if (p3 == null && p4 == null) //only 2 players
             {
-                p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p2
+                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
             }
             else if (p3 != null && p4 == null) //3 players
             {
-                p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p2
-                p1.CheckPlayerCollision(p1, p3, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p3
-                p2.CheckPlayerCollision(p2, p3, gameTime.ElapsedGameTime.TotalSeconds); //p2 and p3
+                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
+                p1.CheckPlayerCollision(p1, p3, time); //p1 and p3
+                p2.CheckPlayerCollision(p2, p3, time); //p2 and p3
             }
             else
             {
-                p1.CheckPlayerCollision(p1, p2, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p2
-                p1.CheckPlayerCollision(p1, p3, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p3
-                p2.CheckPlayerCollision(p2, p3, gameTime.ElapsedGameTime.TotalSeconds); //p2 and p3
-                p1.CheckPlayerCollision(p1, p4, gameTime.ElapsedGameTime.TotalSeconds); //p1 and p4
-                p2.CheckPlayerCollision(p2, p4, gameTime.ElapsedGameTime.TotalSeconds); //p2 and p4
-                p3.CheckPlayerCollision(p3, p4, gameTime.ElapsedGameTime.TotalSeconds); //p3 and p4
+                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
+                p1.CheckPlayerCollision(p1, p3, time); //p1 and p3
+                p2.CheckPlayerCollision(p2, p3, time); //p2 and p3
+                p1.CheckPlayerCollision(p1, p4, time); //p1 and p4
+                p2.CheckPlayerCollision(p2, p4, time); //p2 and p4
+                p3.CheckPlayerCollision(p3, p4, time); //p3 and p4
             }
         }
 
