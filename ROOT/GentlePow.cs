@@ -60,6 +60,7 @@ namespace ROOT
         }
         public override void Activate()
         {
+            isReady = false;
             isActive = true;
             if (isReady)
             {

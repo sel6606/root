@@ -455,6 +455,11 @@ namespace ROOT
                     }
                     #endregion
 
+                    foreach(Player p in playerList)
+                    {
+                        p.Stun(gameTime.ElapsedGameTime.TotalSeconds);
+                    }
+
                     if (uiManager.CheckExit(mState, previousMState))
                     {
                         soundEffects[0].CreateInstance().Play();
@@ -559,7 +564,7 @@ namespace ROOT
         public void Reset()
         {
             playerNum = 4; //this is constant for testing purposes
-            playerList = new List<Player>(playerNum);
+            playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage("Milestone4.txt", orb);
 

@@ -482,26 +482,25 @@ namespace ROOT
                     p2.Orb = true;
                     p1.Orb = false;
                     p1.Stunned = true;
-                    p1.Stun(gameTime);
+                    //p1.Stun(gameTime);
                 }
                 else if (p2.Orb)
                 {
                     p1.Orb = true;
                     p2.Orb = false;
                     p2.Stunned = true;
-                    p2.Stun(gameTime);
+                    //p2.Stun(gameTime);
                 }
             }
             else
             {
-                p1.Stun(gameTime);
-                p2.Stun(gameTime);
+                //p1.Stun(gameTime);
+                //p2.Stun(gameTime);
             }
-
         }
 
         public void Stun(double gameTime)
-        //player will be unable to move while stunned, player will also blink
+        //player will be unable to move while stunned
         {
             if (stunned)
             {
