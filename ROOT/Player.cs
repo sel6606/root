@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace ROOT
 {
-    class Player : GameObject
+    public class Player : GameObject
     {
         //Enum for playerState
         public enum PlayerState //keeps track of what player is doing
@@ -53,7 +53,7 @@ namespace ROOT
 
         private bool jumped = false;
         bool stunned; //checks if player is stunned
-        private double stunTime = 3.00; //keeps track of how long a player is stunned
+        private double stunTime = 10.00; //keeps track of how long a player is stunned
 
         //Fields for position and movement logic
         private bool xBox = false;
@@ -154,6 +154,11 @@ namespace ROOT
         {
             get { return stunned; }
             set { stunned = value; }
+        }
+
+        public PlayerState CurrentDirectionState
+        {
+            get { return currentDirectionState; }
         }
 
         #endregion
@@ -477,26 +482,25 @@ namespace ROOT
                     p2.Orb = true;
                     p1.Orb = false;
                     p1.Stunned = true;
-                    p1.Stun(gameTime);
+                    //p1.Stun(gameTime);
                 }
                 else if (p2.Orb)
                 {
                     p1.Orb = true;
                     p2.Orb = false;
                     p2.Stunned = true;
-                    p2.Stun(gameTime);
+                    //p2.Stun(gameTime);
                 }
             }
             else
             {
-                p1.Stun(gameTime);
-                p2.Stun(gameTime);
+                //p1.Stun(gameTime);
+                //p2.Stun(gameTime);
             }
-
         }
 
         public void Stun(double gameTime)
-        //player will be unable to move while stunned, player will also blink
+        //player will be unable to move while stunned
         {
             if (stunned)
             {
@@ -504,7 +508,7 @@ namespace ROOT
                 if (stunTime <= 0)
                 {
                     stunned = false;
-                    stunTime = 3.00;
+                    stunTime = 10.00;
                 }
             }
         }
@@ -545,16 +549,43 @@ namespace ROOT
 
         private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
         {
-            s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, RECT_HEIGHT*3, RECT_WIDTH, RECT_HEIGHT), Color.White, 0, Vector2.Zero, 0.9f, flipSprite, 0);
+            if(this.Orb) //changes player color if they have the orb
+            {
+                s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, RECT_HEIGHT * 3, RECT_WIDTH, RECT_HEIGHT), Color.Gold, 0, Vector2.Zero, 0.9f, flipSprite, 0);
+            }
+            else
+            {
+                s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, RECT_HEIGHT * 3, RECT_WIDTH, RECT_HEIGHT), Color.White, 0, Vector2.Zero, 0.9f, flipSprite, 0);
+            }
         }
 
         private void DrawJumping(SpriteEffects flipSprite, SpriteBatch s)
         {
-            if (jumpUp < 0)
+            if(this.Orb)
             {
-                if (ground)
+                if (jumpUp < 0)
                 {
-                    DrawStanding(flipSprite, s);
+                    if (ground)
+                    {
+                        DrawStanding(flipSprite, s);
+                    }
+                    else
+                    {
+                        s.Draw(
+                               spriteSheet,                    // - The texture to draw
+                               new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                               new Rectangle(                  // - The "source" rectangle
+                                   RECT_WIDTH,   //   - This rectangle specifies
+                                   RECT_HEIGHT * 2,        //	   where "inside" the texture
+                                   RECT_WIDTH,           //     to get pixels (We don't want to
+                                   RECT_HEIGHT),         //     draw the whole thing)
+                               Color.Gold,                    // - The color
+                               0,                              // - Rotation (none currently)
+                               Vector2.Zero,                   // - Origin inside the image (top left)
+                               0.9f,                           // - Scale (100% - no change)
+                               flipSprite,                     // - Can be used to flip the image
+                               0);
+                    }
                 }
                 else
                 {
@@ -562,7 +593,51 @@ namespace ROOT
                            spriteSheet,                    // - The texture to draw
                            new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
                            new Rectangle(                  // - The "source" rectangle
-                               RECT_WIDTH,   //   - This rectangle specifies
+                               0,   //   - This rectangle specifies
+                               RECT_HEIGHT * 2,        //	   where "inside" the texture
+                               RECT_WIDTH,           //     to get pixels (We don't want to
+                               RECT_HEIGHT),         //     draw the whole thing)
+                           Color.Gold,                    // - The color
+                           0,                              // - Rotation (none currently)
+                           Vector2.Zero,                   // - Origin inside the image (top left)
+                           0.9f,                           // - Scale (100% - no change)
+                           flipSprite,                     // - Can be used to flip the image
+                           0);
+                }
+            }
+            else
+            {
+                if (jumpUp < 0)
+                {
+                    if (ground)
+                    {
+                        DrawStanding(flipSprite, s);
+                    }
+                    else
+                    {
+                        s.Draw(
+                               spriteSheet,                    // - The texture to draw
+                               new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                               new Rectangle(                  // - The "source" rectangle
+                                   RECT_WIDTH,   //   - This rectangle specifies
+                                   RECT_HEIGHT * 2,        //	   where "inside" the texture
+                                   RECT_WIDTH,           //     to get pixels (We don't want to
+                                   RECT_HEIGHT),         //     draw the whole thing)
+                               Color.White,                    // - The color
+                               0,                              // - Rotation (none currently)
+                               Vector2.Zero,                   // - Origin inside the image (top left)
+                               0.9f,                           // - Scale (100% - no change)
+                               flipSprite,                     // - Can be used to flip the image
+                               0);
+                    }
+                }
+                else
+                {
+                    s.Draw(
+                           spriteSheet,                    // - The texture to draw
+                           new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                           new Rectangle(                  // - The "source" rectangle
+                               0,   //   - This rectangle specifies
                                RECT_HEIGHT * 2,        //	   where "inside" the texture
                                RECT_WIDTH,           //     to get pixels (We don't want to
                                RECT_HEIGHT),         //     draw the whole thing)
@@ -574,62 +649,87 @@ namespace ROOT
                            0);
                 }
             }
-            else
-            {
-                s.Draw(
-                       spriteSheet,                    // - The texture to draw
-                       new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
-                       new Rectangle(                  // - The "source" rectangle
-                           0,   //   - This rectangle specifies
-                           RECT_HEIGHT * 2,        //	   where "inside" the texture
-                           RECT_WIDTH,           //     to get pixels (We don't want to
-                           RECT_HEIGHT),         //     draw the whole thing)
-                       Color.White,                    // - The color
-                       0,                              // - Rotation (none currently)
-                       Vector2.Zero,                   // - Origin inside the image (top left)
-                       0.9f,                           // - Scale (100% - no change)
-                       flipSprite,                     // - Can be used to flip the image
-                       0);
-            }
         }
 
         private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
         {
-            if (frame > 5)
+            if(this.Orb)
             {
-                s.Draw(
-                       spriteSheet,                    // - The texture to draw
-                       new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
-                       new Rectangle(                  // - The "source" rectangle
-                           (frame-6) * RECT_WIDTH,   //   - This rectangle specifies
-                           RECT_Y_OFFSET+72,        //	   where "inside" the texture
-                           RECT_WIDTH,           //     to get pixels (We don't want to
-                           RECT_HEIGHT),         //     draw the whole thing)
-                      Color.White,                    // - The color
-                      0,                              // - Rotation (none currently)
-                      Vector2.Zero,                   // - Origin inside the image (top left)
-                      0.9f,                           // - Scale (100% - no change)
-                      flipSprite,                     // - Can be used to flip the image
-                      0);
-                // - Layer depth (unused)
+                if (frame > 5)
+                {
+                    s.Draw(
+                           spriteSheet,                    // - The texture to draw
+                           new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                           new Rectangle(                  // - The "source" rectangle
+                               (frame - 6) * RECT_WIDTH,   //   - This rectangle specifies
+                               RECT_Y_OFFSET + 72,        //	   where "inside" the texture
+                               RECT_WIDTH,           //     to get pixels (We don't want to
+                               RECT_HEIGHT),         //     draw the whole thing)
+                          Color.Gold,                    // - The color
+                          0,                              // - Rotation (none currently)
+                          Vector2.Zero,                   // - Origin inside the image (top left)
+                          0.9f,                           // - Scale (100% - no change)
+                          flipSprite,                     // - Can be used to flip the image
+                          0);
+                    // - Layer depth (unused)
+                }
+                else
+                {
+                    s.Draw(
+                        spriteSheet,                    // - The texture to draw
+                        new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                        new Rectangle(                  // - The "source" rectangle
+                            frame * RECT_WIDTH,   //   - This rectangle specifies
+                            RECT_Y_OFFSET,        //	   where "inside" the texture
+                            RECT_WIDTH,           //     to get pixels (We don't want to
+                            RECT_HEIGHT),         //     draw the whole thing)
+                        Color.Gold,                    // - The color
+                        0,                              // - Rotation (none currently)
+                        Vector2.Zero,                   // - Origin inside the image (top left)
+                        0.9f,                           // - Scale (100% - no change)
+                        flipSprite,                     // - Can be used to flip the image
+                        0);
+                    // - Layer depth (unused)
+                }
             }
             else
             {
-                s.Draw(
-                    spriteSheet,                    // - The texture to draw
-                    new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
-                    new Rectangle(                  // - The "source" rectangle
-                        frame * RECT_WIDTH,   //   - This rectangle specifies
-                        RECT_Y_OFFSET ,        //	   where "inside" the texture
-                        RECT_WIDTH,           //     to get pixels (We don't want to
-                        RECT_HEIGHT),         //     draw the whole thing)
-                    Color.White,                    // - The color
-                    0,                              // - Rotation (none currently)
-                    Vector2.Zero,                   // - Origin inside the image (top left)
-                    0.9f,                           // - Scale (100% - no change)
-                    flipSprite,                     // - Can be used to flip the image
-                    0);
-                // - Layer depth (unused)
+                if (frame > 5)
+                {
+                    s.Draw(
+                           spriteSheet,                    // - The texture to draw
+                           new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                           new Rectangle(                  // - The "source" rectangle
+                               (frame - 6) * RECT_WIDTH,   //   - This rectangle specifies
+                               RECT_Y_OFFSET + 72,        //	   where "inside" the texture
+                               RECT_WIDTH,           //     to get pixels (We don't want to
+                               RECT_HEIGHT),         //     draw the whole thing)
+                          Color.White,                    // - The color
+                          0,                              // - Rotation (none currently)
+                          Vector2.Zero,                   // - Origin inside the image (top left)
+                          0.9f,                           // - Scale (100% - no change)
+                          flipSprite,                     // - Can be used to flip the image
+                          0);
+                    // - Layer depth (unused)
+                }
+                else
+                {
+                    s.Draw(
+                        spriteSheet,                    // - The texture to draw
+                        new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                        new Rectangle(                  // - The "source" rectangle
+                            frame * RECT_WIDTH,   //   - This rectangle specifies
+                            RECT_Y_OFFSET,        //	   where "inside" the texture
+                            RECT_WIDTH,           //     to get pixels (We don't want to
+                            RECT_HEIGHT),         //     draw the whole thing)
+                        Color.White,                    // - The color
+                        0,                              // - Rotation (none currently)
+                        Vector2.Zero,                   // - Origin inside the image (top left)
+                        0.9f,                           // - Scale (100% - no change)
+                        flipSprite,                     // - Can be used to flip the image
+                        0);
+                    // - Layer depth (unused)
+                }
             }
         }
 
