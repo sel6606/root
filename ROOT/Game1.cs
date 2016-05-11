@@ -97,6 +97,10 @@ namespace ROOT
         private Texture2D credits;
         private Texture2D background;
         private Texture2D title;
+        private Texture2D p1Win;
+        private Texture2D p2Win;
+        private Texture2D p3Win;
+        private Texture2D p4Win;
         #endregion
 
         //Width of each button
@@ -273,6 +277,12 @@ namespace ROOT
             cavePowTex = Content.Load<Texture2D>("cavePow");
             cowPowTex = Content.Load<Texture2D>("cowPow");
             gentlePowTex = Content.Load<Texture2D>("gentlePow");
+
+            //Win messages
+            p1Win = Content.Load<Texture2D>("win1");
+            p2Win = Content.Load<Texture2D>("win2");
+            p3Win = Content.Load<Texture2D>("win3");
+            p4Win = Content.Load<Texture2D>("win4");
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
@@ -624,6 +634,39 @@ namespace ROOT
                     break;
                 case GameState.GameOver:    //Draws the game over screen, drawing a restart button and a menu button
                     spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                    if(winner == p1)
+                    {
+                        spriteBatch.Draw(p1Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
+                    }
+                    if (winner == p2)
+                    {
+                        spriteBatch.Draw(p2Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
+                    }
+                    if (winner == p3)
+                    {
+                        spriteBatch.Draw(p3Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
+                    }
+                    if (winner == p4)
+                    {
+                        spriteBatch.Draw(p4Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
+                    }
+
+                    if (winner.ThisType == PlayerType.Caveman)
+                    {
+                        spriteBatch.Draw(cavemanInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
+                    }
+                    if (winner.ThisType == PlayerType.Cowboy)
+                    {
+                        spriteBatch.Draw(cowboyInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
+                    }
+                    else if (winner.ThisType == PlayerType.GentleMan)
+                    {
+                        spriteBatch.Draw(gentlemanInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
+                    }
+                    else if (winner.ThisType == PlayerType.Knight)
+                    {
+                        spriteBatch.Draw(knightInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
+                    }
                     restart.Draw(spriteBatch);
                     menu.Draw(spriteBatch);
                     break;
