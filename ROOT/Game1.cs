@@ -623,6 +623,7 @@ namespace ROOT
                     powerManager.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:    //Draws the game over screen, drawing a restart button and a menu button
+                    spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
                     restart.Draw(spriteBatch);
                     menu.Draw(spriteBatch);
                     break;

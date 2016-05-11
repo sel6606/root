@@ -148,10 +148,6 @@ namespace ROOT
             set { stunned = value; }
         }
 
-        public PlayerState CurrentDirectionState
-        {
-            get { return currentDirectionState; }
-        }
 
         #endregion
 
