@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ROOT
 {
@@ -27,10 +24,6 @@ namespace ROOT
         {
             get { return isSelected; }
             set { isSelected = value; }
-        }
-        public int BoxNum
-        {
-            get { return boxNum; }
         }
 
         public PlayerType Type
@@ -57,15 +50,9 @@ namespace ROOT
             set { right = value; }
         }
 
-        public Rectangle Position
-        {
-            get { return position; }
-            set { position = value; }
-        }
-
         #endregion
 
-        public CharPortrait(Texture2D texture, Texture2D texture2, Rectangle position, bool top, int number)
+        public CharPortrait(Texture2D texture, Texture2D texture2, Rectangle position, bool top, int number, int playerNum)
         {
             boxNum = number;
             this.position = position;
@@ -79,15 +66,28 @@ namespace ROOT
             {
                 selectors.Add(new Rectangle(position.X, position.Y - 16, width, 10));
                 selectors.Add(new Rectangle(position.X + width, position.Y - 16, width, 10));
-                selectors.Add(new Rectangle(position.X + (width * 2), position.Y - 16, width, 10));
-                selectors.Add(new Rectangle(position.X + (width * 3), position.Y - 16, width, 10));
+                if (playerNum > 2)
+                {
+                    selectors.Add(new Rectangle(position.X + (width * 2), position.Y - 16, width, 10));
+                    if (playerNum > 3)
+                    {
+                        selectors.Add(new Rectangle(position.X + (width * 3), position.Y - 16, width, 10));
+                    }
+
+                }
             }
             else
             {
                 selectors.Add(new Rectangle(position.X, bottom, width, 10));
                 selectors.Add(new Rectangle(position.X + width, bottom, width, 10));
-                selectors.Add(new Rectangle(position.X + (width * 2), bottom, width, 10));
-                selectors.Add(new Rectangle(position.X + (width * 3), bottom, width, 10));
+                if (playerNum > 2)
+                {
+                    selectors.Add(new Rectangle(position.X + (width * 2), bottom, width, 10));
+                    if (playerNum > 3)
+                    {
+                        selectors.Add(new Rectangle(position.X + (width * 3), bottom, width, 10));
+                    }
+                }
             }
 
             isSelected = new List<bool>() { false, false, false, false };

@@ -1,11 +1,6 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
@@ -28,7 +23,7 @@ namespace ROOT
 
 
         //constructor for powerup, takes in the player who uses the power up.
-        public CavePow(Player player, List<Player> plaList, SpriteBatch s)
+        public CavePow(Player player, List<Player> plaList, SpriteBatch s, Texture2D texture)
         {
             user = player;
             PlayList = plaList;
@@ -37,6 +32,7 @@ namespace ROOT
             this.coolDuration = cooldownTime;
             this.activeDuration = activeTime;
             sp = s;
+            Tex = texture;
         }
 
 
@@ -53,6 +49,7 @@ namespace ROOT
                     play.moveLeft = y;
                 }
             }
+            isActive = true;
         }
 
 
