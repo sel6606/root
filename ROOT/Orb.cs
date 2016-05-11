@@ -1,16 +1,13 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ROOT
 {
     class Orb : GameObject
     {
-        private bool active;
+        private bool active; //orb is active if it hasn't been picked up
 
         public bool Active
+        //deactivates orb if it has been picked up
         {
             set { active = value; }
             get { return active; }
@@ -19,12 +16,12 @@ namespace ROOT
         public Orb(int x, int y, int width, int height, Texture2D texture)
             : base(x,y,width,height,false, texture)
         {
-            active = true;
+            active = true; //orb is active by default
         }
 
         public override void Draw(SpriteBatch s)
         {
-            base.Draw(s);
+            base.Draw(s); //draws itself on the screen
         }
 
     }

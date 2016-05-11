@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ROOT
 {
@@ -28,10 +25,6 @@ namespace ROOT
             get { return isSelected; }
             set { isSelected = value; }
         }
-        public int BoxNum
-        {
-            get { return boxNum; }
-        }
 
         public PlayerType Type
         {
@@ -55,12 +48,6 @@ namespace ROOT
         {
             get { return right; }
             set { right = value; }
-        }
-
-        public Rectangle Position
-        {
-            get { return position; }
-            set { position = value; }
         }
 
         #endregion

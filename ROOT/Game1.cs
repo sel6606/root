@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 
 namespace ROOT
@@ -17,10 +16,11 @@ namespace ROOT
         Main,
         Start,
         Quit,
-        Controls,
+        Credits,
         Instructions,
         Options,
-        Selection
+        Selection,
+        Title
     }
 
     //Enum for the different characters
@@ -63,14 +63,16 @@ namespace ROOT
         private Player p4;
         private Stage gameStage;
         private Orb orb;
-        private int playerNum=3; //keeps track of how many players are in the game
+        private int playerNum; //keeps track of how many players are in the game
         private List<Player> playerList;
+        private Player winner;
         #endregion
 
         #region Textures
         private Texture2D brickTexture;
         private Texture2D startTexture;
         private Texture2D instructionsTexture;
+        private Texture2D creditButton;
         private Texture2D quitTexture;
         private Texture2D backTexture;
         private Texture2D restartTexture;
@@ -92,6 +94,9 @@ namespace ROOT
         private Texture2D cavePowTex;
         private Texture2D gentlePowTex;
         private Texture2D knightPowTex;
+        private Texture2D credits;
+        private Texture2D background;
+        private Texture2D title;
         #endregion
 
         //Width of each button
@@ -108,6 +113,16 @@ namespace ROOT
         private Button restart;
         private Button menu;
         private SpriteFont uiFont;
+
+        private const double TIMER_LENGTH= 2;
+
+
+
+        #region Properties
+        public Texture2D Title
+        {
+            get { return title; }
+        }
 
         public double Timer1
         {
@@ -158,13 +173,16 @@ namespace ROOT
             set { knightPowTex = value; }
         }
 
+        public int PlayerNum
+        {
+            get { return playerNum; }
+            set { playerNum = value; }
+        }
+        #endregion
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
-        private int playerSize = 25;
-        private int playerWidth = 44;
-        private int playerHeight = 72;
-        private bool NEEDSCONDITION = false;
+
 
 
         GraphicsDeviceManager graphics;
@@ -190,8 +208,9 @@ namespace ROOT
             //Sets mouse to visible and sets the inital GameState and MenuState
             //Also sets inital values
             IsMouseVisible = true;
+            playerNum = 4;
             currentState = GameState.Menu;
-            currentMenuState = MenuState.Main;
+            currentMenuState = MenuState.Title;
             base.Initialize();
         }
 
@@ -216,7 +235,17 @@ namespace ROOT
             optionsTexture = Content.Load<Texture2D>("MenuOptions");
             menuTexture = Content.Load<Texture2D>("MenuMenu");
             instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
+            credits = Content.Load<Texture2D>("Credits");
+            creditButton = Content.Load<Texture2D>("MenuCredits");
             select = Content.Load<Texture2D>("select");
+
+            background = Content.Load<Texture2D>("background");
+            title = Content.Load<Texture2D>("title");
+
+            List<Texture2D> playerButtons = new List<Texture2D>();
+            playerButtons.Add(Content.Load<Texture2D>("twoPlayers"));
+            playerButtons.Add(Content.Load<Texture2D>("threePlayers"));
+            playerButtons.Add(Content.Load<Texture2D>("fourPlayers"));
 
             gentlemanInfo = Content.Load<Texture2D>("gentleman_info");
             cavemanInfo = Content.Load<Texture2D>("caveman_info");
@@ -247,10 +276,10 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("Milestone4.txt", orb);
+            gameStage.ReadStage("Milestone4.txt");
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
-                backTexture, optionsTexture, instructionScreen, cavemanInfo, cowboyInfo,
-                knightInfo, gentlemanInfo, portraits, select, soundEffects[0],playerNum);
+                backTexture, optionsTexture, instructionScreen, creditButton, credits, cavemanInfo, cowboyInfo,
+                knightInfo, gentlemanInfo,background, portraits, playerButtons, select, soundEffects[0],playerNum);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
@@ -443,14 +472,56 @@ namespace ROOT
                     #region Timer Check
                     if (playerNum == 2 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //two players
                     {
+                        if(timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else
+                        {
+                            winner = p2;
+                        }
                         currentState = GameState.GameOver;
                     }
-                    else if (playerNum == 3 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //three players
+                    else if (playerNum == 3 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || SingleKeyPress(Keys.O))) //three players
                     {
+                        if (timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else if (timer2 <= 0)
+                        {
+                            winner = p2;
+                        }
+
+                        else
+                        {
+                            winner = p3;
+                        }
                         currentState = GameState.GameOver;
                     }
-                    else if (playerNum == 4 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //four players
+                    else if (playerNum == 4 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || timer4 <= 0 || SingleKeyPress(Keys.O))) //four players
                     {
+                        if (timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else if (timer2 <= 0)
+                        {
+                            winner = p2;
+                        }
+
+                        else if (timer3 <= 0)
+                        {
+                            winner = p3;
+                        }
+
+                        else
+                        {
+                            winner = p4;
+                        }
                         currentState = GameState.GameOver;
                     }
                     #endregion
@@ -462,6 +533,8 @@ namespace ROOT
 
                     if (uiManager.CheckExit(mState, previousMState))
                     {
+                        playerNum = 4;
+                        Reset();
                         soundEffects[0].CreateInstance().Play();
                         currentMenuState = MenuState.Main;
                         currentState = GameState.Menu;
@@ -492,10 +565,10 @@ namespace ROOT
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.LightGray);
 
             spriteBatch.Begin();
-
+            
             switch (currentState)
             {
                 case GameState.Menu:    //Draws a menu dependent on the current menu state
@@ -563,39 +636,42 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-            playerNum = 3; //this is constant for testing purposes
+
+            p3 = null;
+            p4 = null;
+
             playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("Milestone4.txt", orb);
+            gameStage.ReadStage("Milestone4.txt");
 
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
 
             p1 = new Player(this, gameStage.P1startX, gameStage.P1startY - 50, 40, 30, timer1, spritesheets[(int)menuManager.Types[0]], PlayerIndex.One, (int)menuManager.Types[0]);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
-            timer1 = 1200;
+            timer1 = TIMER_LENGTH;
             playerList.Add(p1); //adds player 1 to the list of players
 
             p2 = new Player(this, gameStage.P2startX, gameStage.P2startY - 50, 40, 30, timer2, spritesheets[(int)menuManager.Types[1]], PlayerIndex.Two, (int)menuManager.Types[1]);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
-            timer2 = 1200;
+            timer2 = TIMER_LENGTH;
             playerList.Add(p2); //adds player 2 to the list of players
             if (playerNum == 3) //three players
             {
                 p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
                 p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
-                timer3 = 1200;
+                timer3 = TIMER_LENGTH;
                 playerList.Add(p3); //adds player 3 to the list
             }
             else if(playerNum == 4) //four players
             {
                 p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
                 p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
-                timer3 = 1200;
+                timer3 = TIMER_LENGTH;
                 playerList.Add(p3); //adds player 3 to the list
 
                 p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, spritesheets[(int)menuManager.Types[3]], PlayerIndex.Four, (int)menuManager.Types[3]);
                 p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
-                timer4 = 1200;
+                timer4 = TIMER_LENGTH;
                 playerList.Add(p4); //adds player 4 to the list
             }
             powerManager = new PowMan(playerList, spriteBatch, GraphicsDevice, this);

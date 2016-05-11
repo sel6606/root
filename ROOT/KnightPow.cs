@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
@@ -45,7 +40,7 @@ namespace ROOT
         public override void Effect()
         {
             isActive = true;
-            user.Speed = user.BaseSpeed*2;
+            user.Speed = (int) Math.Ceiling(user.BaseSpeed * 1.5);
         }
 
 

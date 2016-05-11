@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
@@ -25,11 +20,7 @@ namespace ROOT
 
         private Rectangle rec;
 
-        public Rectangle Rec { get { return rec; } }
-
         private int x;
-
-        public int X { get { return x; } }
 
         private Texture2D tex;
 

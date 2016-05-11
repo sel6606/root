@@ -1,19 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace ROOT
 {
     public class Player : GameObject
     {
         //Enum for playerState
-        public enum PlayerState //keeps track of what player is doing
+        public enum PlayerState //keeps track of what player is doing for animation purposes
         {
             FaceRight,
             FaceLeft,
@@ -21,10 +16,6 @@ namespace ROOT
             Walk,
             Move,
             Jump,
-            //MoveRight,
-            //MoveLeft,
-            //JumpRight,
-            //JumpLeft,
             PowerUp
         }
 
@@ -53,7 +44,7 @@ namespace ROOT
 
         private bool jumped = false;
         bool stunned; //checks if player is stunned
-        private double stunTime = 10.00; //keeps track of how long a player is stunned
+        private double stunTime = 3.00; //keeps track of how long a player should stay stunned
 
         //Fields for position and movement logic
         private bool xBox = false;
@@ -72,7 +63,7 @@ namespace ROOT
         private PlayerState currentState;
         private PlayerState currentDirectionState;
         private KeyboardState previousKbState;
-
+        private GamePadState prevGPState;
 
 
         // Texture and drawing
@@ -94,10 +85,7 @@ namespace ROOT
 
         #endregion
         #region Properties
-        public PlayerState CurentState
-        {
-            get { return currentState; }
-        }
+
 
         public PlayerType ThisType
         {
@@ -143,7 +131,6 @@ namespace ROOT
             get { return xBox; }
             set { xBox = value; }
         }
-        //Properties for hasOrb
         public bool Orb
         {
             get { return hasOrb; }
@@ -180,6 +167,7 @@ namespace ROOT
             selectDown = false;
             setFPS();
             previousKbState = Keyboard.GetState();
+            prevGPState = GamePad.GetState(playerNumber);
             thisType = (PlayerType)type;
         }
 
@@ -201,19 +189,19 @@ namespace ROOT
             else if (xBox)
             {
                 GamePadState gamePad = GamePad.GetState(playerNumber);
-                if (gamePad.ThumbSticks.Left.Y < 0)
+                if (gamePad.ThumbSticks.Left.Y < 0 && prevGPState.ThumbSticks.Left.Y >= 0)
                 {
                     down = true;
                 }
-                if (gamePad.ThumbSticks.Left.Y > 0)
+                if (gamePad.ThumbSticks.Left.Y > 0 && prevGPState.ThumbSticks.Left.Y <= 0)
                 {
                     up = true;
                 }
-                if (gamePad.ThumbSticks.Left.X < 0)
+                if (gamePad.ThumbSticks.Left.X < 0 && prevGPState.ThumbSticks.Left.X >= 0)
                 {
                     left = true;
                 }
-                if (gamePad.ThumbSticks.Left.X > 0)
+                if (gamePad.ThumbSticks.Left.X > 0 && prevGPState.ThumbSticks.Left.X <= 0)
                 {
                     right = true;
                 }
@@ -224,7 +212,6 @@ namespace ROOT
             selectRight = right;
             selectUp = up;
             selectDown = down;
-
         }
 
         public void Update(List<Tile> tiles)
@@ -470,7 +457,7 @@ namespace ROOT
         }
 
         //this method specifically handles logic for player on player collision
-        //returns false unless the player who called this method has taken the orb
+        //changes possesion of the orb and stuns if applicable
         public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
             if (p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
@@ -480,20 +467,13 @@ namespace ROOT
                     p2.Orb = true;
                     p1.Orb = false;
                     p1.Stunned = true;
-                    //p1.Stun(gameTime);
                 }
                 else if (p2.Orb)
                 {
                     p1.Orb = true;
                     p2.Orb = false;
                     p2.Stunned = true;
-                    //p2.Stun(gameTime);
                 }
-            }
-            else
-            {
-                //p1.Stun(gameTime);
-                //p2.Stun(gameTime);
             }
         }
 
@@ -506,7 +486,7 @@ namespace ROOT
                 if (stunTime <= 0)
                 {
                     stunned = false;
-                    stunTime = 10.00;
+                    stunTime = 3.00;
                 }
             }
         }
@@ -515,7 +495,7 @@ namespace ROOT
 
         public void SetControls(Keys r, Keys l, Keys j, Keys u)
         //pre: Keys values to correspond to: moving right, left, jumping, and using powerups
-        //post: sets the player's control mapping
+        //post: sets the player's control mapping (keyboard only)
         {
             moveRight = (int)r;
             moveLeft = (int)l;
@@ -559,7 +539,7 @@ namespace ROOT
 
         private void DrawJumping(SpriteEffects flipSprite, SpriteBatch s)
         {
-            if(this.Orb)
+            if(this.Orb) //changes player color if they have the orb
             {
                 if (jumpUp < 0)
                 {
@@ -651,7 +631,7 @@ namespace ROOT
 
         private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
         {
-            if(this.Orb)
+            if(this.Orb) //changes player color if they have the orb
             {
                 if (frame > 5)
                 {
@@ -739,8 +719,6 @@ namespace ROOT
 
         public override void Draw(SpriteBatch s)
         {
-            //base.Draw(s);
-            //s.Draw(this.Tex, between, Color.Black);
             SpriteEffects flip;
 
             //Sets the direction the player is facing
@@ -776,6 +754,11 @@ namespace ROOT
                     s.Draw(this.Tex, between, Color.Black);
                     break;
             }
+        }
+
+        public void DrawWinning(SpriteEffects flipSprite, SpriteBatch s)
+        {
+            s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, RECT_HEIGHT * 3, RECT_WIDTH, RECT_HEIGHT), Color.White, 0, Vector2.Zero, 0.9f, flipSprite, 0);
         }
     }
 }
