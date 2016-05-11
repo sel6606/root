@@ -118,7 +118,7 @@ namespace ROOT
         private Button menu;
         private SpriteFont uiFont;
 
-        private const double TIMER_LENGTH= 2;
+        private const double TIMER_LENGTH= 120;
 
 
 

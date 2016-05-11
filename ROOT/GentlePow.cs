@@ -55,13 +55,13 @@ namespace ROOT
         }
         public override void Activate()
         {
-            isReady = false;
-            isActive = true;
+            
             if (isReady)
             {
-               // p = Rand.Next(1, 4);
+               p = Rand.Next(1, 4);
             }
-           
+            isReady = false;
+            isActive = true;
             if (p == 1)
             {
                 cave.Activate();
