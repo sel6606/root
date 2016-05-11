@@ -95,6 +95,7 @@ namespace ROOT
         private Texture2D knightPowTex;
         private Texture2D credits;
         private Texture2D background;
+        private Texture2D title;
         #endregion
 
         //Width of each button
@@ -114,7 +115,14 @@ namespace ROOT
 
         private const double TIMER_LENGTH= 2;
 
+
+
         #region Properties
+        public Texture2D Title
+        {
+            get { return title; }
+        }
+
         public double Timer1
         {
             get { return timer1; }
@@ -231,6 +239,7 @@ namespace ROOT
             select = Content.Load<Texture2D>("select");
 
             background = Content.Load<Texture2D>("background");
+            title = Content.Load<Texture2D>("title");
 
             List<Texture2D> playerButtons = new List<Texture2D>();
             playerButtons.Add(Content.Load<Texture2D>("twoPlayers"));
