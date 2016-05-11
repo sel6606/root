@@ -1,19 +1,14 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace ROOT
 {
     public class Player : GameObject
     {
         //Enum for playerState
-        public enum PlayerState //keeps track of what player is doing
+        public enum PlayerState //keeps track of what player is doing for animation purposes
         {
             FaceRight,
             FaceLeft,
@@ -49,7 +44,7 @@ namespace ROOT
 
         private bool jumped = false;
         bool stunned; //checks if player is stunned
-        private double stunTime = 3.00; //keeps track of how long a player is stunned
+        private double stunTime = 3.00; //keeps track of how long a player should stay stunned
 
         //Fields for position and movement logic
         private bool xBox = false;
@@ -90,10 +85,7 @@ namespace ROOT
 
         #endregion
         #region Properties
-        public PlayerState CurentState
-        {
-            get { return currentState; }
-        }
+
 
         public PlayerType ThisType
         {
@@ -139,7 +131,6 @@ namespace ROOT
             get { return xBox; }
             set { xBox = value; }
         }
-        //Properties for hasOrb
         public bool Orb
         {
             get { return hasOrb; }
@@ -466,7 +457,7 @@ namespace ROOT
         }
 
         //this method specifically handles logic for player on player collision
-        //changes possesion of the orb if applicable
+        //changes possesion of the orb and stuns if applicable
         public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
             if (p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
@@ -504,7 +495,7 @@ namespace ROOT
 
         public void SetControls(Keys r, Keys l, Keys j, Keys u)
         //pre: Keys values to correspond to: moving right, left, jumping, and using powerups
-        //post: sets the player's control mapping
+        //post: sets the player's control mapping (keyboard only)
         {
             moveRight = (int)r;
             moveLeft = (int)l;

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -15,14 +12,12 @@ namespace ROOT
         private Button stop;
         private MouseState mState;
         private MouseState previousMState;
-        //private Texture2D powerupTex;
 
-        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture/*, Texture2D powerupTexture*/)
+        public UIMan(Game1 game, SpriteFont UIFont, Texture2D stopTexture)
         {
             this.game = game;
             this.UIFont = UIFont;
             stop = new Button(stopTexture, new Rectangle(0, 0, 30, 30));
-            //powerupTex = powerupTexture;
         }
 
         public void Draw(SpriteBatch s, int playerNum)

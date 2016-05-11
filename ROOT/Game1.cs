@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 
 namespace ROOT
@@ -113,6 +112,7 @@ namespace ROOT
 
         private const double TIMER_LENGTH= 2;
 
+        #region Properties
         public double Timer1
         {
             get { return timer1; }
@@ -167,7 +167,7 @@ namespace ROOT
             get { return playerNum; }
             set { playerNum = value; }
         }
-
+        #endregion
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
@@ -262,7 +262,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("Milestone4.txt", orb);
+            gameStage.ReadStage("Milestone4.txt");
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
                 backTexture, optionsTexture, instructionScreen, creditButton, credits, cavemanInfo, cowboyInfo,
                 knightInfo, gentlemanInfo, portraits, playerButtons, select, soundEffects[0],playerNum);
@@ -586,7 +586,7 @@ namespace ROOT
 
             playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("Milestone4.txt", orb);
+            gameStage.ReadStage("Milestone4.txt");
 
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
 
