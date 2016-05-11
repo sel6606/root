@@ -296,7 +296,7 @@ namespace ROOT
             switch (currentState)
             {
                 case MenuState.Title: //If the menu is on the instructions screen
-                    if (SingleMouseClick() || kbState.GetPressedKeys().Count() > 0)
+                    if (SingleMouseClick() || kbState.GetPressedKeys().Length > 0)
                     {
                         clickSound.CreateInstance().Play();
                         currentState = MenuState.Main;
