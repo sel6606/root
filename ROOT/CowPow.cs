@@ -63,7 +63,7 @@ namespace ROOT
             else if (isActive)
             {
                 
-                if (x == 0 || x == 2 || x == 4)
+                if (x == 0)
                 {
                     rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
                     foreach(Player play in PlayList)
@@ -82,7 +82,7 @@ namespace ROOT
                     rec.X = rec.X + 4;
                     
                 }
-                else if (x == 1 || x == 3 || x == 5)
+                else if (x == 1)
                 {
                     rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
                     foreach (Player play in PlayList)
@@ -114,7 +114,7 @@ namespace ROOT
         public override void Effect()
         {
             rec = new Rectangle(user.X, user.Y + (user.Height / 2), 20, 20);
-            x = (int)user.CurentState;
+            x = (int)user.CurrentDirectionState;
         }
 
 

@@ -21,10 +21,6 @@ namespace ROOT
             Walk,
             Move,
             Jump,
-            //MoveRight,
-            //MoveLeft,
-            //JumpRight,
-            //JumpLeft,
             PowerUp
         }
 
@@ -97,6 +93,11 @@ namespace ROOT
         public PlayerState CurentState
         {
             get { return currentState; }
+        }
+
+        public PlayerState CurrentDirectionState
+        {
+            get { return currentDirectionState; }
         }
 
         public PlayerType ThisType
