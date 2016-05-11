@@ -20,7 +20,8 @@ namespace ROOT
         Credits,
         Instructions,
         Options,
-        Selection
+        Selection,
+        Title
     }
 
     //Enum for the different characters
@@ -202,7 +203,7 @@ namespace ROOT
             IsMouseVisible = true;
             playerNum = 4;
             currentState = GameState.Menu;
-            currentMenuState = MenuState.Main;
+            currentMenuState = MenuState.Title;
             base.Initialize();
         }
 

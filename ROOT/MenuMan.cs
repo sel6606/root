@@ -21,6 +21,7 @@ namespace ROOT
         private Button pNum2;
         private Button pNum3;
         private Button pNum4;
+        private Button selectBack;
 
         private Game1 game;
 
@@ -150,6 +151,8 @@ namespace ROOT
             play = new Button(startTexture, new Rectangle(selectHalfScreen, (game.GraphicsDevice.Viewport.Height - (selectButtonHeight + 10)), selectButtonWidth, selectButtonHeight));
             //Options button on character select screen
             options = new Button(optionsTexture, new Rectangle(selectHalfScreen, 10, selectButtonWidth, selectButtonHeight));
+            //Back button on character select screen
+            selectBack = new Button(backTexture, new Rectangle(selectHalfScreen, (game.GraphicsDevice.Viewport.Height - ((2 * selectButtonHeight) + 10)), selectButtonWidth, selectButtonHeight));
 
             pNum2 = new Button(playerButtons[0], new Rectangle(halfScreen, 25, buttonWidth, buttonHeight));
             //Second button on main menu screen            
@@ -238,6 +241,9 @@ namespace ROOT
         {
             switch (currentState)
             {
+                case MenuState.Title: //Title screen when you start the game
+                    sb.DrawString(menuFont, "Press Mouse 1 To Start", new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 75, (game.GraphicsDevice.Viewport.Height / 2) + 50), Color.Yellow);
+                    break;
                 case MenuState.Instructions: //Displays instructions screen
                     sb.Draw(badInstructions, new Rectangle(0, 0, 800, 480), Color.White);
                     back.Draw(sb);
@@ -250,6 +256,7 @@ namespace ROOT
                     break;
                 case MenuState.Selection:
                     play.Draw(sb);
+                    selectBack.Draw(sb);
                     options.Draw(sb);
                     sb.Draw(info[0], new Rectangle(10, 10, 200, 220), Color.White);
                     sb.Draw(info[1], new Rectangle(10, 250, 200, 220), Color.White);
@@ -288,6 +295,13 @@ namespace ROOT
             //Switch case for the menu state
             switch (currentState)
             {
+                case MenuState.Title: //If the menu is on the instructions screen
+                    if (SingleMouseClick())
+                    {
+                        clickSound.CreateInstance().Play();
+                        currentState = MenuState.Main;
+                    }
+                    break;
                 case MenuState.Instructions: //If the menu is on the instructions screen
                     if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
@@ -327,6 +341,11 @@ namespace ROOT
                     {
                         clickSound.CreateInstance().Play();
                         currentState = MenuState.Options;
+                    }
+                    else if(selectBack.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
+                    {
+                        clickSound.CreateInstance().Play();
+                        currentState = MenuState.Main;
                     }
                     break;
                 case MenuState.Options:
