@@ -1,7 +1,5 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -73,6 +71,7 @@ namespace ROOT
         Texture2D creditScreen;
         Texture2D creditTexture;
         Texture2D select;
+
         //Selection screen textures
         Texture2D caveInfo;
         Texture2D gInfo;
@@ -86,12 +85,6 @@ namespace ROOT
 
 
         SpriteFont menuFont;
-
-        //Sets the menu stuff texture
-        /*public Texture2D MenuTex
-        {
-            set { menuTex = value; }
-        }*/
 
         public List<PlayerType> Types
         {
@@ -245,7 +238,9 @@ namespace ROOT
             switch (currentState)
             {
                 case MenuState.Title: //Title screen when you start the game
-                    sb.DrawString(menuFont, "Press Mouse 1 To Start", new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 75, (game.GraphicsDevice.Viewport.Height / 2) + 50), Color.Yellow);
+                    sb.Draw(menuBg, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Color.White);
+                    sb.Draw(game.Title, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Color.White);
+                    //sb.DrawString(menuFont, "Press Mouse 1 To Start", new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 75, (game.GraphicsDevice.Viewport.Height / 2) + 50), Color.Black);
                     break;
                 case MenuState.Instructions: //Displays instructions screen
                     sb.Draw(badInstructions, new Rectangle(0, 0, 800, 480), Color.White);
@@ -301,7 +296,7 @@ namespace ROOT
             switch (currentState)
             {
                 case MenuState.Title: //If the menu is on the instructions screen
-                    if (SingleMouseClick())
+                    if (SingleMouseClick() || kbState.GetPressedKeys().Count() > 0)
                     {
                         clickSound.CreateInstance().Play();
                         currentState = MenuState.Main;
@@ -392,20 +387,6 @@ namespace ROOT
                 clickSound.CreateInstance().Play();
                 game.PlayerNum = 4;
                 ResetPortraits(4);
-            }
-        }
-
-
-        //Checks to see if a key was pressed exactly once
-        private bool SingleKeyPress(Keys key)
-        {
-            if (kbState.IsKeyDown(key) && previousKbState.IsKeyUp(key))
-            { //Returns true if the key being pressed is different from the key pressed in the previous state
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 

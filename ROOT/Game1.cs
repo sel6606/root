@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
 
 namespace ROOT
@@ -96,6 +95,7 @@ namespace ROOT
         private Texture2D knightPowTex;
         private Texture2D credits;
         private Texture2D background;
+        private Texture2D title;
         #endregion
 
         //Width of each button
@@ -114,6 +114,14 @@ namespace ROOT
         private SpriteFont uiFont;
 
         private const double TIMER_LENGTH= 2;
+
+
+
+        #region Properties
+        public Texture2D Title
+        {
+            get { return title; }
+        }
 
         public double Timer1
         {
@@ -169,7 +177,7 @@ namespace ROOT
             get { return playerNum; }
             set { playerNum = value; }
         }
-
+        #endregion
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
@@ -231,6 +239,7 @@ namespace ROOT
             select = Content.Load<Texture2D>("select");
 
             background = Content.Load<Texture2D>("background");
+            title = Content.Load<Texture2D>("title");
 
             List<Texture2D> playerButtons = new List<Texture2D>();
             playerButtons.Add(Content.Load<Texture2D>("twoPlayers"));
@@ -266,7 +275,7 @@ namespace ROOT
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("Milestone4.txt", orb);
+            gameStage.ReadStage("Milestone4.txt");
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
                 backTexture, optionsTexture, instructionScreen, creditButton, credits, cavemanInfo, cowboyInfo,
                 knightInfo, gentlemanInfo,background, portraits, playerButtons, select, soundEffects[0],playerNum);
@@ -590,7 +599,7 @@ namespace ROOT
 
             playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("Milestone4.txt", orb);
+            gameStage.ReadStage("Milestone4.txt");
 
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
 
