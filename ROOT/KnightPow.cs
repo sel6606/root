@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -40,7 +40,7 @@ namespace ROOT
         public override void Effect()
         {
             isActive = true;
-            user.Speed = user.BaseSpeed*2;
+            user.Speed = (int) Math.Ceiling(user.BaseSpeed * 1.5);
         }
 
 
