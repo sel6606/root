@@ -554,11 +554,13 @@ namespace ROOT
                 case GameState.GameOver: //If the game is on the game over screen
                     if (restart.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses play again, change state to game and reset values
                     { //If the player clicks restart, restart the game
+                        soundEffects[0].CreateInstance().Play();
                         currentState = GameState.Game;
                         Reset();
                     }
                     else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
                     { //If the player clicks menu, return to the main menu
+                        soundEffects[0].CreateInstance().Play();
                         currentState = GameState.Menu;
                         currentMenuState = MenuState.Main;
                     }
