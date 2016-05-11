@@ -174,6 +174,7 @@ namespace ROOT
 
         public void UpdateSelect()
         {
+            xBox = GamePad.GetState(playerNumber).IsConnected;
             KeyboardState input = Keyboard.GetState();
             bool up = false;
             bool right = false;
