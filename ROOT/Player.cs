@@ -181,8 +181,6 @@ namespace ROOT
             setFPS();
             previousKbState = Keyboard.GetState();
             thisType = (PlayerType)type;
-
-
         }
 
         public void UpdateSelect()
