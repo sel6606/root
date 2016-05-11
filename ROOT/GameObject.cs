@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ROOT
 {
@@ -13,13 +9,6 @@ namespace ROOT
         private Rectangle hitBox; //size of the space object occupies
         private bool isSolid; //is the object solid, players cant move through solid objects
         private Texture2D tex; //object's texture
-
-
-        //Properties for isSolid
-        public bool IsSolid
-        {
-            get { return isSolid; }
-        }
 
         //Properties for hitBox
         public Rectangle HitBox

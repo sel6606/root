@@ -45,16 +45,6 @@ namespace ROOT
         //Texture of the tiles
         Texture2D tileTex;
 
-        public SpriteBatch SB
-        {
-            set { sb = value; }
-        }
-
-        public Texture2D TileTex
-        {
-            set { tileTex = value; }
-        }
-
         public List<Tile> StageBounds
         {
             get { return stageBounds; }
@@ -78,7 +68,7 @@ namespace ROOT
         /// <summary>
         /// Reads in a stage from a textfile, parameter is String of file location
         /// </summary>
-        public void ReadStage(String fileName, Orb orb)
+        public void ReadStage(String fileName)
         {
             //sets the initial y position for the platforms
             int ypos = 0;

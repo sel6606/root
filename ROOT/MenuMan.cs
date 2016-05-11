@@ -1,7 +1,5 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -73,6 +71,7 @@ namespace ROOT
         Texture2D creditScreen;
         Texture2D creditTexture;
         Texture2D select;
+
         //Selection screen textures
         Texture2D caveInfo;
         Texture2D gInfo;
@@ -86,12 +85,6 @@ namespace ROOT
 
 
         SpriteFont menuFont;
-
-        //Sets the menu stuff texture
-        /*public Texture2D MenuTex
-        {
-            set { menuTex = value; }
-        }*/
 
         public List<PlayerType> Types
         {
@@ -394,20 +387,6 @@ namespace ROOT
                 clickSound.CreateInstance().Play();
                 game.PlayerNum = 4;
                 ResetPortraits(4);
-            }
-        }
-
-
-        //Checks to see if a key was pressed exactly once
-        private bool SingleKeyPress(Keys key)
-        {
-            if (kbState.IsKeyDown(key) && previousKbState.IsKeyUp(key))
-            { //Returns true if the key being pressed is different from the key pressed in the previous state
-                return true;
-            }
-            else
-            {
-                return false;
             }
         }
 

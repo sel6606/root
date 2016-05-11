@@ -1,11 +1,7 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
@@ -14,16 +10,12 @@ namespace ROOT
         //The player using the power up
         private Player user;
 
-        public bool IsActive { get { return isActive; } }
-
         private SpriteBatch sp;
 
         //Rectangle for the projectile
         private Rectangle rec;
 
         private Rectangle rec2;
-
-        public Rectangle Rec { get { return rec; } }
 
         private int x;
 
