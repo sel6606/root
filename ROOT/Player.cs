@@ -755,5 +755,10 @@ namespace ROOT
                     break;
             }
         }
+
+        public void DrawWinning(SpriteEffects flipSprite, SpriteBatch s)
+        {
+            s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, RECT_HEIGHT * 3, RECT_WIDTH, RECT_HEIGHT), Color.White, 0, Vector2.Zero, 0.9f, flipSprite, 0);
+        }
     }
 }

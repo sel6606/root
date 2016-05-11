@@ -65,6 +65,7 @@ namespace ROOT
         private Orb orb;
         private int playerNum; //keeps track of how many players are in the game
         private List<Player> playerList;
+        private Player winner;
         #endregion
 
         #region Textures
@@ -471,14 +472,56 @@ namespace ROOT
                     #region Timer Check
                     if (playerNum == 2 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //two players
                     {
+                        if(timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else
+                        {
+                            winner = p2;
+                        }
                         currentState = GameState.GameOver;
                     }
                     else if (playerNum == 3 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || SingleKeyPress(Keys.O))) //three players
                     {
+                        if (timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else if (timer2 <= 0)
+                        {
+                            winner = p2;
+                        }
+
+                        else
+                        {
+                            winner = p3;
+                        }
                         currentState = GameState.GameOver;
                     }
                     else if (playerNum == 4 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || timer4 <= 0 || SingleKeyPress(Keys.O))) //four players
                     {
+                        if (timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else if (timer2 <= 0)
+                        {
+                            winner = p2;
+                        }
+
+                        else if (timer3 <= 0)
+                        {
+                            winner = p3;
+                        }
+
+                        else
+                        {
+                            winner = p4;
+                        }
                         currentState = GameState.GameOver;
                     }
                     #endregion
