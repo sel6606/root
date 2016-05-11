@@ -95,6 +95,7 @@ namespace ROOT
         private Texture2D gentlePowTex;
         private Texture2D knightPowTex;
         private Texture2D credits;
+        private Texture2D background;
         #endregion
 
         //Width of each button
@@ -172,10 +173,7 @@ namespace ROOT
         //Variables for testing purposes
         private KeyboardState kbState;
         private KeyboardState previousKbState;
-        private int playerSize = 25;
-        private int playerWidth = 44;
-        private int playerHeight = 72;
-        private bool NEEDSCONDITION = false;
+
 
 
         GraphicsDeviceManager graphics;
@@ -232,6 +230,8 @@ namespace ROOT
             creditButton = Content.Load<Texture2D>("MenuCredits");
             select = Content.Load<Texture2D>("select");
 
+            background = Content.Load<Texture2D>("background");
+
             List<Texture2D> playerButtons = new List<Texture2D>();
             playerButtons.Add(Content.Load<Texture2D>("twoPlayers"));
             playerButtons.Add(Content.Load<Texture2D>("threePlayers"));
@@ -269,7 +269,7 @@ namespace ROOT
             gameStage.ReadStage("Milestone4.txt", orb);
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
                 backTexture, optionsTexture, instructionScreen, creditButton, credits, cavemanInfo, cowboyInfo,
-                knightInfo, gentlemanInfo, portraits, playerButtons, select, soundEffects[0],playerNum);
+                knightInfo, gentlemanInfo,background, portraits, playerButtons, select, soundEffects[0],playerNum);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             cancelTexture = Content.Load<Texture2D>("cancel");
@@ -516,7 +516,7 @@ namespace ROOT
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-
+            
             switch (currentState)
             {
                 case GameState.Menu:    //Draws a menu dependent on the current menu state
