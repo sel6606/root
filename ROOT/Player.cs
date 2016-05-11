@@ -205,8 +205,8 @@ namespace ROOT
                 {
                     right = true;
                 }
+                prevGPState = gamePad;
             }
-
             previousKbState = input;
             selectLeft = left;
             selectRight = right;
