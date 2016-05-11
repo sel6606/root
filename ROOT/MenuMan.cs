@@ -77,6 +77,9 @@ namespace ROOT
         Texture2D gInfo;
         Texture2D kInfo;
         Texture2D cowInfo;
+
+        Texture2D menuBg;
+
         List<Texture2D> info;
         List<Texture2D> portraitTexture;
 
@@ -102,7 +105,7 @@ namespace ROOT
         public MenuMan(Game1 game, Texture2D startTexture, 
             Texture2D instructionsTexture, Texture2D quitTexture, 
             Texture2D backTexture, Texture2D optionsTexture, Texture2D instructionScreen, Texture2D creditsButton, Texture2D credits, Texture2D cavemanInfo,
-            Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo,
+            Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo, Texture2D background,
             List<Texture2D> portraitTexture, List<Texture2D> playerButtons, Texture2D select, SoundEffect click, int playerNum)
         {
             this.game = game;
@@ -133,7 +136,7 @@ namespace ROOT
             backButton = backTexture;
             clickSound = click;
             badInstructions = instructionScreen;
-
+            menuBg = background;
            
 
             //First button on main menu screen
@@ -243,6 +246,7 @@ namespace ROOT
                     back.Draw(sb);
                     break;
                 case MenuState.Main:  //Displays main menu screen
+                    sb.Draw(menuBg, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Color.White);
                     start.Draw(sb);
                     instructions.Draw(sb);
                     creditButton.Draw(sb);
@@ -263,6 +267,7 @@ namespace ROOT
                     portrait6.Draw(sb);
                     break;
                 case MenuState.Options:
+                    sb.Draw(menuBg, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Color.White);
                     pNum2.Draw(sb);
                     pNum3.Draw(sb);
                     pNum4.Draw(sb);
