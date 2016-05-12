@@ -42,7 +42,7 @@ namespace ROOT
             this.activeDuration = activeTime;
             sp = s;
             tex = new Texture2D(g, 1, 1);
-            tex.SetData<Color>(new Color[] { Color.Chartreuse });
+            tex.SetData<Color>(new Color[] { Color.Black });
             Tex = texture;
         }
 
