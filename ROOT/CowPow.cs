@@ -71,6 +71,8 @@ namespace ROOT
                                 if (!play.Stunned)
                                 {
                                     play.Stunned = true;
+                                    play.CowStunned = true;
+
                                 }
                                 play.Stun(elapsedTime);
                             }

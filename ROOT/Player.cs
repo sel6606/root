@@ -44,6 +44,8 @@ namespace ROOT
 
         private bool jumped = false;
         bool stunned; //checks if player is stunned
+        private bool cowStunned = false;
+        public bool CowStunned { get { return cowStunned; } set { cowStunned = value; } }
         private double stunTime = 3.00; //keeps track of how long a player should stay stunned
 
         //Fields for position and movement logic
@@ -462,19 +464,21 @@ namespace ROOT
         //changes possesion of the orb and stuns if applicable
         public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
-            if (p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
+            if (p1.HitBox.Intersects(p2.HitBox) && (!p1.Stunned || p1.cowStunned) && (!p2.Stunned || p2.cowStunned))
             {
                 if (p1.Orb)
                 {
                     p2.Orb = true;
                     p1.Orb = false;
                     p1.Stunned = true;
+                    p1.CowStunned = false;
                 }
                 else if (p2.Orb)
                 {
                     p1.Orb = true;
                     p2.Orb = false;
                     p2.Stunned = true;
+                    p2.CowStunned = false;
                 }
             }
         }
@@ -488,6 +492,7 @@ namespace ROOT
                 if (stunTime <= 0)
                 {
                     stunned = false;
+                    CowStunned = false;
                     stunTime = 3.00;
                 }
             }
