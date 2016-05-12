@@ -1,12 +1,10 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 
 namespace ROOT
 {
-    class Tile : GameObject
+    public class Tile : GameObject
     {
         public Tile(int x, int y, int width, int height, Texture2D texture)
             : base(x, y, width,height,true, texture)
@@ -16,7 +14,7 @@ namespace ROOT
 
         public override void Draw(SpriteBatch s)
         {
-            base.Draw(s);
+            s.Draw(Tex,HitBox,Color.Black);
         }
     }
 }

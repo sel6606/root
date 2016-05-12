@@ -1,11 +1,7 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
@@ -14,16 +10,12 @@ namespace ROOT
         //The player using the power up
         private Player user;
 
-        public bool IsActive { get { return isActive; } }
-
         private SpriteBatch sp;
 
         //Rectangle for the projectile
         private Rectangle rec;
 
         private Rectangle rec2;
-
-        public Rectangle Rec { get { return rec; } }
 
         private int x;
 
@@ -40,7 +32,7 @@ namespace ROOT
 
 
         //constructor for powerup, takes in the player who uses the power up.
-        public CowPow(Player player, List<Player> plaList, SpriteBatch s, GraphicsDevice g)
+        public CowPow(Player player, List<Player> plaList, SpriteBatch s, GraphicsDevice g, Texture2D texture)
         {
             user = player;
             PlayList = plaList;
@@ -50,55 +42,63 @@ namespace ROOT
             this.activeDuration = activeTime;
             sp = s;
             tex = new Texture2D(g, 1, 1);
-            tex.SetData<Color>(new Color[] { Color.Chartreuse });
+            tex.SetData<Color>(new Color[] { Color.Black });
+            Tex = texture;
         }
 
-
+        //Update method for the cowboy powerup
         public override void Update(double elapsedTime)
         {
+            //If the powerup is not ready or active, call the Cooldown() method
             if (!isReady && !isActive)
             {
                 Cooldown(elapsedTime);
             }
             else if (isActive)
             {
-                
-                if (x == 0 || x == 2 || x == 4)
-                {
-                    rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
-                    foreach(Player play in PlayList)
-                    {
-                        if (rec2.Intersects(play.HitBox))
-                        {
 
-
-                            if (!play.Stunned)
-                            {
-                                play.Stunned = true;
-                            }
-                            play.Stun(elapsedTime);
-                        }
-                    }
-                    rec.X = rec.X + 4;
-                    
-                }
-                else if (x == 1 || x == 3 || x == 5)
+                if (x == 0)
                 {
                     rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
                     foreach (Player play in PlayList)
                     {
-                        if (rec2.Intersects(play.HitBox))
+                        if (play != user)
                         {
-                            if (!play.Stunned)
+                            if (rec2.Intersects(play.HitBox))
                             {
-                                play.Stunned = true;
+
+
+                                if (!play.Stunned)
+                                {
+                                    play.Stunned = true;
+                                }
+                                play.Stun(elapsedTime);
                             }
-                            play.Stun(elapsedTime);
+                        }
+                    }
+                    rec.X = rec.X + 4;
+
+                }
+                else if (x == 1)
+                {
+                    rec2 = new Rectangle(rec.X, rec.Y, 4, 2);
+                    foreach (Player play in PlayList)
+                    {
+                        if (play != user)
+                        {
+                            if (rec2.Intersects(play.HitBox))
+                            {
+                                if (!play.Stunned)
+                                {
+                                    play.Stunned = true;
+                                }
+                                play.Stun(elapsedTime);
+                            }
                         }
                     }
                     rec.X = rec.X - 4;
                 }
-                
+
                 activeTimer -= elapsedTime;
                 if (activeTimer <= 0)
                 {
@@ -110,23 +110,25 @@ namespace ROOT
 
         }
 
-        //activates the power up.
+        //Triggers the powerup effect
         public override void Effect()
         {
+            isActive = true;
             rec = new Rectangle(user.X, user.Y + (user.Height / 2), 20, 20);
-            x = (int)user.CurentState;
+            x = (int)user.CurrentDirectionState;
         }
 
 
-        //ends the effect.
+        //Ends the powerup effect
         public override void EndEffect()
         {
             user.Speed = user.BaseSpeed;
         }
 
+        //Draws the cowboy's bullet
         public override void Draw(SpriteBatch sb)
         {
-            sb.Draw(tex, rec, Color.White);
+            sb.Draw(tex, rec2, Color.White);
             base.Draw(sb);
         }
 

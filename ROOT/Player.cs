@@ -1,33 +1,27 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 
 namespace ROOT
 {
-    class Player : GameObject
+    public class Player : GameObject
     {
         //Enum for playerState
-        public enum PlayerState //keeps track of what player is doing
+        public enum PlayerState //keeps track of what player is doing for animation purposes
         {
             FaceRight,
             FaceLeft,
-            MoveRight,
-            MoveLeft,
-            JumpRight,
-            JumpLeft,
+            Idle,
+            Walk,
+            Move,
+            Jump,
             PowerUp
         }
 
-
+        #region Fields
+        //The player class
         private PlayerType thisType;
-
-        public PlayerType ThisType { get { return thisType; } }
 
         //Fields for player controls
         public int moveRight;
@@ -39,6 +33,69 @@ namespace ROOT
         private bool selectLeft;
         private bool selectDown;
         private bool selectUp;
+
+
+        //Fields for collision logic
+        private bool hasOrb;
+        private bool ground;
+        private bool topWall;
+        private bool leftWall;
+        private bool rightWall;
+
+        private bool jumped = false;
+        bool stunned; //checks if player is stunned
+        private double stunTime = 3.00; //keeps track of how long a player should stay stunned
+
+        //Fields for position and movement logic
+        private bool xBox = false;
+        private PlayerIndex playerNumber;
+        private int jumpUp = -1;
+        private int gravDelay = 0;
+        private Vector2 previousPosition;
+        private Vector2 currentPosition;
+        private int previousGravSpeed = -3;
+        private int gravSpeed = -3;
+        private Rectangle between;
+        private int speed = 2;
+        private int baseSpeed = 2;
+
+        //Input variables
+        private PlayerState currentState;
+        private PlayerState currentDirectionState;
+        private KeyboardState previousKbState;
+        private GamePadState prevGPState;
+
+
+        // Texture and drawing
+        public Texture2D spriteSheet;  // The single image with all of the animation frames
+
+        // Animation
+        public int frame;              // The current animation frame
+        public double timeCounter;     // The amount of time that has passed
+        public double fps;             // The speed of the animation
+        public double timePerFrame;    // The amount of time (in fractional seconds) per frame
+
+        // Constants for "source" rectangle (inside the image)
+        public int WALK_FRAME_COUNT = 11;         // The number of frames in the animation
+        public int RECT_Y_OFFSET = 0;    // How far down in the image are the frames?
+        public int RECT_HEIGHT = 72;       // The height of a single frame
+        public int RECT_WIDTH = 44;        // The width of a single frame
+
+        private Game1 game;
+
+        #endregion
+        #region Properties
+
+
+        public PlayerState CurrentDirectionState
+        {
+            get { return currentDirectionState; }
+        }
+
+        public PlayerType ThisType
+        {
+            get { return thisType; }
+        }
 
         public bool SelectRight
         {
@@ -56,50 +113,6 @@ namespace ROOT
         {
             get { return selectUp; }
         }
-
-        //Fields for collision logic
-        private bool hasOrb;
-        private bool ground;
-        private bool topWall;
-        private bool leftWall;
-        private bool rightWall;
-        private bool xBox = false;
-        private PlayerIndex playerNumber;
-        private bool jumped = false;
-        bool stunned; //checks if player is stunned
-        private double stunTime = 3.00; //keeps track of how long a player is stunned
-
-        //Fields for position and movement logic
-        private int jumpUp = -1;
-        private int gravDelay = 0;
-        private Vector2 previousPosition;
-        private Vector2 currentPosition;
-        private int previousGravSpeed = -3;
-        private int gravSpeed = -3;
-        private Rectangle between;
-        private int speed = 2;
-        private int baseSpeed = 2;
-        private PlayerState currentState;
-        private KeyboardState previousKbState;
-
-        public PlayerState CurentState { get { return currentState; } }
-
-        // Texture and drawing
-        public Texture2D spriteSheet;  // The single image with all of the animation frames
-
-        // Animation
-        public int frame;              // The current animation frame
-        public double timeCounter;     // The amount of time that has passed
-        public double fps;             // The speed of the animation
-        public double timePerFrame;    // The amount of time (in fractional seconds) per frame
-
-        // Constants for "source" rectangle (inside the image)
-        public int WALK_FRAME_COUNT = 3;         // The number of frames in the animation
-        const int MARIO_RECT_Y_OFFSET = 116;    // How far down in the image are the frames?
-        const int MARIO_RECT_HEIGHT = 72;       // The height of a single frame
-        const int MARIO_RECT_WIDTH = 44;        // The width of a single frame
-
-        private Game1 game;
 
         public int BaseSpeed
         {
@@ -123,7 +136,6 @@ namespace ROOT
             get { return xBox; }
             set { xBox = value; }
         }
-        //Properties for hasOrb
         public bool Orb
         {
             get { return hasOrb; }
@@ -136,13 +148,17 @@ namespace ROOT
             set { stunned = value; }
         }
 
+
+        #endregion
+
         //constructor, calls game object's but forces isSolid to be false
         public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture, PlayerIndex playerNum, int type)
             : base(x, y, width, height, false, texture)
         {
             this.game = game;
             spriteSheet = this.Tex;
-            currentState = PlayerState.FaceRight;
+            currentState = PlayerState.Idle;
+            currentDirectionState = PlayerState.FaceRight;
             hasOrb = false; //player doesn't start with orb
             playerNumber = playerNum;
             xBox = GamePad.GetState(playerNumber).IsConnected;
@@ -152,13 +168,13 @@ namespace ROOT
             selectDown = false;
             setFPS();
             previousKbState = Keyboard.GetState();
+            prevGPState = GamePad.GetState(playerNumber);
             thisType = (PlayerType)type;
-
-           
         }
 
         public void UpdateSelect()
         {
+            xBox = GamePad.GetState(playerNumber).IsConnected;
             KeyboardState input = Keyboard.GetState();
             bool up = false;
             bool right = false;
@@ -175,30 +191,29 @@ namespace ROOT
             else if (xBox)
             {
                 GamePadState gamePad = GamePad.GetState(playerNumber);
-                if (gamePad.ThumbSticks.Left.Y < 0)
+                if (gamePad.ThumbSticks.Left.Y < 0 && prevGPState.ThumbSticks.Left.Y >= 0)
                 {
                     down = true;
                 }
-                if(gamePad.ThumbSticks.Left.Y > 0)
+                if (gamePad.ThumbSticks.Left.Y > 0 && prevGPState.ThumbSticks.Left.Y <= 0)
                 {
                     up = true;
                 }
-                if (gamePad.ThumbSticks.Left.X < 0)
+                if (gamePad.ThumbSticks.Left.X < 0 && prevGPState.ThumbSticks.Left.X >= 0)
                 {
                     left = true;
                 }
-                if (gamePad.ThumbSticks.Left.X > 0)
+                if (gamePad.ThumbSticks.Left.X > 0 && prevGPState.ThumbSticks.Left.X <= 0)
                 {
                     right = true;
                 }
+                prevGPState = gamePad;
             }
-
             previousKbState = input;
             selectLeft = left;
             selectRight = right;
             selectUp = up;
             selectDown = down;
-
         }
 
         public void Update(List<Tile> tiles)
@@ -214,20 +229,21 @@ namespace ROOT
                 up = input.IsKeyDown((Keys)jump);
                 right = input.IsKeyDown((Keys)moveRight);
                 left = input.IsKeyDown((Keys)moveLeft);
-            }else if (xBox)
+            }
+            else if (xBox)
             {
                 GamePadState gamePad = GamePad.GetState(playerNumber);
                 up = gamePad.IsButtonDown(Buttons.A);
-                if(gamePad.ThumbSticks.Left.X < 0)
+                if (gamePad.ThumbSticks.Left.X < 0)
                 {
                     left = true;
                 }
-                if(gamePad.ThumbSticks.Left.X > 0)
+                if (gamePad.ThumbSticks.Left.X > 0)
                 {
                     right = true;
                 }
             }
-            for (int i=0;i < speed; i++)
+            for (int i = 0; i < speed; i++)
             {
                 Move(up, right, left);
                 CheckCollision(tiles);
@@ -250,7 +266,7 @@ namespace ROOT
                 }
                 if (right)
                 { //If the "right" key is pressed
-                    
+
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
@@ -260,7 +276,7 @@ namespace ROOT
                 }
                 if (left)
                 { //If the "left" key is pressed
-                    
+
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
@@ -304,88 +320,46 @@ namespace ROOT
                     jumped = true;
                 }
 
+
+                //Determines the direction the player is facing
+                if (right)
+                {
+                    currentDirectionState = PlayerState.FaceRight;
+                }
+                if(left)
+                {
+                    currentDirectionState = PlayerState.FaceLeft;
+                }
+                
+
+                //Determines if the the player is idle, jumping, or moving
                 switch (currentState)
                 {
-                    case PlayerState.FaceLeft:
-                        if (right)
+                    case PlayerState.Idle:
+                        if (right || left)
                         {
-                            currentState = PlayerState.FaceRight;
+                            currentState = PlayerState.Move;
                         }
-
-                        else if (left)
+                        else if (up)
                         {
-                            currentState = PlayerState.MoveLeft;
-                        }
-
-                        /*else if (input.IsKeyDown((Keys)jump))
-                        {
-                            currentState = PlayerState.JumpLeft;
-                        }*/
-                        break;
-
-                    case PlayerState.FaceRight:
-                        if (right)
-                        {
-                            currentState = PlayerState.MoveRight;
-                        }
-
-                        else if (left)
-                        {
-                            currentState = PlayerState.FaceLeft;
-                        }
-
-                        /*else if (input.IsKeyDown((Keys)jump))
-                        {
-                            currentState = PlayerState.JumpRight;
-                        }*/
-                        break;
-
-                    case PlayerState.JumpLeft:
-                        if (right)
-                        {
-                            currentState = PlayerState.FaceRight;
-                        }
-
-                        else if (left)
-                        {
-                            currentState = PlayerState.FaceRight;
+                            currentState = PlayerState.Jump;
                         }
                         break;
-
-                    case PlayerState.JumpRight:
-                        if (right)
+                    case PlayerState.Jump:
+                        if (right || left)
                         {
-                            currentState = PlayerState.FaceRight;
-                        }
-
-                        else if (left)
-                        {
-                            currentState = PlayerState.FaceRight;
+                            currentState = PlayerState.Move;
                         }
                         break;
-
-                    case PlayerState.MoveLeft:
-                        if (!left)
+                    case PlayerState.Move:
+                        if (!left && !right)
                         {
-                            currentState = PlayerState.FaceLeft;
+                            currentState = PlayerState.Idle;
                         }
-
-                        /*else if (input.IsKeyDown((Keys)jump))
+                        if (up)
                         {
-                            currentState = PlayerState.JumpLeft;
-                        }*/
-                        break;
-
-                    case PlayerState.MoveRight:
-                        if (!right)
-                        {
-                            currentState = PlayerState.FaceRight;
+                            currentState = PlayerState.Jump;
                         }
-
-                        /*else if (input.IsKeyDown((Keys)jump))
-                        {
-                            currentState = PlayerState.JumpRight;
-                        }*/
                         break;
                 }
 
@@ -456,7 +430,7 @@ namespace ROOT
                 //Checks for walls to the left of the player 
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.HitBox.Intersects(g[i].HitBox) || this.Left == g[i].Right) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height) && this.Right>g[i].Right)
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height) && this.Right > g[i].Right)
                 {
                     //Player will stop moving left because of the wall
 
@@ -466,7 +440,7 @@ namespace ROOT
                 //Checks for walls to the right of the player
                 //and that tile and player are in the same relative y-coordinate
                 if ((this.Right == g[i].Left || this.HitBox.Intersects(g[i].HitBox)) &&
-                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height ) && this.Left < g[i].Left)
+                    (bBound >= g[i].Y && uBound <= g[i].Y + g[i].Height) && this.Left < g[i].Left)
                 {
                     //Player will stop moving right because of the wall
                     rightWall = true;
@@ -485,41 +459,33 @@ namespace ROOT
         }
 
         //this method specifically handles logic for player on player collision
-        //returns false unless the player who called this method has taken the orb
+        //changes possesion of the orb and stuns if applicable
         public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
-            if(p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
+            if (p1.HitBox.Intersects(p2.HitBox) && !p1.Stunned && !p2.Stunned)
             {
-                if(p1.Orb)
+                if (p1.Orb)
                 {
                     p2.Orb = true;
                     p1.Orb = false;
                     p1.Stunned = true;
-                    p1.Stun(gameTime);
                 }
-                else if(p2.Orb)
+                else if (p2.Orb)
                 {
                     p1.Orb = true;
                     p2.Orb = false;
                     p2.Stunned = true;
-                    p2.Stun(gameTime);
                 }
             }
-            else
-            {
-                p1.Stun(gameTime);
-                p2.Stun(gameTime);
-            }
-            
         }
 
         public void Stun(double gameTime)
-        //player will be unable to move while stunned, player will also blink
+        //player will be unable to move while stunned
         {
             if (stunned)
             {
                 stunTime -= gameTime;
-                if(stunTime <= 0)
+                if (stunTime <= 0)
                 {
                     stunned = false;
                     stunTime = 3.00;
@@ -527,45 +493,11 @@ namespace ROOT
             }
         }
 
-        public override void Draw(SpriteBatch s)
-        {
-            //base.Draw(s);
-            //s.Draw(this.Tex, between, Color.Black);
-            switch (currentState)
-            {
-                case PlayerState.FaceLeft:
-                    DrawStanding(SpriteEffects.FlipHorizontally, s);
-                    break;
 
-                case PlayerState.FaceRight:
-                    DrawStanding(SpriteEffects.None, s);
-                    break;
-
-                case PlayerState.JumpLeft:
-                    DrawStanding(SpriteEffects.FlipHorizontally, s);
-                    break;
-
-                case PlayerState.JumpRight:
-                    DrawStanding(SpriteEffects.None, s);
-                    break;
-
-                case PlayerState.MoveLeft:
-                    DrawWalking(SpriteEffects.FlipHorizontally, s);
-                    break;
-
-                case PlayerState.MoveRight:
-                    DrawWalking(SpriteEffects.None, s);
-                    break;
-
-                case PlayerState.PowerUp:
-                    s.Draw(this.Tex, between, Color.Black);
-                    break;
-            }
-        }
 
         public void SetControls(Keys r, Keys l, Keys j, Keys u)
         //pre: Keys values to correspond to: moving right, left, jumping, and using powerups
-        //post: sets the player's control mapping
+        //post: sets the player's control mapping (keyboard only)
         {
             moveRight = (int)r;
             moveLeft = (int)l;
@@ -587,7 +519,7 @@ namespace ROOT
             }
             if (this.HitBox.Center.Y < 0)
             {
-                this.Y = maxY - this.Height / 2; 
+                this.Y = maxY - this.Height / 2;
             }
             if (this.HitBox.Center.Y > maxY)
             {
@@ -597,31 +529,233 @@ namespace ROOT
 
         private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
         {
-            s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, MARIO_RECT_Y_OFFSET, MARIO_RECT_WIDTH, MARIO_RECT_HEIGHT), Color.White, 0, Vector2.Zero, 0.9f, flipSprite, 0);
+            if(this.Orb) //changes player color if they have the orb
+            {
+                s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, RECT_HEIGHT * 3, RECT_WIDTH, RECT_HEIGHT), Color.Gold, 0, Vector2.Zero, 0.9f, flipSprite, 0);
+            }
+            else
+            {
+                s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, RECT_HEIGHT * 3, RECT_WIDTH, RECT_HEIGHT), Color.White, 0, Vector2.Zero, 0.9f, flipSprite, 0);
+            }
+        }
+
+        private void DrawJumping(SpriteEffects flipSprite, SpriteBatch s)
+        {
+            if(this.Orb) //changes player color if they have the orb
+            {
+                if (jumpUp < 0)
+                {
+                    if (ground)
+                    {
+                        DrawStanding(flipSprite, s);
+                    }
+                    else
+                    {
+                        s.Draw(
+                               spriteSheet,                    // - The texture to draw
+                               new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                               new Rectangle(                  // - The "source" rectangle
+                                   RECT_WIDTH,   //   - This rectangle specifies
+                                   RECT_HEIGHT * 2,        //	   where "inside" the texture
+                                   RECT_WIDTH,           //     to get pixels (We don't want to
+                                   RECT_HEIGHT),         //     draw the whole thing)
+                               Color.Gold,                    // - The color
+                               0,                              // - Rotation (none currently)
+                               Vector2.Zero,                   // - Origin inside the image (top left)
+                               0.9f,                           // - Scale (100% - no change)
+                               flipSprite,                     // - Can be used to flip the image
+                               0);
+                    }
+                }
+                else
+                {
+                    s.Draw(
+                           spriteSheet,                    // - The texture to draw
+                           new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                           new Rectangle(                  // - The "source" rectangle
+                               0,   //   - This rectangle specifies
+                               RECT_HEIGHT * 2,        //	   where "inside" the texture
+                               RECT_WIDTH,           //     to get pixels (We don't want to
+                               RECT_HEIGHT),         //     draw the whole thing)
+                           Color.Gold,                    // - The color
+                           0,                              // - Rotation (none currently)
+                           Vector2.Zero,                   // - Origin inside the image (top left)
+                           0.9f,                           // - Scale (100% - no change)
+                           flipSprite,                     // - Can be used to flip the image
+                           0);
+                }
+            }
+            else
+            {
+                if (jumpUp < 0)
+                {
+                    if (ground)
+                    {
+                        DrawStanding(flipSprite, s);
+                    }
+                    else
+                    {
+                        s.Draw(
+                               spriteSheet,                    // - The texture to draw
+                               new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                               new Rectangle(                  // - The "source" rectangle
+                                   RECT_WIDTH,   //   - This rectangle specifies
+                                   RECT_HEIGHT * 2,        //	   where "inside" the texture
+                                   RECT_WIDTH,           //     to get pixels (We don't want to
+                                   RECT_HEIGHT),         //     draw the whole thing)
+                               Color.White,                    // - The color
+                               0,                              // - Rotation (none currently)
+                               Vector2.Zero,                   // - Origin inside the image (top left)
+                               0.9f,                           // - Scale (100% - no change)
+                               flipSprite,                     // - Can be used to flip the image
+                               0);
+                    }
+                }
+                else
+                {
+                    s.Draw(
+                           spriteSheet,                    // - The texture to draw
+                           new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                           new Rectangle(                  // - The "source" rectangle
+                               0,   //   - This rectangle specifies
+                               RECT_HEIGHT * 2,        //	   where "inside" the texture
+                               RECT_WIDTH,           //     to get pixels (We don't want to
+                               RECT_HEIGHT),         //     draw the whole thing)
+                           Color.White,                    // - The color
+                           0,                              // - Rotation (none currently)
+                           Vector2.Zero,                   // - Origin inside the image (top left)
+                           0.9f,                           // - Scale (100% - no change)
+                           flipSprite,                     // - Can be used to flip the image
+                           0);
+                }
+            }
         }
 
         private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
         {
-            s.Draw(
-                spriteSheet,                    // - The texture to draw
-                new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
-                new Rectangle(                  // - The "source" rectangle
-                    frame * MARIO_RECT_WIDTH,   //   - This rectangle specifies
-                    MARIO_RECT_Y_OFFSET,        //	   where "inside" the texture
-                    MARIO_RECT_WIDTH,           //     to get pixels (We don't want to
-                    MARIO_RECT_HEIGHT),         //     draw the whole thing)
-                Color.White,                    // - The color
-                0,                              // - Rotation (none currently)
-                Vector2.Zero,                   // - Origin inside the image (top left)
-                0.9f,                           // - Scale (100% - no change)
-                flipSprite,                     // - Can be used to flip the image
-                0);                             // - Layer depth (unused)
+            if(this.Orb) //changes player color if they have the orb
+            {
+                if (frame > 5)
+                {
+                    s.Draw(
+                           spriteSheet,                    // - The texture to draw
+                           new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                           new Rectangle(                  // - The "source" rectangle
+                               (frame - 6) * RECT_WIDTH,   //   - This rectangle specifies
+                               RECT_Y_OFFSET + 72,        //	   where "inside" the texture
+                               RECT_WIDTH,           //     to get pixels (We don't want to
+                               RECT_HEIGHT),         //     draw the whole thing)
+                          Color.Gold,                    // - The color
+                          0,                              // - Rotation (none currently)
+                          Vector2.Zero,                   // - Origin inside the image (top left)
+                          0.9f,                           // - Scale (100% - no change)
+                          flipSprite,                     // - Can be used to flip the image
+                          0);
+                    // - Layer depth (unused)
+                }
+                else
+                {
+                    s.Draw(
+                        spriteSheet,                    // - The texture to draw
+                        new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                        new Rectangle(                  // - The "source" rectangle
+                            frame * RECT_WIDTH,   //   - This rectangle specifies
+                            RECT_Y_OFFSET,        //	   where "inside" the texture
+                            RECT_WIDTH,           //     to get pixels (We don't want to
+                            RECT_HEIGHT),         //     draw the whole thing)
+                        Color.Gold,                    // - The color
+                        0,                              // - Rotation (none currently)
+                        Vector2.Zero,                   // - Origin inside the image (top left)
+                        0.9f,                           // - Scale (100% - no change)
+                        flipSprite,                     // - Can be used to flip the image
+                        0);
+                    // - Layer depth (unused)
+                }
+            }
+            else
+            {
+                if (frame > 5)
+                {
+                    s.Draw(
+                           spriteSheet,                    // - The texture to draw
+                           new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                           new Rectangle(                  // - The "source" rectangle
+                               (frame - 6) * RECT_WIDTH,   //   - This rectangle specifies
+                               RECT_Y_OFFSET + 72,        //	   where "inside" the texture
+                               RECT_WIDTH,           //     to get pixels (We don't want to
+                               RECT_HEIGHT),         //     draw the whole thing)
+                          Color.White,                    // - The color
+                          0,                              // - Rotation (none currently)
+                          Vector2.Zero,                   // - Origin inside the image (top left)
+                          0.9f,                           // - Scale (100% - no change)
+                          flipSprite,                     // - Can be used to flip the image
+                          0);
+                    // - Layer depth (unused)
+                }
+                else
+                {
+                    s.Draw(
+                        spriteSheet,                    // - The texture to draw
+                        new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                        new Rectangle(                  // - The "source" rectangle
+                            frame * RECT_WIDTH,   //   - This rectangle specifies
+                            RECT_Y_OFFSET,        //	   where "inside" the texture
+                            RECT_WIDTH,           //     to get pixels (We don't want to
+                            RECT_HEIGHT),         //     draw the whole thing)
+                        Color.White,                    // - The color
+                        0,                              // - Rotation (none currently)
+                        Vector2.Zero,                   // - Origin inside the image (top left)
+                        0.9f,                           // - Scale (100% - no change)
+                        flipSprite,                     // - Can be used to flip the image
+                        0);
+                    // - Layer depth (unused)
+                }
+            }
         }
 
         public void setFPS()
         {
             fps = 10.0;
             timePerFrame = 1.0 / fps;
+        }
+
+        public override void Draw(SpriteBatch s)
+        {
+            SpriteEffects flip;
+
+            //Sets the direction the player is facing
+            if (currentDirectionState == PlayerState.FaceLeft)
+            {
+                flip = SpriteEffects.FlipHorizontally;
+            }
+            else
+            {
+                flip = SpriteEffects.None;
+            }
+
+            //Draws the player either idle, moving, or jumping
+            switch (currentState)
+            {
+                case PlayerState.Idle:
+                    DrawStanding(flip, s);
+                    break;
+                case PlayerState.Jump:
+                    DrawJumping(flip, s);
+                    break;
+                case PlayerState.Move:
+                    if (ground)
+                    {
+                        DrawWalking(flip, s);
+                    }
+                    else
+                    {
+                        DrawJumping(flip, s);
+                    }
+                    break;
+                case PlayerState.PowerUp:
+                    s.Draw(this.Tex, between, Color.Black);
+                    break;
+            }
         }
     }
 }

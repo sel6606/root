@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace ROOT
 {
-    abstract class Powerup
+    public abstract class Powerup
     {
 
         //timer to check activation time
@@ -25,15 +20,16 @@ namespace ROOT
 
         private Rectangle rec;
 
-        public Rectangle Rec { get { return rec; } }
-
         private int x;
-
-        public int X { get { return x; } }
 
         private Texture2D tex;
 
-        public Texture2D Tex { get { return tex; } }
+        public Texture2D Tex
+        {
+            get { return tex; }
+
+            set { tex = value; }
+        }
 
 
         //whether the powerup can be used
@@ -44,6 +40,11 @@ namespace ROOT
 
         //how long the cooldown is
         protected double coolDuration;
+
+        public bool IsReady
+        {
+            get { return isReady; }
+        }
 
 
         //does the cooldown of the power up.
@@ -59,7 +60,7 @@ namespace ROOT
 
 
         //starts the power up if it is avaible
-        public void Activate()
+        public virtual void Activate()
         {
             if (isReady)
             {
