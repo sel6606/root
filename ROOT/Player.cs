@@ -87,6 +87,11 @@ namespace ROOT
         #region Properties
 
 
+        public PlayerState CurrentDirectionState
+        {
+            get { return currentDirectionState; }
+        }
+
         public PlayerType ThisType
         {
             get { return thisType; }
@@ -143,10 +148,6 @@ namespace ROOT
             set { stunned = value; }
         }
 
-        public PlayerState CurrentDirectionState
-        {
-            get { return currentDirectionState; }
-        }
 
         #endregion
 
@@ -173,6 +174,7 @@ namespace ROOT
 
         public void UpdateSelect()
         {
+            xBox = GamePad.GetState(playerNumber).IsConnected;
             KeyboardState input = Keyboard.GetState();
             bool up = false;
             bool right = false;
@@ -205,8 +207,8 @@ namespace ROOT
                 {
                     right = true;
                 }
+                prevGPState = gamePad;
             }
-
             previousKbState = input;
             selectLeft = left;
             selectRight = right;

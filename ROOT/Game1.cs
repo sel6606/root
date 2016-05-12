@@ -23,9 +23,8 @@ namespace ROOT
         Title
     }
 
-    //Enum for the different characters
-    //Enum for player character
-    public enum PlayerType //Decides what sprite to draw and what powerup to do.
+    //Enum for the different character types
+    public enum PlayerType
     {
         GentleMan,
         Knight,
@@ -38,7 +37,7 @@ namespace ROOT
     public class Game1 : Game
     {
 
-        //Enum for game states
+        //Enum for the game states
         public enum GameState
         {
             Menu,
@@ -46,57 +45,40 @@ namespace ROOT
             GameOver
         }
 
-        //Fields
         #region Game Fields
+        //State fields
         private GameState currentState;
         private MenuState currentMenuState;
+        private MouseState mState;
+        private MouseState previousMState;
+        private KeyboardState kbState;
+        private KeyboardState previousKbState;
+
+        //Fields for various manager classes
         private MenuMan menuManager;
         private UIMan uiManager;
         private PowMan powerManager;
+        private Stage gameStage;
+
+        //Fields for each player's timer
         private double timer1;
         private double timer2;
         private double timer3;
         private double timer4;
+
+        //Fields for each player
         private Player p1;
         private Player p2;
         private Player p3;
         private Player p4;
-        private Stage gameStage;
+        private List<Player> playerList;
+
+        private Button restart;
+        private Button menu;
+        private SpriteFont uiFont;
         private Orb orb;
         private int playerNum; //keeps track of how many players are in the game
-        private List<Player> playerList;
-        #endregion
-
-        #region Textures
-        private Texture2D brickTexture;
-        private Texture2D startTexture;
-        private Texture2D instructionsTexture;
-        private Texture2D creditButton;
-        private Texture2D quitTexture;
-        private Texture2D backTexture;
-        private Texture2D restartTexture;
-        private Texture2D optionsTexture;
-        private Texture2D menuTexture;
-        private Texture2D cancelTexture;
-        private Texture2D orbTexture;
-        private Texture2D instructionScreen;
-        private Texture2D cowboyInfo;
-        private Texture2D knightInfo;
-        private Texture2D cavemanInfo;
-        private Texture2D gentlemanInfo;
-        private Texture2D select;
-        private Texture2D gSheet;
-        private Texture2D kSheet;
-        private Texture2D cmSheet;
-        private Texture2D cbSheet;
-        private Texture2D cowPowTex;
-        private Texture2D cavePowTex;
-        private Texture2D gentlePowTex;
-        private Texture2D knightPowTex;
-        private Texture2D credits;
-        private Texture2D background;
-        private Texture2D title;
-        #endregion
+        private Player winner;
 
         //Width of each button
         private int buttonWidth;
@@ -107,87 +89,134 @@ namespace ROOT
         //Distance of buttons from the bottom of the screen (used for the restart and menu buttons on the game over screen
         private int bottomDistance;
 
-        private MouseState mState;
-        private MouseState previousMState;
-        private Button restart;
-        private Button menu;
-        private SpriteFont uiFont;
+        //Constants
+        private const double TIMER_LENGTH = 120;
 
-        private const double TIMER_LENGTH= 2;
+        GraphicsDeviceManager graphics;
+        SpriteBatch spriteBatch;
+        List<SoundEffect> soundEffects;
+        List<Texture2D> spritesheets;
+        #endregion
 
+        #region Textures
 
+        //Button textures
+        private Texture2D startTexture;
+        private Texture2D instructionsTexture;
+        private Texture2D creditButton;
+        private Texture2D quitTexture;
+        private Texture2D backTexture;
+        private Texture2D restartTexture;
+        private Texture2D optionsTexture;
+        private Texture2D menuTexture;
+
+        //UI and Selection screen Textures
+        private Texture2D cancelTexture;
+        private Texture2D select;
+        private Texture2D cowPowTex;
+        private Texture2D cavePowTex;
+        private Texture2D gentlePowTex;
+        private Texture2D knightPowTex;
+        private Texture2D cowboyInfo;
+        private Texture2D knightInfo;
+        private Texture2D cavemanInfo;
+        private Texture2D gentlemanInfo;
+
+        //Object textures
+        private Texture2D brickTexture;
+        private Texture2D orbTexture;
+        
+        //Character spritesheets
+        private Texture2D gSheet;
+        private Texture2D kSheet;
+        private Texture2D cmSheet;
+        private Texture2D cbSheet;
+
+        //Background and menu textures
+        private Texture2D instructionScreen;
+        private Texture2D credits;
+        private Texture2D background;
+        private Texture2D title;
+
+        private Texture2D p1Win;
+        private Texture2D p2Win;
+        private Texture2D p3Win;
+        private Texture2D p4Win;
+        #endregion
 
         #region Properties
+
+        //Properties for title texture
         public Texture2D Title
         {
             get { return title; }
         }
-
+        
+        //Properties for timer1
         public double Timer1
         {
             get { return timer1; }
         }
 
+        //Properties for timer2
         public double Timer2
         {
             get { return timer2; }
         }
 
+        //Properties for timer3
         public double Timer3
         {
             get { return timer3; }
         }
 
+        //Properties for timer4
         public double Timer4
         {
             get { return timer4; }
         }
 
+        //Porperties for powerManager
         public PowMan PowerManager
         {
             get { return powerManager; }
         }
 
+        //Properties for cowPowTex
         public Texture2D CowPowTex
         {
             get { return cowPowTex; }
             set { cowPowTex = value; }
         }
 
+        //Properties for cavePowTex
         public Texture2D CavePowTex
         {
             get { return cavePowTex; }
             set { cavePowTex = value; }
         }
 
+        //Properties for gentlePowTex
         public Texture2D GentlePowTex
         {
             get { return gentlePowTex; }
             set { gentlePowTex = value; }
         }
 
+        //Properties for knightPowTex
         public Texture2D KnightPowTex
         {
             get { return knightPowTex; }
             set { knightPowTex = value; }
         }
 
+        //Properties for playerNum
         public int PlayerNum
         {
             get { return playerNum; }
             set { playerNum = value; }
         }
         #endregion
-        //Variables for testing purposes
-        private KeyboardState kbState;
-        private KeyboardState previousKbState;
-
-
-
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        List<SoundEffect> soundEffects;
-        List<Texture2D> spritesheets;
 
         public Game1()
         {
@@ -205,7 +234,7 @@ namespace ROOT
         protected override void Initialize()
         {
             //Sets mouse to visible and sets the inital GameState and MenuState
-            //Also sets inital values
+            //Also sets default player number
             IsMouseVisible = true;
             playerNum = 4;
             currentState = GameState.Menu;
@@ -221,10 +250,10 @@ namespace ROOT
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
             //Sound effects
             soundEffects.Add(Content.Load<SoundEffect>("click"));
 
+            #region Button Textures
             //Texture for buttons on the menus
             startTexture = Content.Load<Texture2D>("MenuStart");
             instructionsTexture = Content.Load<Texture2D>("MenuInstructions");
@@ -233,32 +262,14 @@ namespace ROOT
             restartTexture = Content.Load<Texture2D>("MenuRestart");
             optionsTexture = Content.Load<Texture2D>("MenuOptions");
             menuTexture = Content.Load<Texture2D>("MenuMenu");
-            instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
-            credits = Content.Load<Texture2D>("Credits");
             creditButton = Content.Load<Texture2D>("MenuCredits");
-            select = Content.Load<Texture2D>("select");
-
-            background = Content.Load<Texture2D>("background");
-            title = Content.Load<Texture2D>("title");
-
             List<Texture2D> playerButtons = new List<Texture2D>();
             playerButtons.Add(Content.Load<Texture2D>("twoPlayers"));
             playerButtons.Add(Content.Load<Texture2D>("threePlayers"));
             playerButtons.Add(Content.Load<Texture2D>("fourPlayers"));
+            #endregion
 
-            gentlemanInfo = Content.Load<Texture2D>("gentleman_info");
-            cavemanInfo = Content.Load<Texture2D>("caveman_info");
-            cowboyInfo = Content.Load<Texture2D>("cowboy_info");
-            knightInfo = Content.Load<Texture2D>("knight_info");
-
-            gSheet = Content.Load<Texture2D>("gSheet");
-            cmSheet = Content.Load<Texture2D>("cmSheet");
-            cbSheet = Content.Load<Texture2D>("cbSheet");
-            kSheet = Content.Load<Texture2D>("kSheet");
-
-            spritesheets = new List<Texture2D> { gSheet, kSheet, cbSheet, cmSheet };
-
-
+            #region Select Screen Textures
             List<Texture2D> portraits = new List<Texture2D>();
             portraits.Add(Content.Load<Texture2D>("cmPortrait"));
             portraits.Add(Content.Load<Texture2D>("cbPortrait"));
@@ -266,12 +277,37 @@ namespace ROOT
             portraits.Add(Content.Load<Texture2D>("gPortrait"));
             portraits.Add(Content.Load<Texture2D>("placeholder"));
             portraits.Add(Content.Load<Texture2D>("placeholder2"));
+            select = Content.Load<Texture2D>("select");
+
+            gentlemanInfo = Content.Load<Texture2D>("gentleman_info");
+            cavemanInfo = Content.Load<Texture2D>("caveman_info");
+            cowboyInfo = Content.Load<Texture2D>("cowboy_info");
+            knightInfo = Content.Load<Texture2D>("knight_info");
+            #endregion
+
+            instructionScreen = Content.Load<Texture2D>("Terrible Instructions");
+            credits = Content.Load<Texture2D>("Credits");
+            background = Content.Load<Texture2D>("background");
+            title = Content.Load<Texture2D>("title");
+
+            //Spritesheet textures
+            gSheet = Content.Load<Texture2D>("gSheet");
+            cmSheet = Content.Load<Texture2D>("cmSheet");
+            cbSheet = Content.Load<Texture2D>("cbSheet");
+            kSheet = Content.Load<Texture2D>("kSheet");
+            spritesheets = new List<Texture2D> { gSheet, kSheet, cbSheet, cmSheet };
 
             //PowerUp Textures
             knightPowTex = Content.Load<Texture2D>("sprint");
             cavePowTex = Content.Load<Texture2D>("cavePow");
             cowPowTex = Content.Load<Texture2D>("cowPow");
             gentlePowTex = Content.Load<Texture2D>("gentlePow");
+
+            //Win messages
+            p1Win = Content.Load<Texture2D>("win1");
+            p2Win = Content.Load<Texture2D>("win2");
+            p3Win = Content.Load<Texture2D>("win3");
+            p4Win = Content.Load<Texture2D>("win4");
 
             brickTexture = Content.Load<Texture2D>("brick-wall");
             gameStage = new Stage(spriteBatch, brickTexture);
@@ -471,14 +507,56 @@ namespace ROOT
                     #region Timer Check
                     if (playerNum == 2 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //two players
                     {
+                        if(timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else
+                        {
+                            winner = p2;
+                        }
                         currentState = GameState.GameOver;
                     }
                     else if (playerNum == 3 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || SingleKeyPress(Keys.O))) //three players
                     {
+                        if (timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else if (timer2 <= 0)
+                        {
+                            winner = p2;
+                        }
+
+                        else
+                        {
+                            winner = p3;
+                        }
                         currentState = GameState.GameOver;
                     }
                     else if (playerNum == 4 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || timer4 <= 0 || SingleKeyPress(Keys.O))) //four players
                     {
+                        if (timer1 <= 0)
+                        {
+                            winner = p1;
+                        }
+
+                        else if (timer2 <= 0)
+                        {
+                            winner = p2;
+                        }
+
+                        else if (timer3 <= 0)
+                        {
+                            winner = p3;
+                        }
+
+                        else
+                        {
+                            winner = p4;
+                        }
                         currentState = GameState.GameOver;
                     }
                     #endregion
@@ -501,11 +579,13 @@ namespace ROOT
                 case GameState.GameOver: //If the game is on the game over screen
                     if (restart.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses play again, change state to game and reset values
                     { //If the player clicks restart, restart the game
+                        soundEffects[0].CreateInstance().Play();
                         currentState = GameState.Game;
                         Reset();
                     }
                     else if (menu.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses back to menu, change state to menu and menustate to main
                     { //If the player clicks menu, return to the main menu
+                        soundEffects[0].CreateInstance().Play();
                         currentState = GameState.Menu;
                         currentMenuState = MenuState.Main;
                     }
@@ -580,6 +660,40 @@ namespace ROOT
                     powerManager.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:    //Draws the game over screen, drawing a restart button and a menu button
+                    spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+                    if(winner == p1)
+                    {
+                        spriteBatch.Draw(p1Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
+                    }
+                    if (winner == p2)
+                    {
+                        spriteBatch.Draw(p2Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
+                    }
+                    if (winner == p3)
+                    {
+                        spriteBatch.Draw(p3Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
+                    }
+                    if (winner == p4)
+                    {
+                        spriteBatch.Draw(p4Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
+                    }
+
+                    if (winner.ThisType == PlayerType.Caveman)
+                    {
+                        spriteBatch.Draw(cavemanInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
+                    }
+                    if (winner.ThisType == PlayerType.Cowboy)
+                    {
+                        spriteBatch.Draw(cowboyInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
+                    }
+                    else if (winner.ThisType == PlayerType.GentleMan)
+                    {
+                        spriteBatch.Draw(gentlemanInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
+                    }
+                    else if (winner.ThisType == PlayerType.Knight)
+                    {
+                        spriteBatch.Draw(knightInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
+                    }
                     restart.Draw(spriteBatch);
                     menu.Draw(spriteBatch);
                     break;
