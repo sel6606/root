@@ -5,11 +5,12 @@ namespace ROOT
 {
     public class GameObject
     {
-        //fields common to all game objects
-        private Rectangle hitBox; //size of the space object occupies
-        private bool isSolid; //is the object solid, players cant move through solid objects
-        private Texture2D tex; //object's texture
+        //Fields common to all game objects
+        private Rectangle hitBox; //Size of the space the object occupies
+        private bool isSolid; //Is the object solid? Players can't move through solid objects
+        private Texture2D tex; //Object's texture
 
+        #region Properties
         //Properties for hitBox
         public Rectangle HitBox
         {
@@ -79,20 +80,21 @@ namespace ROOT
             set { tex = value; }
         }
 
+        #endregion
 
-        //constructor
-        public GameObject(int x, int y, int width, int height, bool solid, Texture2D texture)
-        //requires x/y coordinates for a starting point, dimensions for the hitbox rectangle,
+
+        //Constructor for GameObject
+        //Requires x/y coordinates for a starting point, dimensions for the hitbox rectangle,
         //and a solid bool value
+        public GameObject(int x, int y, int width, int height, bool solid, Texture2D texture)
         {
             tex = texture;
-
             hitBox = new Rectangle(x, y, width, height);
             isSolid = solid;
         }
 
+        //Draw method for the game object
         public virtual void Draw(SpriteBatch s)
-        //allows game objects to draw themselves
         {
             s.Draw(tex, hitBox, Color.White);
         }

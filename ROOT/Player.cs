@@ -7,8 +7,8 @@ namespace ROOT
 {
     public class Player : GameObject
     {
-        //Enum for playerState
-        public enum PlayerState //keeps track of what player is doing for animation purposes
+        //Enum for PlayerState
+        public enum PlayerState //Keeps track of what player is doing for animation purposes
         {
             FaceRight,
             FaceLeft,
@@ -153,7 +153,7 @@ namespace ROOT
 
         #endregion
 
-        //constructor, calls game object's but forces isSolid to be false
+        //Constructor, calls game object but forces isSolid to be false
         public Player(Game1 game, int x, int y, int width, int height, double time, Texture2D texture, PlayerIndex playerNum, int type)
             : base(x, y, width, height, false, texture)
         {
@@ -174,6 +174,8 @@ namespace ROOT
             thisType = (PlayerType)type;
         }
 
+        //Updates method that is called on the selection screen
+        //Checks for player input in each direction
         public void UpdateSelect()
         {
             xBox = GamePad.GetState(playerNumber).IsConnected;
@@ -184,14 +186,14 @@ namespace ROOT
             bool down = false;
 
             if (!xBox)
-            {
+            { //If the player is using a keyboard
                 up = input.IsKeyDown((Keys)jump) && previousKbState.IsKeyUp((Keys)jump);
                 right = input.IsKeyDown((Keys)moveRight) && previousKbState.IsKeyUp((Keys)moveRight);
                 left = input.IsKeyDown((Keys)moveLeft) && previousKbState.IsKeyUp((Keys)moveLeft);
                 down = input.IsKeyDown((Keys)use) && previousKbState.IsKeyUp((Keys)use);
             }
             else if (xBox)
-            {
+            { //If the player is using an XBox controller
                 GamePadState gamePad = GamePad.GetState(playerNumber);
                 if (gamePad.ThumbSticks.Left.Y < 0 && prevGPState.ThumbSticks.Left.Y >= 0)
                 {
@@ -211,6 +213,8 @@ namespace ROOT
                 }
                 prevGPState = gamePad;
             }
+
+            //Update the relevant variables
             previousKbState = input;
             selectLeft = left;
             selectRight = right;
@@ -218,22 +222,23 @@ namespace ROOT
             selectDown = down;
         }
 
+        //Update method for player
         public void Update(List<Tile> tiles)
         {
             KeyboardState input = Keyboard.GetState();
             bool up = false;
             bool right = false;
             bool left = false;
-
             jumped = false;
+
             if (!xBox)
-            {
+            { //If the player is using a keyboard
                 up = input.IsKeyDown((Keys)jump);
                 right = input.IsKeyDown((Keys)moveRight);
                 left = input.IsKeyDown((Keys)moveLeft);
             }
             else if (xBox)
-            {
+            { //If the player is using an XBox controller
                 GamePadState gamePad = GamePad.GetState(playerNumber);
                 up = gamePad.IsButtonDown(Buttons.A);
                 if (gamePad.ThumbSticks.Left.X < 0)
@@ -245,12 +250,16 @@ namespace ROOT
                     right = true;
                 }
             }
+
+            //Loop depending on the player speed
             for (int i = 0; i < speed; i++)
             {
+                //Move and then check for collisions
                 Move(up, right, left);
                 CheckCollision(tiles);
             }
         }
+
         //Updates the position of the player depending on the user input
         public void Move(bool up, bool right, bool left)
         {
@@ -268,7 +277,6 @@ namespace ROOT
                 }
                 if (right)
                 { //If the "right" key is pressed
-
                     if (!rightWall)
                     { //If the player is not colliding with a wall on the right
                       //update the x position
@@ -278,7 +286,6 @@ namespace ROOT
                 }
                 if (left)
                 { //If the "left" key is pressed
-
                     if (!leftWall)
                     { //If the player is not colliding with a wall on the left
                       //update the x position
@@ -291,18 +298,16 @@ namespace ROOT
                     if (!ground)
                     { //If the player is in the air
                       //Run the gravity logic
-
                         currentPosition.Y = currentPosition.Y - jumpUp;
                         this.Y = this.Y - jumpUp;
-
-                        //makes the arc work properly
+                        //Makes the arc work properly
                         if (gravDelay > 0)
                         {
                             gravDelay = gravDelay - 1;
                         }
                         else
                         {
-                            //edit this to change negative acceleration
+                            //Edit this to change negative acceleration
                             if (jumpUp > gravSpeed)
                             {
                                 jumpUp = jumpUp - 1;
@@ -312,7 +317,7 @@ namespace ROOT
                     }
                     else
                     {
-                        //makes them jump while on the ground
+                        //Makes the player jump while on the ground
                         if (jumpUp > 0)
                         {
                             currentPosition.Y = currentPosition.Y - jumpUp;
@@ -328,11 +333,11 @@ namespace ROOT
                 {
                     currentDirectionState = PlayerState.FaceRight;
                 }
-                if(left)
+                if (left)
                 {
                     currentDirectionState = PlayerState.FaceLeft;
                 }
-                
+
 
                 //Determines if the the player is idle, jumping, or moving
                 switch (currentState)
@@ -460,8 +465,8 @@ namespace ROOT
             this.Y = (int)currentPosition.Y;
         }
 
-        //this method specifically handles logic for player on player collision
-        //changes possesion of the orb and stuns if applicable
+        //This method specifically handles logic for player on player collision
+        //Changes possesion of the orb and stuns if applicable
         public void CheckPlayerCollision(Player p1, Player p2, double gameTime)
         {
             if (p1.HitBox.Intersects(p2.HitBox) && (!p1.Stunned || p1.cowStunned) && (!p2.Stunned || p2.cowStunned))
@@ -483,11 +488,11 @@ namespace ROOT
             }
         }
 
+        //Player will be unable to move while stunned
         public void Stun(double gameTime)
-        //player will be unable to move while stunned
         {
             if (stunned)
-            {
+            { //Keeps track of how long the player has been stunned
                 stunTime -= gameTime;
                 if (stunTime <= 0)
                 {
@@ -499,10 +504,8 @@ namespace ROOT
         }
 
 
-
+        //Keys values to correspond to: moving right, left, jumping, and using powerups
         public void SetControls(Keys r, Keys l, Keys j, Keys u)
-        //pre: Keys values to correspond to: moving right, left, jumping, and using powerups
-        //post: sets the player's control mapping (keyboard only)
         {
             moveRight = (int)r;
             moveLeft = (int)l;
@@ -532,9 +535,10 @@ namespace ROOT
             }
         }
 
+        //Draws the player in a standing position
         private void DrawStanding(SpriteEffects flipSprite, SpriteBatch s)
         {
-            if(this.Orb) //changes player color if they have the orb
+            if (this.Orb) //Changes player color if they have the orb
             {
                 s.Draw(spriteSheet, new Vector2(this.X, this.Y - this.Height), new Rectangle(0, RECT_HEIGHT * 3, RECT_WIDTH, RECT_HEIGHT), Color.Gold, 0, Vector2.Zero, 0.9f, flipSprite, 0);
             }
@@ -544,9 +548,10 @@ namespace ROOT
             }
         }
 
+        //Draws the player jumping
         private void DrawJumping(SpriteEffects flipSprite, SpriteBatch s)
         {
-            if(this.Orb) //changes player color if they have the orb
+            if (this.Orb) //Changes player color if they have the orb
             {
                 if (jumpUp < 0)
                 {
@@ -558,12 +563,12 @@ namespace ROOT
                     {
                         s.Draw(
                                spriteSheet,                    // - The texture to draw
-                               new Vector2(this.X, this.Y - this.Height),                       // - The location to draw on the screen
+                               new Vector2(this.X, this.Y - this.Height), // - The location to draw on the screen
                                new Rectangle(                  // - The "source" rectangle
-                                   RECT_WIDTH,   //   - This rectangle specifies
-                                   RECT_HEIGHT * 2,        //	   where "inside" the texture
-                                   RECT_WIDTH,           //     to get pixels (We don't want to
-                                   RECT_HEIGHT),         //     draw the whole thing)
+                                   RECT_WIDTH,               //This rectangle specifies
+                                   RECT_HEIGHT * 2,          //where "inside" the texture
+                                   RECT_WIDTH,               //to get pixels (We don't want to
+                                   RECT_HEIGHT),            // draw the whole thing)
                                Color.Gold,                    // - The color
                                0,                              // - Rotation (none currently)
                                Vector2.Zero,                   // - Origin inside the image (top left)
@@ -636,9 +641,10 @@ namespace ROOT
             }
         }
 
+        //Draws the player walking
         private void DrawWalking(SpriteEffects flipSprite, SpriteBatch s)
         {
-            if(this.Orb) //changes player color if they have the orb
+            if (this.Orb) //Changes player color if they have the orb
             {
                 if (frame > 5)
                 {
@@ -718,12 +724,14 @@ namespace ROOT
             }
         }
 
+        //Sets the frame rate of the animations 
         public void setFPS()
         {
             fps = 10.0;
             timePerFrame = 1.0 / fps;
         }
 
+        //Draw method for player
         public override void Draw(SpriteBatch s)
         {
             SpriteEffects flip;

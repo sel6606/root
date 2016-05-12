@@ -126,7 +126,7 @@ namespace ROOT
         //Object textures
         private Texture2D brickTexture;
         private Texture2D orbTexture;
-        
+
         //Character spritesheets
         private Texture2D gSheet;
         private Texture2D kSheet;
@@ -152,7 +152,7 @@ namespace ROOT
         {
             get { return title; }
         }
-        
+
         //Properties for timer1
         public double Timer1
         {
@@ -276,8 +276,6 @@ namespace ROOT
             portraits.Add(Content.Load<Texture2D>("cbPortrait"));
             portraits.Add(Content.Load<Texture2D>("kPortrait"));
             portraits.Add(Content.Load<Texture2D>("gPortrait"));
-            portraits.Add(Content.Load<Texture2D>("placeholder"));
-            portraits.Add(Content.Load<Texture2D>("placeholder2"));
             select = Content.Load<Texture2D>("select");
 
             gentlemanInfo = Content.Load<Texture2D>("gentleman_info");
@@ -315,7 +313,7 @@ namespace ROOT
             p3Win = Content.Load<Texture2D>("win3");
             p4Win = Content.Load<Texture2D>("win4");
 
-            
+
             //Game stage initialization
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage(STAGE_FILE);
@@ -323,11 +321,11 @@ namespace ROOT
             //Manager initialization
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
                 backTexture, optionsTexture, instructionScreen, creditButton, credits, cavemanInfo, cowboyInfo,
-                knightInfo, gentlemanInfo,background, portraits, playerButtons, select, soundEffects[0],playerNum);
+                knightInfo, gentlemanInfo, background, portraits, playerButtons, select, soundEffects[0], playerNum);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
             uiManager = new UIMan(this, uiFont, cancelTexture);
-           
+
 
             //Initial button sizes
             buttonWidth = 300;
@@ -461,14 +459,14 @@ namespace ROOT
                             orb.Active = false;
                         }
                     }
-                    else if(p3 != null && p4 == null) //If there are three players
+                    else if (p3 != null && p4 == null) //If there are three players
                     {
                         if (p1.Orb || p2.Orb || p3.Orb)
                         {
                             orb.Active = false;
                         }
                     }
-                    else if(p3 != null && p4 != null) //If there are four players
+                    else if (p3 != null && p4 != null) //If there are four players
                     {
                         if (p1.Orb || p2.Orb || p3.Orb || p4.Orb)
                         {
@@ -490,7 +488,7 @@ namespace ROOT
                             timer2 -= gameTime.ElapsedGameTime.TotalSeconds;
                         }
                     }
-                    else if(p3 != null && p4 == null) //If there are three players
+                    else if (p3 != null && p4 == null) //If there are three players
                     {
                         if (p1.Orb)
                         {
@@ -505,7 +503,7 @@ namespace ROOT
                             timer3 -= gameTime.ElapsedGameTime.TotalSeconds;
                         }
                     }
-                    else if(p3 != null && p4 != null) //If there are four players
+                    else if (p3 != null && p4 != null) //If there are four players
                     {
                         if (p1.Orb)
                         {
@@ -531,7 +529,7 @@ namespace ROOT
 
                     if (playerNum == 2 && (timer1 <= 0 || timer2 <= 0)) //If there are only two players
                     {
-                        if(timer1 <= 0)
+                        if (timer1 <= 0)
                         {
                             winner = p1;
                         }
@@ -586,7 +584,7 @@ namespace ROOT
                     #endregion
 
                     //Calls the Stun method on each player
-                    foreach(Player p in playerList)
+                    foreach (Player p in playerList)
                     {
                         p.Stun(gameTime.ElapsedGameTime.TotalSeconds);
                     }
@@ -738,27 +736,27 @@ namespace ROOT
             GraphicsDevice.Clear(Color.LightGray);
 
             spriteBatch.Begin();
-            
+
             switch (currentState)
             {
                 case GameState.Menu:    //Draws a menu dependent on the current menu state
-                    menuManager.Draw(currentMenuState,spriteBatch);
+                    menuManager.Draw(currentMenuState, spriteBatch);
                     break;
                 case GameState.Game:    //Draws the game screen, the stage, all players, and the orb
                     gameStage.Draw();
                     #region Drawing Players
-                    if(p3 == null && p4 == null) //two players
+                    if (p3 == null && p4 == null) //two players
                     {
                         p1.Draw(spriteBatch);
                         p2.Draw(spriteBatch);
                     }
-                    else if(p3 != null && p4 == null) //three players
+                    else if (p3 != null && p4 == null) //three players
                     {
                         p1.Draw(spriteBatch);
                         p2.Draw(spriteBatch);
                         p3.Draw(spriteBatch);
                     }
-                    else if(p3 != null && p4 != null) //four players
+                    else if (p3 != null && p4 != null) //four players
                     {
                         p1.Draw(spriteBatch);
                         p2.Draw(spriteBatch);
@@ -775,14 +773,14 @@ namespace ROOT
                             orb.Draw(spriteBatch);
                         }
                     }
-                    else if(p3 != null && p4 == null) //three players
+                    else if (p3 != null && p4 == null) //three players
                     {
                         if (!p1.Orb && !p2.Orb && !p3.Orb)
                         {
                             orb.Draw(spriteBatch);
                         }
                     }
-                    else if(p3 != null && p4 != null) //four players
+                    else if (p3 != null && p4 != null) //four players
                     {
                         if (!p1.Orb && !p2.Orb && !p3.Orb && !p4.Orb)
                         {
@@ -798,7 +796,7 @@ namespace ROOT
                     spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
 
                     //Draws the winner
-                    if(winner == p1)
+                    if (winner == p1)
                     {
                         spriteBatch.Draw(p1Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
                     }
@@ -847,44 +845,54 @@ namespace ROOT
         //Resets variables to their initial values that they should have at the start
         public void Reset()
         {
-
+            //Sets players 3 and 4 to null
             p3 = null;
             p4 = null;
 
+            //Resets the player list and the game stage
             playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
             gameStage.ReadStage(STAGE_FILE);
 
+            //Initialize the orb
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
 
+            //Initialize Player 1 and add it to the player list
             p1 = new Player(this, gameStage.P1startX, gameStage.P1startY - 50, 40, 30, timer1, spritesheets[(int)menuManager.Types[0]], PlayerIndex.One, (int)menuManager.Types[0]);
             p1.SetControls(Keys.D, Keys.A, Keys.W, Keys.S);
             timer1 = TIMER_LENGTH;
-            playerList.Add(p1); //adds player 1 to the list of players
+            playerList.Add(p1);
 
+            //Initialize Player 2 and add it to the player list
             p2 = new Player(this, gameStage.P2startX, gameStage.P2startY - 50, 40, 30, timer2, spritesheets[(int)menuManager.Types[1]], PlayerIndex.Two, (int)menuManager.Types[1]);
             p2.SetControls(Keys.Right, Keys.Left, Keys.Up, Keys.Down);
             timer2 = TIMER_LENGTH;
-            playerList.Add(p2); //adds player 2 to the list of players
-            if (playerNum == 3) //three players
-            {
-                p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
-                p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
-                timer3 = TIMER_LENGTH;
-                playerList.Add(p3); //adds player 3 to the list
-            }
-            else if(playerNum == 4) //four players
-            {
-                p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
-                p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
-                timer3 = TIMER_LENGTH;
-                playerList.Add(p3); //adds player 3 to the list
+            playerList.Add(p2);
 
+            if (playerNum == 3) //If there are three players
+            {
+                //Initialize Player 3 and add it to the player list
+                p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
+                p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
+                timer3 = TIMER_LENGTH;
+                playerList.Add(p3);
+            }
+            else if (playerNum == 4) //If there are four players
+            {
+                //Initialize Player 3 and add it to the player list
+                p3 = new Player(this, gameStage.P3startX, gameStage.P3startY - 50, 40, 30, timer3, spritesheets[(int)menuManager.Types[2]], PlayerIndex.Three, (int)menuManager.Types[2]);
+                p3.SetControls(Keys.NumPad6, Keys.NumPad4, Keys.NumPad8, Keys.NumPad5);
+                timer3 = TIMER_LENGTH;
+                playerList.Add(p3);
+
+                //Initialize Player 4 and add it to the player list
                 p4 = new Player(this, gameStage.P4startX, gameStage.P4startY - 50, 40, 30, timer4, spritesheets[(int)menuManager.Types[3]], PlayerIndex.Four, (int)menuManager.Types[3]);
                 p4.SetControls(Keys.L, Keys.J, Keys.I, Keys.K);
                 timer4 = TIMER_LENGTH;
-                playerList.Add(p4); //adds player 4 to the list
+                playerList.Add(p4);
             }
+
+            //Creates a new power manager
             powerManager = new PowMan(playerList, spriteBatch, GraphicsDevice, this);
         }
 
@@ -892,7 +900,7 @@ namespace ROOT
         private bool SingleKeyPress(Keys key)
         {
             if (kbState.IsKeyDown(key) && previousKbState.IsKeyUp(key))
-            { //Returns true if the key being pressed is different from the key pressed in the previous state
+            {
                 return true;
             }
             else

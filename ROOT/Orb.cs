@@ -4,17 +4,18 @@ namespace ROOT
 {
     class Orb : GameObject
     {
-        private bool active; //orb is active if it hasn't been picked up
+        private bool active; //Orb is active if it hasn't been picked up
 
+        //Properties for active
         public bool Active
-        //deactivates orb if it has been picked up
         {
             set { active = value; }
             get { return active; }
         }
 
+        //Constructor for orb
         public Orb(int x, int y, int width, int height, Texture2D texture)
-            : base(x,y,width,height,false, texture)
+            : base(x, y, width, height, false, texture)
         {
             active = true; //orb is active by default
         }

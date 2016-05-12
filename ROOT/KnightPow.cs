@@ -6,7 +6,7 @@ namespace ROOT
 {
     class KnightPow : Powerup
     {
-        //The player using the power up
+        //The player using the powerup
         private Player user;
 
         private SpriteBatch sp;
@@ -14,16 +14,16 @@ namespace ROOT
         //List of all players.
         private List<Player> PlayList;
 
-        //the powerups cooldown time
-        private double cooldownTime=15;
+        //The powerup's cooldown time
+        private double cooldownTime = 15;
 
-        //How long the power up is active
-        private double activeTime=5;
+        //How long the powerup is active
+        private double activeTime = 5;
 
-       
 
-        //constructor for powerup, takes in the player who uses the power up.
-        public KnightPow(Player player, List<Player> plaList,SpriteBatch s, Texture2D texture)
+
+        //Constructor for powerup
+        public KnightPow(Player player, List<Player> plaList, SpriteBatch s, Texture2D texture)
         {
             user = player;
             PlayList = plaList;
@@ -36,15 +36,15 @@ namespace ROOT
         }
 
 
-        //activates the power up.
+        //Triggers the powerup's effect
         public override void Effect()
         {
             isActive = true;
-            user.Speed = (int) Math.Ceiling(user.BaseSpeed * 1.5);
+            user.Speed = (int)Math.Ceiling(user.BaseSpeed * 1.5);
         }
 
 
-        //ends the effect.
+        //Ends the effect.
         public override void EndEffect()
         {
             user.Speed = user.BaseSpeed;

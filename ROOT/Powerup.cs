@@ -6,24 +6,33 @@ namespace ROOT
 {
     public abstract class Powerup
     {
+        //Protected Fields
 
-        //timer to check activation time
+        //Timer to check activation time
         protected double activeTimer;
-
-        //timer to check cooldown time.
+        //Timer to check cooldown time.
         protected double cooldownTimer;
-
-        //whether tha powerup is in use
+        //Whether the powerup is in use
         protected bool isActive;
+        //Whether the powerup can be used
+        protected bool isReady;
+        //How long the power up is active.
+        protected double activeDuration;
+        //How long the cooldown is
+        protected double coolDuration;
 
-        public bool IsActive { get { return isActive; } }
-
+        //Private fields
         private Rectangle rec;
-
         private int x;
-
         private Texture2D tex;
 
+        //Properties for isActive
+        public bool IsActive
+        {
+            get { return isActive; }
+        }
+
+        //Properties for tex
         public Texture2D Tex
         {
             get { return tex; }
@@ -31,35 +40,26 @@ namespace ROOT
             set { tex = value; }
         }
 
-
-        //whether the powerup can be used
-        protected bool isReady;
-
-        //how long the power up is active.
-        protected double activeDuration;
-
-        //how long the cooldown is
-        protected double coolDuration;
-
+        //Properties for isReady
         public bool IsReady
         {
             get { return isReady; }
         }
 
 
-        //does the cooldown of the power up.
+        //Runs the cooldown logic for the powerup
         public void Cooldown(double elapsedTime)
         {
-                cooldownTimer -= elapsedTime;
-                if (cooldownTimer <= 0)
-                {
-                    isReady = true;
-                }
-            
+            cooldownTimer -= elapsedTime;
+            if (cooldownTimer <= 0)
+            {
+                isReady = true;
+            }
+
         }
 
 
-        //starts the power up if it is avaible
+        //Starts the power up if it is avaible
         public virtual void Activate()
         {
             if (isReady)
@@ -73,7 +73,7 @@ namespace ROOT
         }
 
 
-        //updates the timer.
+        //Updates the timer.
         public virtual void Update(double elapsedTime)
         {
             if (!isReady && !isActive)
@@ -82,11 +82,11 @@ namespace ROOT
             }
             else if (isActive)
             {
-                
+
                 activeTimer -= elapsedTime;
                 if (activeTimer <= 0)
                 {
-                    //ends the effect if time is out
+                    //Ends the effect if time is out
                     isActive = false;
                     EndEffect();
                 }
@@ -94,17 +94,16 @@ namespace ROOT
 
         }
 
+        //Empty Draw method for some reason
         public virtual void Draw(SpriteBatch sb)
         {
-            
         }
 
 
-        //abstract methods for the power ups effects
+        //Abstract methods for the powerup's effects
         public abstract void Effect();
-
         public abstract void EndEffect();
-      
+
 
     }
 }

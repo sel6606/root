@@ -6,7 +6,7 @@ namespace ROOT
 {
     class GentlePow : Powerup
     {
-        //The player using the power up
+        //The player using the powerup
         private Player user;
 
         private SpriteBatch sp;
@@ -15,30 +15,28 @@ namespace ROOT
         //List of all players.
         private List<Player> PlayList;
 
-        //the int to decide what power to use
+        //The int to decide what power to use
         private int p = 2;
 
-        //the powerups cooldown time
+        //The powerup's cooldown time
         private double cooldownTime = 15;
 
-        //How long the power up is active
+        //How long the powerup is active
         private double activeTime = 5;
 
-        //Random for the power up
+        //Random for the powerup
         Random Rand = new Random();
 
         //Instances of each powerup
-        CavePow cave ;
-
-        CowPow cow;
-
-        KnightPow Kpow;
+        private CavePow cave;
+        private CowPow cow;
+        private KnightPow Kpow;
 
         //Game1
-        Game1 game;
+        private Game1 game;
 
-        //constructor for powerup, takes in the player who uses the power up.
-        public GentlePow(Player player, List<Player> plaList, SpriteBatch s,GraphicsDevice g, Game1 game, Texture2D texture)
+        //Constructor for powerup, takes in the player who uses the powerup.
+        public GentlePow(Player player, List<Player> plaList, SpriteBatch s, GraphicsDevice g, Game1 game, Texture2D texture)
         {
             this.game = game;
             user = player;
@@ -47,41 +45,47 @@ namespace ROOT
             this.isReady = true;
             this.coolDuration = cooldownTime;
             this.activeDuration = activeTime;
-            cave = new CavePow(user, PlayList,s, game.CavePowTex);
-            cow = new CowPow(user, PlayList,s,g, game.CowPowTex);
-            Kpow = new KnightPow(user, PlayList,s, game.KnightPowTex);
+            cave = new CavePow(user, PlayList, s, game.CavePowTex);
+            cow = new CowPow(user, PlayList, s, g, game.CowPowTex);
+            Kpow = new KnightPow(user, PlayList, s, game.KnightPowTex);
             sp = s;
             Tex = texture;
         }
+
+        //Activates the powerup
         public override void Activate()
         {
-            
+            //If the powerup is usable, set p equal to a random integer between 1 and 4
             if (isReady)
             {
-               p = Rand.Next(1, 4);
+                p = Rand.Next(1, 4);
             }
+
             isReady = false;
             isActive = true;
+
             if (p == 1)
             {
+                //Activate the caveman powerup
                 cave.Activate();
             }
             else if (p == 2)
             {
+                //Activate the cowboy powerup
                 cow.Activate();
             }
             else if (p == 3)
             {
+                //Activate the knight powerup
                 Kpow.Activate();
             }
         }
 
-        //activates the power up.
+        //Triggers the powerup effect
         public override void Effect()
         {
-            
-
-            if(p == 1)
+            //Depending on p, trigger the corresponding effect
+            if (p == 1)
             {
                 cave.Effect();
             }
@@ -97,10 +101,12 @@ namespace ROOT
         }
 
 
-        //ends the effect.
+        //Ends the effect
         public override void EndEffect()
         {
             isActive = false;
+
+            //Depending on p, call the corresponding EndEffect()
             if (p == 1)
             {
                 cave.EndEffect();
@@ -115,6 +121,7 @@ namespace ROOT
             }
         }
 
+        //Draws the powerup
         public override void Draw(SpriteBatch sb)
         {
             if (p == 2)
@@ -122,8 +129,11 @@ namespace ROOT
                 cow.Draw(sb);
             }
         }
+
+        //Update method for GentlePow
         public override void Update(double elapsedTime)
         {
+            //Depending on p, update the corresponding powerup
             if (p == 1)
             {
                 cave.Update(elapsedTime);

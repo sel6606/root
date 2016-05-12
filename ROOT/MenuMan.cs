@@ -9,8 +9,13 @@ namespace ROOT
 {
     class MenuMan
     {
+        //Input states
         private KeyboardState kbState;
         private KeyboardState previousKbState;
+        private MouseState mState;
+        private MouseState previousMState;
+
+        #region Buttons
         private Button instructions;
         private Button start;
         private Button quit;
@@ -20,47 +25,42 @@ namespace ROOT
         private Button pNum3;
         private Button pNum4;
         private Button selectBack;
-
-        private Game1 game;
-
-        //Use these variables for the character selection
         private Button play;
         private Button options;
 
-        private MouseState mState;
-        private MouseState previousMState;
-        private SoundEffect clickSound;
+        //Width of each button
+        private int buttonWidth;
+
+        //Height of each button    
+        private int buttonHeight;
+
+        #endregion
+
+        //Select screen fields
         private CharPortrait portrait1;
         private CharPortrait portrait2;
         private CharPortrait portrait3;
         private CharPortrait portrait4;
-        private CharPortrait portrait5;
-        private CharPortrait portrait6;
         private List<CharPortrait> portraits;
 
-        private List<PlayerType> types;
-
-        //Width of each button
-        private int buttonWidth;
-        //Height of each button    
-        private int buttonHeight;
-        //Finds half of the screen's width to help center the buttons   
-        private int halfScreen;
-
-        private int fullScreen;
-
         private int selectButtonWidth;
-
         private int selectButtonHeight;
-
         private int selectHalfScreen;
-
         private int portraitWidth;
-
         private int portraitHeight;
-
         private int portraitHalfScreen;
 
+
+        //Other fields
+        private Game1 game;
+        private List<PlayerType> types;
+        private SoundEffect clickSound;
+
+        //Finds half of the screen's width to help center the buttons   
+        private int halfScreen;
+        private int fullScreen;
+
+        #region Textures
 
         //Textures of the buttons
         Texture2D startButton;
@@ -86,20 +86,25 @@ namespace ROOT
 
         SpriteFont menuFont;
 
+        #endregion
+
+        //Properties for types
         public List<PlayerType> Types
         {
             get { return types; }
         }
+
+        //Properties for menuFont
         public SpriteFont MenuFont
         {
             set { menuFont = value; }
         }
 
         //Constructor for MenuMan
-        public MenuMan(Game1 game, Texture2D startTexture, 
-            Texture2D instructionsTexture, Texture2D quitTexture, 
+        public MenuMan(Game1 game, Texture2D startTexture,
+            Texture2D instructionsTexture, Texture2D quitTexture,
             Texture2D backTexture, Texture2D optionsTexture, Texture2D instructionScreen, Texture2D creditsButton, Texture2D credits, Texture2D cavemanInfo,
-            Texture2D cowboyInfo,Texture2D knightInfo,Texture2D gentlemanInfo, Texture2D background,
+            Texture2D cowboyInfo, Texture2D knightInfo, Texture2D gentlemanInfo, Texture2D background,
             List<Texture2D> portraitTexture, List<Texture2D> playerButtons, Texture2D select, SoundEffect click, int playerNum)
         {
             this.game = game;
@@ -131,7 +136,7 @@ namespace ROOT
             clickSound = click;
             badInstructions = instructionScreen;
             menuBg = background;
-           
+
 
             //First button on main menu screen
             start = new Button(startButton, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight));
@@ -156,83 +161,63 @@ namespace ROOT
             //Third button on main menu screen
             pNum4 = new Button(playerButtons[2], new Rectangle(halfScreen, 225, buttonWidth, buttonHeight));
 
-            //First Character portrait
-            portrait1 = new CharPortrait(portraitTexture[0], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,1, playerNum);
-            portrait2 = new CharPortrait(portraitTexture[1], select, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,2, playerNum);
-            portrait3 = new CharPortrait(portraitTexture[2], select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true,3, playerNum);
-            portrait4 = new CharPortrait(portraitTexture[3], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false,4,playerNum);
-            portrait5 = new CharPortrait(portraitTexture[4], select, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false,5,playerNum);
-            portrait6 = new CharPortrait(portraitTexture[5], select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false,6,playerNum);
-            SetNeighbors();
-            portrait1.IsSelected = new List<bool> { true, true, true, true };
-            portraits = new List<CharPortrait>();
+            //Reset character portraits
+            ResetPortraits(playerNum);
+
             info = new List<Texture2D> { cavemanInfo, cavemanInfo, cavemanInfo, cavemanInfo };
-            portraits.Add(portrait1);
-            portraits.Add(portrait2);
-            portraits.Add(portrait3);
-            portraits.Add(portrait4);
-            portraits.Add(portrait5);
-            portraits.Add(portrait6);
+
         }
 
+
+        //Resets the portraits on the select screen
         public void ResetPortraits(int playerNum)
         {
-            portrait1 = new CharPortrait(portraitTexture[0], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true, 1, playerNum);
-            portrait2 = new CharPortrait(portraitTexture[1], select, new Rectangle(portraitHalfScreen, 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true, 2, playerNum);
-            portrait3 = new CharPortrait(portraitTexture[2], select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true, 3, playerNum);
-            portrait4 = new CharPortrait(portraitTexture[3], select, new Rectangle(portraitHalfScreen - (10 + portraitWidth), 240 + 10, portraitWidth, portraitHeight), false, 4, playerNum);
-            portrait5 = new CharPortrait(portraitTexture[4], select, new Rectangle(portraitHalfScreen, 240 + 10, portraitWidth, portraitHeight), false, 5, playerNum);
-            portrait6 = new CharPortrait(portraitTexture[5], select, new Rectangle(portraitHalfScreen + ((portraitWidth) + 10), 240 + 10, portraitWidth, portraitHeight), false, 6, playerNum);
+            portrait1 = new CharPortrait(portraitTexture[0], select, new Rectangle(portraitHalfScreen - (10 + (portraitWidth/2)), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true, 1, playerNum);
+            portrait2 = new CharPortrait(portraitTexture[1], select, new Rectangle(portraitHalfScreen + (portraitWidth/2), 240 - (portraitHeight + 10), portraitWidth, portraitHeight), true, 2, playerNum);
+            portrait3 = new CharPortrait(portraitTexture[2], select, new Rectangle(portraitHalfScreen - (10 + (portraitWidth/2)), 250, portraitWidth, portraitHeight), false, 3, playerNum);
+            portrait4 = new CharPortrait(portraitTexture[3], select, new Rectangle(portraitHalfScreen + (portraitWidth/2), 250, portraitWidth, portraitHeight), false, 4, playerNum);
+
             SetNeighbors();
+
             portrait1.IsSelected = new List<bool> { true, true, true, true };
             portraits = new List<CharPortrait>();
             portraits.Add(portrait1);
             portraits.Add(portrait2);
             portraits.Add(portrait3);
             portraits.Add(portrait4);
-            portraits.Add(portrait5);
-            portraits.Add(portrait6);
         }
 
+
+        //Sets up the neighbors for each portrait
         public void SetNeighbors()
         {
             //Portrait 1
-            portrait1.Vertical = portrait4;
-            portrait1.Left = portrait3;
+            portrait1.Vertical = portrait3;
+            portrait1.Left = portrait2;
             portrait1.Right = portrait2;
             portrait1.Type = PlayerType.Caveman;
 
             //Portrait 2
-            portrait2.Vertical = portrait5;
+            portrait2.Vertical = portrait4;
             portrait2.Left = portrait1;
-            portrait2.Right = portrait3;
+            portrait2.Right = portrait1;
             portrait2.Type = PlayerType.Cowboy;
 
             //Portrait 3
-            portrait3.Vertical = portrait6;
-            portrait3.Left = portrait2;
-            portrait3.Right = portrait1;
+            portrait3.Vertical = portrait1;
+            portrait3.Left = portrait4;
+            portrait3.Right = portrait4;
             portrait3.Type = PlayerType.Knight;
 
             //Portrait 4
-            portrait4.Vertical = portrait1;
-            portrait4.Left = portrait6;
-            portrait4.Right = portrait5;
+            portrait4.Vertical = portrait2;
+            portrait4.Left = portrait3;
+            portrait4.Right = portrait3;
             portrait4.Type = PlayerType.GentleMan;
 
-            //Portrait 5
-            portrait5.Vertical = portrait2;
-            portrait5.Left = portrait4;
-            portrait5.Right = portrait6;
-            portrait5.Type = PlayerType.Caveman;
-
-            //Portrait 6
-            portrait6.Vertical = portrait3;
-            portrait6.Left = portrait5;
-            portrait6.Right = portrait4;
-            portrait6.Type = PlayerType.Caveman;
         }
 
+        //Draw method for MenuMan
         public void Draw(MenuState currentState, SpriteBatch sb)
         {
             switch (currentState)
@@ -240,7 +225,6 @@ namespace ROOT
                 case MenuState.Title: //Title screen when you start the game
                     sb.Draw(menuBg, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Color.White);
                     sb.Draw(game.Title, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Color.White);
-                    //sb.DrawString(menuFont, "Press Mouse 1 To Start", new Vector2((game.GraphicsDevice.Viewport.Width / 2) - 75, (game.GraphicsDevice.Viewport.Height / 2) + 50), Color.Black);
                     break;
                 case MenuState.Instructions: //Displays instructions screen
                     sb.Draw(badInstructions, new Rectangle(0, 0, 800, 480), Color.White);
@@ -253,7 +237,7 @@ namespace ROOT
                     creditButton.Draw(sb);
                     quit.Draw(sb);
                     break;
-                case MenuState.Selection:
+                case MenuState.Selection: //Displays selection screen
                     play.Draw(sb);
                     selectBack.Draw(sb);
                     options.Draw(sb);
@@ -265,17 +249,15 @@ namespace ROOT
                     portrait2.Draw(sb);
                     portrait3.Draw(sb);
                     portrait4.Draw(sb);
-                    portrait5.Draw(sb);
-                    portrait6.Draw(sb);
                     break;
-                case MenuState.Options:
+                case MenuState.Options: //Displays options screen
                     sb.Draw(menuBg, new Rectangle(0, 0, game.GraphicsDevice.Viewport.Width, game.GraphicsDevice.Viewport.Height), Color.White);
                     pNum2.Draw(sb);
                     pNum3.Draw(sb);
                     pNum4.Draw(sb);
                     back.Draw(sb);
                     break;
-                case MenuState.Credits:
+                case MenuState.Credits: //Displays credits screen
                     sb.GraphicsDevice.Clear(Color.Black);
                     sb.Draw(creditScreen, new Rectangle(0, 0, 800, 360), Color.White);
                     back.Draw(sb);
@@ -326,29 +308,31 @@ namespace ROOT
                     {
                         clickSound.CreateInstance().Play();
                         currentState = MenuState.Quit;
-                    }else if(creditButton.MouseHovering(mState.X,mState.Y) && SingleMouseClick())
+                    }
+                    else if (creditButton.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         clickSound.CreateInstance().Play();
                         currentState = MenuState.Credits;
                     }
                     break;
-                case MenuState.Selection:
-                    if(play.MouseHovering(mState.X,mState.Y) && SingleMouseClick())
+                case MenuState.Selection: //If you are on the selection screen
+                    if (play.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         clickSound.CreateInstance().Play();
                         currentState = MenuState.Start;
-                    }else if (options.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
+                    }
+                    else if (options.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         clickSound.CreateInstance().Play();
                         currentState = MenuState.Options;
                     }
-                    else if(selectBack.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
+                    else if (selectBack.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         clickSound.CreateInstance().Play();
                         currentState = MenuState.Main;
                     }
                     break;
-                case MenuState.Options:
+                case MenuState.Options: //If you are on the options screen
                     CheckOptions();
                     if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
@@ -356,7 +340,7 @@ namespace ROOT
                         currentState = MenuState.Selection;
                     }
                     break;
-                case MenuState.Credits: 
+                case MenuState.Credits: //If you are on the credits screen
                     if (back.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
                     {
                         clickSound.CreateInstance().Play();
@@ -368,21 +352,24 @@ namespace ROOT
             return currentState;
         }
 
+        //Checks to see if any buttons on the options screen were pressed
         public void CheckOptions()
         {
-            if(pNum2.MouseHovering(mState.X,mState.Y) && SingleMouseClick())
+            //If any of the buttons were pressed, set the player number appropriately and reset the portraits
+
+            if (pNum2.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
             {
                 clickSound.CreateInstance().Play();
                 game.PlayerNum = 2;
                 ResetPortraits(2);
             }
-            else if(pNum3.MouseHovering(mState.X,mState.Y) && SingleMouseClick())
+            else if (pNum3.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
             {
                 clickSound.CreateInstance().Play();
                 game.PlayerNum = 3;
                 ResetPortraits(3);
             }
-            else if(pNum4.MouseHovering(mState.X,mState.Y) && SingleMouseClick())
+            else if (pNum4.MouseHovering(mState.X, mState.Y) && SingleMouseClick())
             {
                 clickSound.CreateInstance().Play();
                 game.PlayerNum = 4;
@@ -434,7 +421,7 @@ namespace ROOT
         //Helper method for SelectionState
         private void UpdateSelected(Player player, int playerNumber)
         {
-            CharPortrait current=null;
+            CharPortrait current = null;
             player.UpdateSelect();
             for (int i = 0; i < portraits.Count; i++)
             {
@@ -447,9 +434,10 @@ namespace ROOT
             {
                 current.IsSelected[playerNumber - 1] = false;
                 current = current.Left;
-                current.IsSelected[playerNumber - 1 ] = true;
+                current.IsSelected[playerNumber - 1] = true;
 
-            }else if (player.SelectRight)
+            }
+            else if (player.SelectRight)
             {
                 current.IsSelected[playerNumber - 1] = false;
                 current = current.Right;
@@ -479,7 +467,7 @@ namespace ROOT
                 default:
                     break;
             }
-            types[playerNumber - 1] = current.Type;           
+            types[playerNumber - 1] = current.Type;
         }
 
     }
