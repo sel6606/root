@@ -91,6 +91,7 @@ namespace ROOT
 
         //Constants
         private const double TIMER_LENGTH = 120;
+        private const string STAGE_FILE = "Milestone4.txt";
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -290,6 +291,11 @@ namespace ROOT
             background = Content.Load<Texture2D>("background");
             title = Content.Load<Texture2D>("title");
 
+
+            brickTexture = Content.Load<Texture2D>("brick-wall");
+            orbTexture = Content.Load<Texture2D>("orb");
+            cancelTexture = Content.Load<Texture2D>("cancel");
+
             //Spritesheet textures
             gSheet = Content.Load<Texture2D>("gSheet");
             cmSheet = Content.Load<Texture2D>("cmSheet");
@@ -309,27 +315,34 @@ namespace ROOT
             p3Win = Content.Load<Texture2D>("win3");
             p4Win = Content.Load<Texture2D>("win4");
 
-            brickTexture = Content.Load<Texture2D>("brick-wall");
+            
+            //Game stage initialization
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("Milestone4.txt");
+            gameStage.ReadStage(STAGE_FILE);
+
+            //Manager initialization
             menuManager = new MenuMan(this, startTexture, instructionsTexture, quitTexture,
                 backTexture, optionsTexture, instructionScreen, creditButton, credits, cavemanInfo, cowboyInfo,
                 knightInfo, gentlemanInfo,background, portraits, playerButtons, select, soundEffects[0],playerNum);
             menuManager.MenuFont = Content.Load<SpriteFont>("menuText");
             uiFont = Content.Load<SpriteFont>("menuText");
-            cancelTexture = Content.Load<Texture2D>("cancel");
             uiManager = new UIMan(this, uiFont, cancelTexture);
-            orbTexture = Content.Load<Texture2D>("orb");
+           
 
-
+            //Initial button sizes
             buttonWidth = 300;
             buttonHeight = 100;
+
+            //Initaliaze other variables
             halfScreen = (GraphicsDevice.Viewport.Width / 2) - (buttonWidth / 2);
             bottomDistance = (GraphicsDevice.Viewport.Height - (buttonHeight + 50));
+
             //Sets the location of the restart button
             restart = new Button(restartTexture, new Rectangle(halfScreen - ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
             //Sets the location of the menu button
             menu = new Button(menuTexture, new Rectangle(halfScreen + ((buttonWidth / 2) + 20), bottomDistance, buttonWidth, buttonHeight));
+
+            //Calls reset
             Reset();
         }
 
@@ -357,9 +370,11 @@ namespace ROOT
             switch (currentState)
             {
                 case GameState.Menu: //If the game is on the menu
+                    #region Menu Logic
+                    //Gets the current menu state
                     currentMenuState = menuManager.NextState(currentMenuState, mState, previousMState);
                     if (currentMenuState == MenuState.Selection)
-                    {
+                    { //If the menu is on the selection screen, call the selection state method
                         menuManager.SelectionState(playerNum, p1, p2, p3, p4);
                     }
 
@@ -373,17 +388,22 @@ namespace ROOT
                         Exit();
                     }
                     break;
+                #endregion
                 case GameState.Game:
-                    powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
-                    //If either player wins, change state to game over
-                    PlayerStuff(gameTime); //most player logic is handled here
+                    #region Game Logic
 
-                    PlayerCollisions(gameTime); //all player collision logic
+                    //Updates the powerups
+                    powerManager.Update(gameTime.ElapsedGameTime.TotalSeconds);
+
+                    PlayerStuff(gameTime); //Call the player logic
+
+                    PlayerCollisions(gameTime); //Call the player collision logic
 
                     #region Orb Collection
-                    //checking for orb collision
-                    if (p3 == null && p4 == null) // only two players
+                    //If there are only 2 players
+                    if (p3 == null && p4 == null)
                     {
+                        //If either player intersects with the orb, pick it up
                         if (p1.HitBox.Intersects(orb.HitBox) && orb.Active)
                         {
                             p1.Orb = true;
@@ -393,8 +413,9 @@ namespace ROOT
                             p2.Orb = true;
                         }
                     }
-                    else if (p3 != null && p4 == null) //three players
+                    else if (p3 != null && p4 == null) //If there are three players
                     {
+                        //If any player intersects with the orb, pick it up
                         if (p1.HitBox.Intersects(orb.HitBox) && orb.Active)
                         {
                             p1.Orb = true;
@@ -408,8 +429,9 @@ namespace ROOT
                             p3.Orb = true;
                         }
                     }
-                    else if (p3 != null && p4 != null) //four players
+                    else if (p3 != null && p4 != null) //If there are four players
                     {
+                        //If any player intersects with the orb, pick it up
                         if (p1.HitBox.Intersects(orb.HitBox) && orb.Active)
                         {
                             p1.Orb = true;
@@ -430,23 +452,23 @@ namespace ROOT
                     #endregion
 
                     #region Orb Active
-                    //collecting the orb
-                    //orb is not drawn if a player has it
-                    if (p3 == null && p4 == null) //only two players
+                    //If the orb has been picked up
+                    //Orb is not drawn if a player has it
+                    if (p3 == null && p4 == null) //If there are only two players
                     {
                         if (p1.Orb || p2.Orb)
                         {
                             orb.Active = false;
                         }
                     }
-                    else if(p3 != null && p4 == null) //three players
+                    else if(p3 != null && p4 == null) //If there are three players
                     {
                         if (p1.Orb || p2.Orb || p3.Orb)
                         {
                             orb.Active = false;
                         }
                     }
-                    else if(p3 != null && p4 != null) //four players
+                    else if(p3 != null && p4 != null) //If there are four players
                     {
                         if (p1.Orb || p2.Orb || p3.Orb || p4.Orb)
                         {
@@ -455,9 +477,9 @@ namespace ROOT
                     }
                     #endregion
 
-                    #region Timer logic
-                    //incrementing timers
-                    if (p3 == null && p4 == null) //only two players
+                    #region Timer Logic
+                    //Incrementing timers
+                    if (p3 == null && p4 == null) //If there are only two players
                     {
                         if (p1.Orb)
                         {
@@ -468,7 +490,7 @@ namespace ROOT
                             timer2 -= gameTime.ElapsedGameTime.TotalSeconds;
                         }
                     }
-                    else if(p3 != null && p4 == null) //three players
+                    else if(p3 != null && p4 == null) //If there are three players
                     {
                         if (p1.Orb)
                         {
@@ -483,7 +505,7 @@ namespace ROOT
                             timer3 -= gameTime.ElapsedGameTime.TotalSeconds;
                         }
                     }
-                    else if(p3 != null && p4 != null) //four players
+                    else if(p3 != null && p4 != null) //If there are four players
                     {
                         if (p1.Orb)
                         {
@@ -505,7 +527,9 @@ namespace ROOT
                     #endregion
 
                     #region Timer Check
-                    if (playerNum == 2 && (timer1 <= 0 || timer2 <= 0 || SingleKeyPress(Keys.O))) //two players
+                    //If any player's timer has reached zero, set them as the winner and end the game
+
+                    if (playerNum == 2 && (timer1 <= 0 || timer2 <= 0)) //If there are only two players
                     {
                         if(timer1 <= 0)
                         {
@@ -518,7 +542,7 @@ namespace ROOT
                         }
                         currentState = GameState.GameOver;
                     }
-                    else if (playerNum == 3 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || SingleKeyPress(Keys.O))) //three players
+                    else if (playerNum == 3 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0)) //If there are three players
                     {
                         if (timer1 <= 0)
                         {
@@ -536,7 +560,7 @@ namespace ROOT
                         }
                         currentState = GameState.GameOver;
                     }
-                    else if (playerNum == 4 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || timer4 <= 0 || SingleKeyPress(Keys.O))) //four players
+                    else if (playerNum == 4 && (timer1 <= 0 || timer2 <= 0 || timer3 <= 0 || timer4 <= 0)) //If there are four players
                     {
                         if (timer1 <= 0)
                         {
@@ -561,11 +585,13 @@ namespace ROOT
                     }
                     #endregion
 
+                    //Calls the Stun method on each player
                     foreach(Player p in playerList)
                     {
                         p.Stun(gameTime.ElapsedGameTime.TotalSeconds);
                     }
 
+                    //If the exit button is pressed, reset values and exit to the menu
                     if (uiManager.CheckExit(mState, previousMState))
                     {
                         playerNum = 4;
@@ -574,9 +600,10 @@ namespace ROOT
                         currentMenuState = MenuState.Main;
                         currentState = GameState.Menu;
                     }
-                    //Otherwise, run logic and call the UI and Player draw methods
                     break;
+                #endregion
                 case GameState.GameOver: //If the game is on the game over screen
+                    #region GameOver Logic
                     if (restart.MouseHovering(mState.X, mState.Y) && SingleMouseClick()) //If the player chooses play again, change state to game and reset values
                     { //If the player clicks restart, restart the game
                         soundEffects[0].CreateInstance().Play();
@@ -590,10 +617,116 @@ namespace ROOT
                         currentMenuState = MenuState.Main;
                     }
                     break;
+                    #endregion
             }
+
+            //Updates previous keyboard and mouse states
             previousKbState = kbState;
             previousMState = mState;
             base.Update(gameTime);
+        }
+
+
+
+        //Helper method for the player logic
+        public void PlayerStuff(GameTime gameTime)
+        {
+            #region Player 1
+            p1.Update(gameStage.StageBounds);
+            p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+            p1.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            if (p1.timeCounter >= p1.timePerFrame)
+            {
+                p1.frame += 1; // Adjust the frame
+
+                if (p1.frame > p1.WALK_FRAME_COUNT)
+                {  // Check the bounds
+                    p1.frame = 0;
+
+                }
+                p1.timeCounter -= p1.timePerFrame; // Remove the time we "used"
+            }
+            #endregion
+            #region Player 2
+            p2.Update(gameStage.StageBounds);
+            p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+            p2.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+            if (p2.timeCounter >= p2.timePerFrame)
+            {
+                p2.frame += 1; // Adjust the frame
+
+                if (p2.frame > p2.WALK_FRAME_COUNT)
+                {   // Check the bounds
+                    p2.frame = 0;
+                }
+                p2.timeCounter -= p2.timePerFrame; // Remove the time we "used"
+            }
+            #endregion
+            #region Player 3
+            if (p3 != null) //only checks player 3's logic if they're in the game
+            {
+                p3.Update(gameStage.StageBounds);
+                p3.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+                p3.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+                if (p3.timeCounter >= p3.timePerFrame)
+                {
+                    p3.frame += 1; // Adjust the frame
+                    if (p3.frame > p3.WALK_FRAME_COUNT)
+                    {  // Check the bounds
+                        p3.frame = 0;
+                    }
+                    p3.timeCounter -= p3.timePerFrame;    // Remove the time we "used"
+                }
+            }
+            #endregion
+            #region Player 4
+            if (p4 != null) //only checks player 4's logic if they're in the game
+            {
+                p4.Update(gameStage.StageBounds);
+                p4.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+                p4.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+                if (p4.timeCounter >= p4.timePerFrame)
+                {
+                    p4.frame += 1; // Adjust the frame
+
+                    if (p4.frame > p4.WALK_FRAME_COUNT)
+                    {  // Check the bounds
+                        p4.frame = 0;
+                    }
+                    p4.timeCounter -= p4.timePerFrame;    // Remove the time we "used"
+                }
+            }
+            #endregion
+        }
+
+
+        //Helper method for player collisions
+        public void PlayerCollisions(GameTime gameTime)
+        {
+            double time = gameTime.ElapsedGameTime.TotalSeconds;
+            if (p3 == null && p4 == null) //If there are only 2 players
+            {
+                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
+            }
+            else if (p3 != null && p4 == null) //If there are 3 players
+            {
+                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
+                p1.CheckPlayerCollision(p1, p3, time); //p1 and p3
+                p2.CheckPlayerCollision(p2, p3, time); //p2 and p3
+            }
+            else
+            { //If there are 4 players
+                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
+                p1.CheckPlayerCollision(p1, p3, time); //p1 and p3
+                p2.CheckPlayerCollision(p2, p3, time); //p2 and p3
+                p1.CheckPlayerCollision(p1, p4, time); //p1 and p4
+                p2.CheckPlayerCollision(p2, p4, time); //p2 and p4
+                p3.CheckPlayerCollision(p3, p4, time); //p3 and p4
+            }
         }
 
         /// <summary>
@@ -611,7 +744,7 @@ namespace ROOT
                 case GameState.Menu:    //Draws a menu dependent on the current menu state
                     menuManager.Draw(currentMenuState,spriteBatch);
                     break;
-                case GameState.Game:    //Draws the game screen, drawing the stage, both players, and the orb
+                case GameState.Game:    //Draws the game screen, the stage, all players, and the orb
                     gameStage.Draw();
                     #region Drawing Players
                     if(p3 == null && p4 == null) //two players
@@ -659,8 +792,12 @@ namespace ROOT
                     #endregion
                     powerManager.Draw(spriteBatch);
                     break;
-                case GameState.GameOver:    //Draws the game over screen, drawing a restart button and a menu button
+                case GameState.GameOver:
+                    #region Game Over Logic   
+                    //Draws the game over screen, drawing a restart button and a menu button
                     spriteBatch.Draw(background, new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height), Color.White);
+
+                    //Draws the winner
                     if(winner == p1)
                     {
                         spriteBatch.Draw(p1Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
@@ -678,6 +815,7 @@ namespace ROOT
                         spriteBatch.Draw(p4Win, new Rectangle(halfScreen, 25, buttonWidth, buttonHeight), Color.White);
                     }
 
+                    //Draws the character of the winner
                     if (winner.ThisType == PlayerType.Caveman)
                     {
                         spriteBatch.Draw(cavemanInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
@@ -694,9 +832,11 @@ namespace ROOT
                     {
                         spriteBatch.Draw(knightInfo, new Vector2((GraphicsDevice.Viewport.Width / 2) - 100, (GraphicsDevice.Viewport.Height / 2) - 110), Color.White);
                     }
+                    //Draws the buttons
                     restart.Draw(spriteBatch);
                     menu.Draw(spriteBatch);
                     break;
+                    #endregion
             }
 
             spriteBatch.End();
@@ -713,7 +853,7 @@ namespace ROOT
 
             playerList = new List<Player>();
             gameStage = new Stage(spriteBatch, brickTexture);
-            gameStage.ReadStage("Milestone4.txt");
+            gameStage.ReadStage(STAGE_FILE);
 
             orb = new Orb(gameStage.OrbstartX, gameStage.OrbstartY, 25, 25, orbTexture);
 
@@ -776,111 +916,7 @@ namespace ROOT
 
         }
 
-        public void PlayerStuff(GameTime gameTime)
-        //all player logic is processed here
-        {
-            //player 1
-            p1.Update(gameStage.StageBounds);
-            p1.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
-            p1.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
-            if (p1.timeCounter >= p1.timePerFrame)
-            {
-                p1.frame += 1;                     // Adjust the frame
-
-                if (p1.frame > p1.WALK_FRAME_COUNT)
-                {  // Check the bounds
-                    p1.frame = 0;
-
-                }// Back to 1 (since 0 is the "standing" frame)
-
-                p1.timeCounter -= p1.timePerFrame;    // Remove the time we "used"
-            }
-
-            //player 2
-            p2.Update(gameStage.StageBounds);
-            p2.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-
-            p2.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
-            if (p2.timeCounter >= p2.timePerFrame)
-            {
-                p2.frame += 1;                     // Adjust the frame
-
-                if (p2.frame > p2.WALK_FRAME_COUNT)   // Check the bounds
-                    p2.frame = 0;                  // Back to 1 (since 0 is the "standing" frame)
-
-                p2.timeCounter -= p2.timePerFrame;    // Remove the time we "used"
-            }
-
-            //player 3
-            if(p3 != null) //only checks player 3's logic if they're in the game
-            {
-                p3.Update(gameStage.StageBounds);
-                p3.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-
-                p3.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
-                if (p3.timeCounter >= p3.timePerFrame)
-                {
-                    p3.frame += 1;                     // Adjust the frame
-
-                    if (p3.frame > p3.WALK_FRAME_COUNT)
-                    {  // Check the bounds
-                        p3.frame = 0;
-
-                    }// Back to 1 (since 0 is the "standing" frame)
-
-                    p3.timeCounter -= p3.timePerFrame;    // Remove the time we "used"
-                }
-            }
-
-            //player 4 
-            if(p4 != null) //only checks player 4's logic if they're in the game
-            {
-                p4.Update(gameStage.StageBounds);
-                p4.ScreenWrap(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
-
-                p4.timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
-                if (p4.timeCounter >= p4.timePerFrame)
-                {
-                    p4.frame += 1;                     // Adjust the frame
-
-                    if (p4.frame > p4.WALK_FRAME_COUNT)
-                    {  // Check the bounds
-                        p4.frame = 0;
-
-                    }// Back to 1 (since 0 is the "standing" frame)
-
-                    p4.timeCounter -= p4.timePerFrame;    // Remove the time we "used"
-                }
-            }
-        }
-
-
-
-        public void PlayerCollisions(GameTime gameTime)
-        //handles all of the player collision logic in one spot
-        {
-            double time = gameTime.ElapsedGameTime.TotalSeconds;
-            if (p3 == null && p4 == null) //only 2 players
-            {
-                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
-            }
-            else if (p3 != null && p4 == null) //3 players
-            {
-                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
-                p1.CheckPlayerCollision(p1, p3, time); //p1 and p3
-                p2.CheckPlayerCollision(p2, p3, time); //p2 and p3
-            }
-            else
-            {
-                p1.CheckPlayerCollision(p1, p2, time); //p1 and p2
-                p1.CheckPlayerCollision(p1, p3, time); //p1 and p3
-                p2.CheckPlayerCollision(p2, p3, time); //p2 and p3
-                p1.CheckPlayerCollision(p1, p4, time); //p1 and p4
-                p2.CheckPlayerCollision(p2, p4, time); //p2 and p4
-                p3.CheckPlayerCollision(p3, p4, time); //p3 and p4
-            }
-        }
 
     }
 }
