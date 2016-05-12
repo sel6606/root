@@ -20,12 +20,6 @@ namespace ROOT
             this.buttonArea = buttonArea;
         }
 
-        //Draws each button to the screen
-        public void Draw(SpriteBatch s)
-        {
-            s.Draw(buttonTexture, buttonArea, Color.White);
-        }
-
         //Detects if the mouse is hovering over the button.
         //The x and y parameters are the x and y coordinates
         //of the mouse cursor.
@@ -41,6 +35,15 @@ namespace ROOT
                 return false;
             }
         }
+
+
+        //Draws each button to the screen
+        public void Draw(SpriteBatch s)
+        {
+            s.Draw(buttonTexture, buttonArea, Color.White);
+        }
+
+
 
 
     }
