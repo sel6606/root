@@ -48,6 +48,7 @@ namespace ROOT
                 if (!(user == play))
                 { //Inverts the left and right controls for each player that is not the user
                     int y = 0;
+                    play.Inverse = true;
                     y = play.moveRight;
                     play.moveRight = play.moveLeft;
                     play.moveLeft = y;
@@ -65,6 +66,7 @@ namespace ROOT
                 if (!(user == play))
                 { //Returns the player's controls to normal
                     int y = 0;
+                    play.Inverse = false;
                     y = play.moveRight;
                     play.moveRight = play.moveLeft;
                     play.moveLeft = y;

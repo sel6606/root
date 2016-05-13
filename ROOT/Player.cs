@@ -28,6 +28,7 @@ namespace ROOT
         public int moveLeft;
         public int jump;
         public int use;
+        private bool inverse = false;
 
         private bool selectRight;
         private bool selectLeft;
@@ -150,6 +151,12 @@ namespace ROOT
             set { stunned = value; }
         }
 
+        public bool Inverse
+        {
+            get { return inverse; }
+            set { inverse = value; }
+        }
+
 
         #endregion
 
@@ -243,11 +250,25 @@ namespace ROOT
                 up = gamePad.IsButtonDown(Buttons.A);
                 if (gamePad.ThumbSticks.Left.X < 0)
                 {
-                    left = true;
+                    if (inverse)
+                    {
+                        right = true;
+                    }
+                    else
+                    {
+                        left = true;
+                    }
                 }
                 if (gamePad.ThumbSticks.Left.X > 0)
                 {
-                    right = true;
+                    if (inverse)
+                    {
+                        left = true;
+                    }
+                    else
+                    {
+                        right = true;
+                    }
                 }
             }
 
